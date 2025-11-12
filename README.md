@@ -229,7 +229,7 @@ IronPython ScriptEngine aktiviert
 ```bash
 # 1. Repository klonen
 git clone <repository-url>
-cd wago-plc-config-toolchain
+cd codesys-project-generator
 
 # 2. Abhängigkeiten installieren
 pip install -r requirements.txt
@@ -501,7 +501,7 @@ cat ./output/validation_report.txt | grep "IP"
 ### Projekt-Struktur
 
 ```
-wago-plc-config-toolchain/
+codesys-project-generator/
 │
 ├── batch_processor.py              # CLI-Wrapper für Excel-Verarbeitung
 ├── excel_to_json_converter.py      # Kern-Extraktionslogik
