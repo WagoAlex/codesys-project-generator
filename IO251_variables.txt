@@ -1,0 +1,15 @@
+(* Variable List for PLC: IO251 *)
+(* PLC Type: 750-8210/025-000 *)
+(* IP Address: 172.16.46.251 *)
+(* Location: VIII D 10 E01 *)
+(* Generated from JSON configuration *)
+
+VAR_GLOBAL
+
+  (* Module: 750-610 - 1 signals *)
+  I4270_Fu_IO251 AT %I* : BOOL; (* IX 64. 0 -A3.1 - NC *)
+
+  (* Module: 750-652 - 1 signals *)
+  I16904_Me_NavSysSERIALInTE : BOOL; (* RS485: XX   0 -A8.1 - NMEA *)
+
+END_VAR

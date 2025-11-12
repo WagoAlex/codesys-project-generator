@@ -1,0 +1,44 @@
+{
+  "PLC_Info": {
+    "Name": "IO251",
+    "Type": "750-8210/025-000",
+    "IP_Address": "172.16.46.251",
+    "Location": "VIII D 10 E01",
+    "IO_Box": "36148077"
+  },
+  "IO_Modules": [
+    {
+      "Module_Type": "750-610",
+      "Signals": [
+        {
+          "Terminal": "IX 64. 0 -A3.1",
+          "Object_Name": "I4270_Fu_IO251",
+          "Signal_Type": "I",
+          "Signal": "NC"
+        }
+      ]
+    },
+    {
+      "Module_Type": "750-652",
+      "Signals": [
+        {
+          "Terminal": "XX   0 -A8.1",
+          "Object_Name": "I16904_Me_NavSysSERIALInTE",
+          "Signal_Type": "RS485",
+          "Signal": "NMEA"
+        }
+      ]
+    }
+  ],
+  "Statistics": {
+    "Total_Modules": 2,
+    "Total_Signals": 2,
+    "Input_Signals": 1,
+    "Output_Signals": 0
+  },
+  "Metadata": {
+    "Generated": "2025-10-28T08:28:58.547234",
+    "Source_File": "LIST_OF_MEASURING_POINTS_Large_2.xls",
+    "Generator": "WAGO PLC Config Extractor v2.0"
+  }
+}

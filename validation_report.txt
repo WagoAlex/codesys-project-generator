@@ -1,0 +1,178 @@
+======================================================================
+WAGO PLC Configuration - Validation Report
+======================================================================
+Generated: 2025-10-28 08:28:58
+Source File: LIST_OF_MEASURING_POINTS_Large_2.xls
+======================================================================
+
+Total Warnings: 2
+Total Errors: 0
+
+Validation Log:
+----------------------------------------------------------------------
+[INFO] Reading IO-Boxen sheet from LIST_OF_MEASURING_POINTS_Large_2.xls...
+[INFO] Found 81 rows in IO-Boxen sheet
+[INFO] Added PLC: IO020 (172.16.46.020) - Type: 750-8210/025-000
+[INFO] Added PLC: IO021 (172.16.46.021) - Type: 750-8210/025-000
+[INFO] Added PLC: IO024 (172.16.46.024) - Type: 750-8210
+[INFO] Added PLC: IO025 (172.16.46.025) - Type: 750-8210
+[INFO] Added PLC: IO032 (172.16.46.032) - Type: 750-8210
+[INFO] Added PLC: IO033 (172.16.46.033) - Type: 750-8210
+[INFO] Added PLC: IO035 (172.16.46.035) - Type: 750-8210
+[INFO] Added PLC: IO036 (172.16.46.036) - Type: 750-8210
+[INFO] Added PLC: IO038 (172.16.46.038) - Type: 750-8210
+[INFO] Added PLC: IO041 (172.16.46.041) - Type: 750-8210
+[INFO] Added PLC: IO052 (172.16.46.052) - Type: 750-8210
+[INFO] Added PLC: IO053 (172.16.46.053) - Type: 750-8210
+[INFO] Added PLC: IO054 (172.16.46.054) - Type: 750-8210/025-000
+[INFO] Added PLC: IO071 (172.16.46.071) - Type: 750-8210/025-000
+[INFO] Added PLC: IO072 (172.16.46.072) - Type: 750-8210
+[INFO] Added PLC: IO073 (172.16.46.073) - Type: 750-8210
+[INFO] Added PLC: IO074 (172.16.46.074) - Type: 750-8210/025-000
+[INFO] Added PLC: IO075 (172.16.46.075) - Type: 750-8210
+[INFO] Added PLC: IO076 (172.16.46.076) - Type: 750-8210
+[INFO] Added PLC: IO078 (172.16.46.078) - Type: 750-8210
+[INFO] Added PLC: IO091 (172.16.46.091) - Type: 750-8210
+[INFO] Added PLC: IO092 (172.16.46.092) - Type: 750-8210
+[INFO] Added PLC: IO093 (172.16.46.093) - Type: 750-8210
+[INFO] Added PLC: IO094 (172.16.46.094) - Type: 750-8210
+[INFO] Added PLC: IO095 (172.16.46.095) - Type: 750-8210
+[INFO] Added PLC: IO096 (172.16.46.096) - Type: 750-8210
+[INFO] Added PLC: IO098 (172.16.46.098) - Type: 750-8210
+[INFO] Added PLC: IO112 (172.16.46.112) - Type: 750-8210
+[INFO] Added PLC: IO113 (172.16.46.113) - Type: 750-8210
+[INFO] Added PLC: IO114 (172.16.46.114) - Type: 750-8210/025-000
+[INFO] Added PLC: IO115 (172.16.46.115) - Type: 750-8210/025-000
+[INFO] Added PLC: IO116 (172.16.46.116) - Type: 750-8210/025-000
+[INFO] Added PLC: IO117 (172.16.46.117) - Type: 750-8210/025-000
+[INFO] Added PLC: IO132 (172.16.46.132) - Type: 750-8210
+[INFO] Added PLC: IO133 (172.16.46.133) - Type: 750-8210
+[INFO] Added PLC: IO134 (172.16.46.134) - Type: 750-8210/025-000
+[INFO] Added PLC: IO135 (172.16.46.135) - Type: 750-8210
+[INFO] Added PLC: IO136 (172.16.46.136) - Type: 750-8210
+[INFO] Added PLC: IO138 (172.16.46.138) - Type: 750-8210
+[INFO] Added PLC: IO151 (172.16.46.151) - Type: 750-8210
+[INFO] Added PLC: IO152 (172.16.46.152) - Type: 750-8210/025-000
+[INFO] Added PLC: IO153 (172.16.46.153) - Type: 750-8210
+[INFO] Added PLC: IO155 (172.16.46.155) - Type: 750-8210
+[INFO] Added PLC: IO156 (172.16.46.156) - Type: 750-8210
+[INFO] Added PLC: IO158 (172.16.46.158) - Type: 750-8210
+[INFO] Added PLC: IO201 (172.16.46.201) - Type: 750-8210
+[INFO] Added PLC: IO202 (172.16.46.202) - Type: 750-8210
+[INFO] Added PLC: IO203 (172.16.46.203) - Type: 750-8210
+[INFO] Added PLC: IO204 (172.16.46.204) - Type: 750-8210
+[INFO] Added PLC: IO205 (172.16.46.205) - Type: 750-8210
+[INFO] Added PLC: IO206 (172.16.46.206) - Type: 750-8210
+[INFO] Added PLC: IO212 (172.16.46.212) - Type: 750-8210
+[INFO] Added PLC: IO213 (172.16.46.213) - Type: 750-8210
+[INFO] Added PLC: IO214 (172.16.46.214) - Type: 750-8210
+[INFO] Added PLC: IO215 (172.16.46.215) - Type: 750-8210
+[INFO] Added PLC: IO216 (172.16.46.216) - Type: 750-8210
+[INFO] Added PLC: IO217 (172.16.46.217) - Type: 750-8210
+[INFO] Added PLC: IO218 (172.16.46.218) - Type: 750-8210
+[INFO] Added PLC: IO219 (172.16.46.219) - Type: 750-8210
+[INFO] Added PLC: IO220 (172.16.46.220) - Type: 750-8210
+[INFO] Added PLC: IO221 (172.16.46.221) - Type: 750-8210
+[INFO] Added PLC: IO222 (172.16.46.222) - Type: 750-8210
+[INFO] Added PLC: IO223 (172.16.46.223) - Type: 750-8210
+[INFO] Added PLC: IO224 (172.16.46.224) - Type: 750-8210
+[INFO] Added PLC: IO225 (172.16.46.225) - Type: 750-8210
+[INFO] Added PLC: IO228 (172.16.46.228) - Type: 750-8210
+[INFO] Added PLC: IO229 (172.16.46.229) - Type: 750-8210
+[INFO] Added PLC: IO230 (172.16.46.230) - Type: 750-8210
+[INFO] Added PLC: IO231 (172.16.46.231) - Type: 750-8210
+[INFO] Added PLC: IO232 (172.16.46.232) - Type: 750-8210
+[INFO] Added PLC: IO233 (172.16.46.233) - Type: 750-8210
+[INFO] Added PLC: IO234 (172.16.46.234) - Type: 750-8210
+[INFO] Added PLC: IO235 (172.16.46.235) - Type: 750-8210
+[INFO] Added PLC: IO246 (172.16.46.246) - Type: 750-8210
+[INFO] Added PLC: IO247 (172.16.46.247) - Type: 750-8210
+[INFO] Added PLC: IO248 (172.16.46.248) - Type: 750-8210
+[INFO] Added PLC: IO249 (172.16.46.249) - Type: 750-8210
+[INFO] Added PLC: IO251 (172.16.46.251) - Type: 750-8210/025-000
+[INFO] Successfully extracted 78 PLCs from IO-Boxen
+[INFO] Reading SIGNALLIST sheet...
+[INFO] Found 12600 rows in SIGNALLIST
+[WARNING] Signal found for unknown PLC: IO026
+[WARNING] Total signals for unknown PLCs: 942
+[INFO] Successfully extracted 10027 signals
+[INFO] Generating JSON files in outputs...
+[INFO] Generated: PLC_IO020_config.json
+[INFO] Generated: PLC_IO021_config.json
+[INFO] Generated: PLC_IO024_config.json
+[INFO] Generated: PLC_IO025_config.json
+[INFO] Generated: PLC_IO032_config.json
+[INFO] Generated: PLC_IO033_config.json
+[INFO] Generated: PLC_IO035_config.json
+[INFO] Generated: PLC_IO036_config.json
+[INFO] Generated: PLC_IO038_config.json
+[INFO] Generated: PLC_IO041_config.json
+[INFO] Generated: PLC_IO052_config.json
+[INFO] Generated: PLC_IO053_config.json
+[INFO] Generated: PLC_IO054_config.json
+[INFO] Generated: PLC_IO071_config.json
+[INFO] Generated: PLC_IO072_config.json
+[INFO] Generated: PLC_IO073_config.json
+[INFO] Generated: PLC_IO074_config.json
+[INFO] Generated: PLC_IO075_config.json
+[INFO] Generated: PLC_IO076_config.json
+[INFO] Generated: PLC_IO078_config.json
+[INFO] Generated: PLC_IO091_config.json
+[INFO] Generated: PLC_IO092_config.json
+[INFO] Generated: PLC_IO093_config.json
+[INFO] Generated: PLC_IO094_config.json
+[INFO] Generated: PLC_IO095_config.json
+[INFO] Generated: PLC_IO096_config.json
+[INFO] Generated: PLC_IO098_config.json
+[INFO] Generated: PLC_IO112_config.json
+[INFO] Generated: PLC_IO113_config.json
+[INFO] Generated: PLC_IO114_config.json
+[INFO] Generated: PLC_IO115_config.json
+[INFO] Generated: PLC_IO116_config.json
+[INFO] Generated: PLC_IO117_config.json
+[INFO] Generated: PLC_IO132_config.json
+[INFO] Generated: PLC_IO133_config.json
+[INFO] Generated: PLC_IO134_config.json
+[INFO] Generated: PLC_IO135_config.json
+[INFO] Generated: PLC_IO136_config.json
+[INFO] Generated: PLC_IO138_config.json
+[INFO] Generated: PLC_IO151_config.json
+[INFO] Generated: PLC_IO152_config.json
+[INFO] Generated: PLC_IO153_config.json
+[INFO] Generated: PLC_IO155_config.json
+[INFO] Generated: PLC_IO156_config.json
+[INFO] Generated: PLC_IO158_config.json
+[INFO] Generated: PLC_IO201_config.json
+[INFO] Generated: PLC_IO202_config.json
+[INFO] Generated: PLC_IO203_config.json
+[INFO] Generated: PLC_IO204_config.json
+[INFO] Generated: PLC_IO205_config.json
+[INFO] Generated: PLC_IO206_config.json
+[INFO] Generated: PLC_IO212_config.json
+[INFO] Generated: PLC_IO213_config.json
+[INFO] Generated: PLC_IO214_config.json
+[INFO] Generated: PLC_IO215_config.json
+[INFO] Generated: PLC_IO216_config.json
+[INFO] Generated: PLC_IO217_config.json
+[INFO] Generated: PLC_IO218_config.json
+[INFO] Generated: PLC_IO219_config.json
+[INFO] Generated: PLC_IO220_config.json
+[INFO] Generated: PLC_IO221_config.json
+[INFO] Generated: PLC_IO222_config.json
+[INFO] Generated: PLC_IO223_config.json
+[INFO] Generated: PLC_IO224_config.json
+[INFO] Generated: PLC_IO225_config.json
+[INFO] Generated: PLC_IO228_config.json
+[INFO] Generated: PLC_IO229_config.json
+[INFO] Generated: PLC_IO230_config.json
+[INFO] Generated: PLC_IO231_config.json
+[INFO] Generated: PLC_IO232_config.json
+[INFO] Generated: PLC_IO233_config.json
+[INFO] Generated: PLC_IO234_config.json
+[INFO] Generated: PLC_IO235_config.json
+[INFO] Generated: PLC_IO246_config.json
+[INFO] Generated: PLC_IO247_config.json
+[INFO] Generated: PLC_IO248_config.json
+[INFO] Generated: PLC_IO249_config.json
+[INFO] Generated: PLC_IO251_config.json
+[INFO] Generated: summary.txt
