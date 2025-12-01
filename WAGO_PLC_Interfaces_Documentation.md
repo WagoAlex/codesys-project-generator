@@ -62,9 +62,9 @@ Phase 2: JSON → CODESYS PROJECT
             │ [parse_config_json(), parse_variables_file(), load_config_from_json()]
             ↓
    ┌────────────────────────────────┐
-   │  create_codesys_project_       │
-   │   enhanced.py V7.0             │
-   │  ─────────────────────────────  │
+   │  create_codesys_project        │
+   │                                │
+   │  ────────────────────────────  │
    │  Step 1: Load JSON config      │  load_config_from_json()      ◄─── NEW!
    │  Step 2: Parse input files     │  parse_variables_file()
    │  Step 3: Load template         │  create_project_from_template()
@@ -94,8 +94,8 @@ Phase 2: JSON → CODESYS PROJECT
    │     │  └─ ...          │
    │     └─ IP: 172.16.x.x  │
    │  PLC_PRG               │  → Main program
-   │  ├─ VAR ... END_VAR    │  → FB instances              ◄─── NEW!
-   │  └─ Implementation     │  → FB calls                  ◄─── NEW!
+   │  ├─ VAR ... END_VAR    │  → FB instances              ◄─── NEW
+   │  └─ Implementation     │  → FB calls                  ◄─── NEW
    │  GVL_IO020             │  → Global variables
    └────────────────────────┘
 ```
@@ -115,7 +115,7 @@ Phase 2: JSON → CODESYS PROJECT
 | 5 | `generate_summary()` | Summary report | Line 330-362 |
 | 6 | `generate_validation_report()` | Validation report | Line 364-388 |
 
-### **Phase 2: JSON → CODESYS** (create_codesys_project_enhanced.py V7.0)
+### **Phase 2: JSON → CODESYS** (create_codesys_project)
 
 | Step | Method | Purpose | Source |
 |------|--------|---------|--------|
@@ -312,7 +312,7 @@ plc_type = extract_plc_type("750-8210/025-000")
 
 ---
 
-### 4. CODESYS Library Management (NEW IN V7!)
+### 4. CODESYS Library Management 
 
 #### **librarymanager.primary_repository**
 **Purpose:** Access to CODESYS library repository for programmatic library installation
@@ -428,7 +428,7 @@ code generation and namespace resolution.
 
 ---
 
-### 5. Function Block Instantiation (NEW IN V7!)
+### 5. Function Block Instantiation 
 
 #### **add_fb_instances_to_plc_prg()**
 **Purpose:** Programmatically instantiate function blocks in PLC_PRG
@@ -911,8 +911,8 @@ if module_type in MODULE_GREYLIST:
 
 ---
 
-### 4. Library Repository API (NEW IN V7!)
-**Source:** `create_codesys_project_enhanced.py`, Line 232-413
+### 4. Library Repository API 
+**Source:** `create_codesys_project.py`, Line 232-413
 
 **Why:**
 - Eliminates manual library download/installation
@@ -920,7 +920,7 @@ if module_type in MODULE_GREYLIST:
 - Dependency resolution
 - Consistent library versions across projects
 
-**Before (V5):**
+**Before :**
 ```python
 # Manual approach - NOT RELIABLE
 # 1. Download .library file manually
@@ -929,7 +929,7 @@ if module_type in MODULE_GREYLIST:
 # 4. No dependency resolution
 ```
 
-**After (V7):**
+**After:**
 ```python
 # Automated approach - RELIABLE
 repo = librarymanager.primary_repository
@@ -940,7 +940,7 @@ if results:
 
 ---
 
-### 5. FB Instantiation in Implementation (NEW IN V7!)
+### 5. FB Instantiation in Implementation 
 **Source:** `create_codesys_project_enhanced.py`, Line 800-913
 
 **Why:**
@@ -957,7 +957,7 @@ VAR
 END_VAR
 ```
 
-**Correct (V7):**
+**Correct :**
 ```iec61131-3
 VAR
     fbMqtt : MQTT.MqttClient;
@@ -991,7 +991,7 @@ The WAGO PLC Configuration System uses a **two-phase architecture**:
 - **json**: Data serialization
 - **re**: Data validation
 - **CODESYS ScriptEngine**: Project automation
-- **CODESYS librarymanager**: Library management (V7)
+- **CODESYS librarymanager**: Library management
 - **glob/os**: File management
 
 **Advantages:**
@@ -1003,7 +1003,7 @@ The WAGO PLC Configuration System uses a **two-phase architecture**:
 - **NEW:** Automatic library management
 - **NEW:** Professional FB integration
 
-**Key Innovations V7:**
+**Key Improvements :**
 - Repository API for libraries (no manual download)
 - Proper FB instantiation (declaration + implementation)
 - Namespace resolution via lib.name (not lib.title)
@@ -1073,7 +1073,7 @@ namespace = library.title  # "MQTT_Client_SL"
 fb_type = "{0}.MqttClient".format(namespace)  
 # Result: "MQTT_Client_SL.MqttClient" ❌
 
-# CORRECT - V7 approach:
+# CORRECT - Current approach:
 namespace = library.name  # "MQTT"
 fb_type = "{0}.MqttClient".format(namespace)
 # Result: "MQTT.MqttClient" ✅
