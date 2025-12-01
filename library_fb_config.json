@@ -1,0 +1,110 @@
+{
+  "configuration": {
+    "project_settings": {
+      "version": "2.0",
+      "description": "CODESYS Library & FB Configuration - CORRECTED"
+    },
+    "namespace_mapping": {
+      "info": "Mapping zwischen Library Title und Namespace - KRITISCH!",
+      "MQTT Client SL": "MQTT",
+      "MQTT_Client_SL": "MQTT",
+      "JSON Utilities SL": "JSON",
+      "JSON_Utilities_SL": "JSON",
+      "Web Client SL": "WEB_CLIENT",
+      "WagoAppCloud": "WagoAppCloud",
+      "WagoAppJSON": "WagoAppJSON"
+    }
+  },
+  
+  "libraries": {
+    "description": "Bibliotheken die installiert werden sollen",
+    "items": [
+      {
+        "name": "MQTT Client SL",
+        "vendor": "CODESYS",
+        "version": "1.10.0.0",
+        "namespace": "MQTT",
+        "url": "https://store.codesys.com/mqtt-client-sl.html",
+        "required": true,
+        "notes": "WICHTIG: Title ist 'MQTT Client SL', Namespace ist 'MQTT'"
+      },
+      {
+        "name": "JSON Utilities SL",
+        "vendor": "CODESYS",
+        "version": "1.9.0.0",
+        "namespace": "JSON",
+        "url": "https://store.codesys.com/json-utilities-sl.html",
+        "required": false,
+        "notes": "Für JSON-Parsing"
+      },
+      {
+        "name": "WagoAppCloud",
+        "vendor": "WAGO",
+        "version": "1.3.5.7",
+        "namespace": "WagoAppCloud",
+        "required": false,
+        "notes": "WAGO Libraries haben meist identischen Namespace"
+      },
+      {
+        "name": "WagoAppJSON",
+        "vendor": "WAGO",
+        "version": "1.1.0.32",
+        "namespace": "WagoAppJSON",
+        "required": false
+      }
+    ]
+  },
+  
+  "function_blocks": {
+    "description": "Function Block Instanzen die erstellt werden sollen",
+    "items": [
+      {
+        "library": "MQTT Client SL",
+        "library_namespace": "MQTT",
+        "fb_type": "MQTT.MQTTClient",
+        "instance": "oMqttClient",
+        "description": "MQTT Client Instanz",
+        "params": {
+          "sHostname": "'broker.hivemq.com'",
+          "uiPort": "1883",
+          "sClientID": "'WAGO_PLC_001'",
+          "tKeepAlive": "T#60S",
+          "xEnableLog": "TRUE",
+          "sStatus =>": "sMqttStatus",
+          "xConnected =>": "xMqttConnected"
+        }
+      },
+      {
+        "library": "JSON Utilities SL",
+        "library_namespace": "JSON",
+        "fb_type": "JSON.JSONFileReader",
+        "instance": "oJSONFileReader",
+        "description": "JSON Parser Instanz",
+        "params": {
+          "xExecute": "xExecute",
+          "sFilename": "sFilename",
+          "xIgnoreValueStringLength": "TRUE",
+          "xAsyncMode": "TRUE",
+          "jsonData =>": "jsonData",
+          "xDone =>": "xDone",
+          "xBusy =>": "xBusy",
+          "xError =>": "xError",
+          "eError =>": "eError",
+          "xValueTruncated =>": "xValueTruncated"
+        }
+      }
+    ]
+  },
+  
+  "debugging": {
+    "enable_detailed_logging": true,
+    "test_library_access_first": true,
+    "notes": [
+      "Bei Fehler 'Library nicht gefunden':",
+      "1. Prüfe ob Library in CODESYS installiert ist",
+      "2. Prüfe Namespace in library_repositories_list.txt",
+      "3. Aktualisiere namespace_mapping in dieser Datei",
+      "4. Verwende test_library_access() Funktion"
+    ]
+  }
+}
