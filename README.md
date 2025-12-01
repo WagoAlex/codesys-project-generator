@@ -69,72 +69,72 @@ Project Managers
 ### System Architecture
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         INPUT LAYER                              │
+│                         INPUT LAYER                             │
 │  ┌──────────────────────────────────────────────────────────┐   │
-│  │  Excel file: LIST_OF_MEASURING_POINTS.xls               │   │
-│  │  ┌──────────────┬──────────────┬───────────────────┐    │   │
-│  │  │  IO Boxes    │  SIGNALLIST  │  LOCATION/LEGEND │    │   │
-│  │  │  (PLC info)  │  (signals)   │  (metadata)      │    │   │
-│  │  └──────────────┴──────────────┴───────────────────┘    │   │
+│  │  Excel file: LIST_OF_MEASURING_POINTS.xls                │   │
+│  │  ┌──────────────┬──────────────┬───────────────────┐     │   │
+│  │  │  IO Boxes    │  SIGNALLIST  │  LOCATION/LEGEND  │     │   │
+│  │  │  (PLC info)  │  (signals)   │  (metadata)       │     │   │
+│  │  └──────────────┴──────────────┴───────────────────┘     │   │
 │  └──────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                    PROCESSING LAYER                              │
+│                    PROCESSING LAYER                             │
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │  batch_processor.py                                      │   │
-│  │  ├─► excel_to_json_converter.py (PLCConfigExtractor)    │   │
-│  │  │   ├─► Extract PLCs (IO Boxes sheet)                  │   │
-│  │  │   ├─► Extract signals (SIGNALLIST sheet)             │   │
-│  │  │   ├─► Validate IP addresses                          │   │
-│  │  │   ├─► Group by module type                           │   │
-│  │  │   └─► Calculate statistics                           │   │
+│  │  ├─► excel_to_json_converter.py (PLCConfigExtractor)     │   │
+│  │  │   ├─► Extract PLCs (IO Boxes sheet)                   │   │
+│  │  │   ├─► Extract signals (SIGNALLIST sheet)              │   │
+│  │  │   ├─► Validate IP addresses                           │   │
+│  │  │   ├─► Group by module type                            │   │
+│  │  │   └─► Calculate statistics                            │   │
 │  └──────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                       OUTPUT LAYER                               │
+│                       OUTPUT LAYER                              │
 │  ┌──────────────────────────────────────────────────────────┐   │
-│  │  JSON configurations                                    │   │
-│  │  ├─► PLC_IO020_config.json                              │   │
-│  │  ├─► PLC_IO043_config.json                              │   │
-│  │  └─► PLC_IO251_config.json                              │   │
+│  │  JSON configurations                                     │   │
+│  │  ├─► PLC_IO020_config.json                               │   │
+│  │  ├─► PLC_IO043_config.json                               │   │
+│  │  └─► PLC_IO251_config.json                               │   │
 │  │                                                          │   │
-│  │  IEC 61131-3 variable lists                             │   │
-│  │  ├─► IO020_variables.txt                                │   │
-│  │  ├─► IO043_variables.txt                                │   │
-│  │  └─► IO251_variables.txt                                │   │
+│  │  IEC 61131-3 variable lists                              │   │
+│  │  ├─► IO020_variables.txt                                 │   │
+│  │  ├─► IO043_variables.txt                                 │   │
+│  │  └─► IO251_variables.txt                                 │   │
 │  │                                                          │   │
 │  │  Reports                                                 │   │
-│  │  ├─► summary.txt                                        │   │
-│  │  └─► validation_report.txt                              │   │
+│  │  ├─► summary.txt                                         │   │
+│  │  └─► validation_report.txt                               │   │
 │  └──────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                   CODESYS INTEGRATION LAYER                      │
+│                   CODESYS INTEGRATION LAYER                     │
 │  ┌──────────────────────────────────────────────────────────┐   │
-│  │  create_codesys_project.py (IronPython)                 │   │
-│  │  ├─► Load template project (TEMPLATE_WAGO_750-8210)     │   │
-│  │  ├─► Configure PLC device (750-8210)                    │   │
-│  │  ├─► Add K-Bus I/O modules                              │   │
-│  │  ├─► Import variables (GVL)                             │   │
-│  │  ├─► Set IP address                                     │   │
-│  │  └─► Save CODESYS project                               │   │
+│  │  create_codesys_project.py (IronPython)                  │   │
+│  │  ├─► Load template project (TEMPLATE_WAGO_750-8210)      │   │
+│  │  ├─► Configure PLC device (750-8210)                     │   │
+│  │  ├─► Add K-Bus I/O modules                               │   │
+│  │  ├─► Import variables (GVL)                              │   │
+│  │  ├─► Set IP address                                      │   │
+│  │  └─► Save CODESYS project                                │   │
 │  └──────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                         FINAL OUTPUT                             │
+│                         FINAL OUTPUT                            │
 │  ┌──────────────────────────────────────────────────────────┐   │
-│  │  CODESYS Projects (.project)                            │   │
-│  │  ├─► IO020.project                                      │   │
-│  │  ├─► IO043.project                                      │   │
-│  │  └─► IO251.project                                      │   │
+│  │  CODESYS Projects (.project)                             │   │
+│  │  ├─► IO020.project                                       │   │
+│  │  ├─► IO043.project                                       │   │
+│  │  └─► IO251.project                                       │   │
 │  └──────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -841,19 +841,19 @@ proj.close()
 ┌─────────────────────────────────────────────────────────────────────┐
 │ EXCEL: LIST_OF_MEASURING_POINTS.xls                                 │
 ├─────────────────────────────────────────────────────────────────────┤
-│                                                                      │
+│                                                                     │
 │  Sheet: IO-Boxen (header row 4)                                     │
 │  ┌────────────────────────────────────────────────────────────────┐ │
-│  │ IO BOX | Location | PLC   | ... | IP-Adress      | Type      │ │
+│  │ IO BOX | Location | PLC   | ... | IP-Adress      | Type        │ │
 │  ├────────────────────────────────────────────────────────────────┤ │
-│  │ 361403 | I A 3    | IO043 | ... | 172.16.60.043  | 750-8210  │ │
+│  │ 361403 | I A 3    | IO043 | ... | 172.16.60.043  | 750-8210    │ │
 │  └────────────────────────────────────────────────────────────────┘ │
-│                                                                      │
+│                                                                     │
 │  Sheet: SIGNALLIST (header row 1)                                   │
 │  ┌────────────────────────────────────────────────────────────────┐ │
-│  │ PLC | Type | Signal | Mode_Type | PLC_terminal | Objektname  │ │
+│  │ PLC | Type | Signal | Mode_Type | PLC_terminal | Objektname    │ │
 │  ├────────────────────────────────────────────────────────────────┤ │
-│  │IO043│  I   │  NC    │  750-432  │ IX 65.3-A3.5 │ I0001_Me..  │ │
+│  │IO043│  I   │  NC    │  750-432  │ IX 65.3-A3.5 │ I0001_Me..    │ │
 │  └────────────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────────┘
                                 │
@@ -862,9 +862,9 @@ proj.close()
 ┌─────────────────────────────────────────────────────────────────────┐
 │ PLCConfigExtractor.extract_plcs_from_io_boxes()                     │
 ├─────────────────────────────────────────────────────────────────────┤
-│                                                                      │
-│  DataFrame → row iteration → validation                              │
-│                                                                      │
+│                                                                     │
+│  DataFrame → row iteration → validation                             │
+│                                                                     │
 │  self.plcs["IO043"] = {                                             │
 │      "PLC_Info": {                                                  │
 │          "Name": "IO043",                                           │
@@ -882,10 +882,10 @@ proj.close()
 ┌─────────────────────────────────────────────────────────────────────┐
 │ PLCConfigExtractor.extract_signals_from_signallist()                │
 ├─────────────────────────────────────────────────────────────────────┤
-│                                                                      │
-│  DataFrame → grouping by (PLC, Module_Type)                          │
-│                                                                      │
-│  self.plcs["IO043"]["IO_Modules"]["750-432"] = {                   │
+│                                                                     │
+│  DataFrame → grouping by (PLC, Module_Type)                         │
+│                                                                     │
+│  self.plcs["IO043"]["IO_Modules"]["750-432"] = {                    │
 │      "Module_Type": "750-432",                                      │
 │      "Signals": [                                                   │
 │          {                                                          │
@@ -896,7 +896,7 @@ proj.close()
 │          }                                                          │
 │      ]                                                              │
 │  }                                                                  │
-│                                                                      │
+│                                                                     │
 │  Update statistics:                                                 │
 │  - Total_Modules++                                                  │
 │  - Total_Signals++                                                  │
@@ -907,7 +907,7 @@ proj.close()
 ┌─────────────────────────────────────────────────────────────────────┐
 │ PLCConfigExtractor.generate_json_files()                            │
 ├─────────────────────────────────────────────────────────────────────┤
-│                                                                      │
+│                                                                     │
 │  For each PLC in self.plcs:                                         │
 │      1. Convert IO_Modules dict → list                              │
 │      2. Add metadata                                                │
@@ -930,17 +930,17 @@ proj.close()
 ┌─────────────────────────────────────────────────────────────────────┐
 │ create_variable_list()                                              │
 ├─────────────────────────────────────────────────────────────────────┤
-│                                                                      │
-│  For each PLC:                                                       │
-│      For each module in IO_Modules:                                  │
-│          For each signal:                                            │
-│              Map Signal_Type → IEC data type                         │
-│              Generate declaration                                    │
-│                                                                      │
-│  VAR_GLOBAL                                                          │
-│      (* Module: 750-432 *)                                           │
-│      I0001_Me_MnCoolCmnAlrm : BOOL;                                  │
-│  END_VAR                                                             │
+│                                                                     │
+│  For each PLC:                                                      │
+│      For each module in IO_Modules:                                 │
+│          For each signal:                                           │
+│              Map Signal_Type → IEC data type                        │
+│              Generate declaration                                   │
+│                                                                     │
+│  VAR_GLOBAL                                                         │
+│      (* Module: 750-432 *)                                          │
+│      I0001_Me_MnCoolCmnAlrm : BOOL;                                 │
+│  END_VAR                                                            │
 └─────────────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
@@ -957,7 +957,7 @@ proj.close()
 ┌─────────────────────────────────────────────────────────────────────┐
 │ create_single_project()                                             │
 ├─────────────────────────────────────────────────────────────────────┤
-│                                                                      │
+│                                                                     │
 │  1. Load IO043_variables.txt → var_block (string)                   │
 │  2. Load PLC_IO043_config.json → config (dict)                      │
 │  3. Copy template → IO043.project                                   │
