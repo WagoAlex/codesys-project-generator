@@ -1,106 +1,80 @@
-# WAGO PLC Configuration Toolchain
-
-**Automatisierte Extraktion, Konvertierung und CODESYS-Integration von PLC-Konfigurationen**
-
-Version: 2.0  
-Letztes Update: November 2025
-
+# PLC Configuration Toolchain
+Automated extraction, conversion, and CODESYS integration of PLC configurations
+Version: 2.1  
+Last Update: November 2025
 ---
-
-## 📋 Inhaltsverzeichnis
-
-- [Genereller Überblick](#-genereller-überblick)
-  - [Was ist dieses Projekt?](#was-ist-dieses-projekt)
-  - [Hauptfunktionen](#hauptfunktionen)
-  - [Wer sollte dieses Tool verwenden?](#wer-sollte-dieses-tool-verwenden)
-- [Architektonischer Überblick & Nutzungsanleitung](#-architektonischer-überblick--nutzungsanleitung)
-  - [System-Architektur](#system-architektur)
-  - [Workflow-Diagramm](#workflow-diagramm)
-  - [Schnellstart](#schnellstart)
-  - [Detaillierte Nutzungsanleitung](#detaillierte-nutzungsanleitung)
-- [Entwickler-Dokumentation](#-entwickler-dokumentation)
-  - [Projekt-Struktur](#projekt-struktur)
-  - [Komponenten-Details](#komponenten-details)
-  - [Datenfluss & Schnittstellen](#datenfluss--schnittstellen)
-  - [Erweiterung & Anpassung](#erweiterung--anpassung)
-
+## 📋 Table of Contents
+- [General Overview](#-general-overview)
+  - [What is this project?](#what-is-this-project)
+  - [Key Features](#key-features)
+  - [Who should use this tool?](#who-should-use-this-tool)
+- [Architectural Overview & Usage Guide](#-architectural-overview--usage-guide)
+  - [System Architecture](#system-architecture)
+  - [Workflow Diagram](#workflow-diagram)
+  - [Quick Start](#quick-start)
+  - [Detailed Usage Guide](#detailed-usage-guide)
+- [Developer Documentation](#-developer-documentation)
+  - [Project Structure](#project-structure)
+  - [Component Details](#component-details)
+  - [Data Flow & Interfaces](#data-flow--interfaces)
+  - [Extension & Customization](#extension--customization)
 ---
-
-## 🎯 Genereller Überblick
-
-### Was ist dieses Projekt?
-
-Die **WAGO PLC Configuration Toolchain** ist eine umfassende Automatisierungslösung für die Verwaltung und Integration von WAGO PLC-Konfigurationen. Sie transformiert Excel-basierte Messpunktlisten in strukturierte JSON-Konfigurationen und CODESYS-kompatible Projektdateien.
-
-#### Problemstellung
-
-In industriellen Automatisierungsprojekten werden PLC-Konfigurationen oft in Excel-Dokumenten verwaltet:
-- Hunderte bis Tausende von I/O-Signalen pro Projekt
-- Manuelle Übertragung in CODESYS ist fehleranfällig und zeitaufwendig
-- Keine zentrale Versionskontrolle oder Validierung
-- Schwierige Nachvollziehbarkeit von Änderungen
-
-#### Lösung
-
-Diese Toolchain automatisiert den kompletten Workflow:
-1. **Extraktion**: Liest strukturierte Daten aus Excel-Dateien
-2. **Validierung**: Prüft IP-Adressen, Moduldefinitionen und Signalkonsistenz
-3. **Transformation**: Generiert JSON-Konfigurationen und IEC 61131-3 Variablenlisten
-4. **Integration**: Erstellt vollständige CODESYS-Projekte via IronPython ScriptEngine
-
-### Hauptfunktionen
-
-#### ✅ Excel-zu-JSON-Konvertierung
-- Automatische Erkennung von bis zu 5 PLCs pro Projekt
-- Extraktion von I/O-Modulkonfigurationen (750-4xx, 750-5xx, 750-6xx)
-- Validierung von IP-Adressen (172.16.46.x, 172.16.60.x)
-- Generierung strukturierter JSON-Dateien
-
-#### ✅ CODESYS-Integration
-- Automatische Projekterstellung aus Template
-- Konfiguration der K-Bus I/O-Module
-- Import von Variablenlisten (IEC 61131-3 Standard)
-- IP-Adress-Konfiguration der PLC-Devices
-
-#### ✅ Qualitätssicherung
-- Umfassende Validierungsberichte
-- Warnungen bei ungültigen Einträgen
-- Statistiken pro PLC (Module, Signale, I/O-Typen)
-- Logging aller Verarbeitungsschritte
-
-### Wer sollte dieses Tool verwenden?
-
-#### 🎯 Zielgruppen
-
-**Automatisierungsingenieure**
-- Erstellen von PLC-Projekten aus Anlagendokumentation
-- Schnelle Integration neuer I/O-Konfigurationen
-- Konsistente Projekt-Strukturen
-
-**Systemintegratoren**
-- Batch-Verarbeitung mehrerer PLCs
-- Standardisierte Projektvorlagen
-- Dokumentation und Nachverfolgbarkeit
-
-**Projektmanager**
-- Überblick über Projekt-Umfang (Anzahl Signale, Module)
-- Validierung von Planungsdaten
-- Qualitätssicherung vor Inbetriebnahme
-
+## 🎯 General Overview
+### What is this project?
+The WAGO PLC Configuration Toolchain is a comprehensive automation solution for managing and integrating WAGO PLC configurations. It transforms Excel-based measuring point lists into structured JSON configurations and CODESYS-compatible project files.
+#### Problem Statement
+In industrial automation projects, PLC configurations are often maintained in Excel documents:
+- Hundreds to thousands of I/O signals per project
+- Manual transfer into CODESYS is error-prone and time-consuming
+- No central version control or validation
+- Difficult traceability of changes
+#### Solution
+This toolchain automates the entire workflow:
+1. Extraction: Reads structured data from Excel files
+2. Validation: Checks IP addresses, module definitions, and signal consistency
+3. Transformation: Generates JSON configurations and IEC 61131-3 variable lists
+4. Integration: Creates complete CODESYS projects via IronPython ScriptEngine
+### Key Features
+#### ✅ Excel-to-JSON Conversion
+- Automatic detection of up to 5 PLCs per project
+- Extraction of I/O module configurations (750-4xx, 750-5xx, 750-6xx)
+- Validation of IP addresses (172.16.46.x, 172.16.60.x)
+- Generation of structured JSON files
+#### ✅ CODESYS Integration
+- Automatic project creation from template
+- Configuration of K-Bus I/O modules
+- Import of variable lists (IEC 61131-3 standard)
+- IP address configuration of PLC devices
+#### ✅ Quality Assurance
+- Comprehensive validation reports
+- Warnings for invalid entries
+- Statistics per PLC (modules, signals, I/O types)
+- Logging of all processing steps
+### Who should use this tool?
+#### 🎯 Target audiences
+Automation Engineers
+- Create PLC projects from plant documentation
+- Rapid integration of new I/O configurations
+- Consistent project structures
+System Integrators
+- Batch processing of multiple PLCs
+- Standardized project templates
+- Documentation and traceability
+Project Managers
+- Overview of project scope (number of signals, modules)
+- Validation of planning data
+- Quality assurance prior to commissioning
 ---
-
-## 🏗️ Architektonischer Überblick & Nutzungsanleitung
-
-### System-Architektur
-
+## 🏗️ Architectural Overview & Usage Guide
+### System Architecture
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                         INPUT LAYER                              │
 │  ┌──────────────────────────────────────────────────────────┐   │
-│  │  Excel-Datei: LIST_OF_MEASURING_POINTS.xls              │   │
+│  │  Excel file: LIST_OF_MEASURING_POINTS.xls               │   │
 │  │  ┌──────────────┬──────────────┬───────────────────┐    │   │
-│  │  │  IO-Boxen    │  SIGNALLIST  │  LOCATION/LEGEND │    │   │
-│  │  │  (PLC-Info)  │  (Signale)   │  (Metadaten)     │    │   │
+│  │  │  IO Boxes    │  SIGNALLIST  │  LOCATION/LEGEND │    │   │
+│  │  │  (PLC info)  │  (signals)   │  (metadata)      │    │   │
 │  │  └──────────────┴──────────────┴───────────────────┘    │   │
 │  └──────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
@@ -111,11 +85,11 @@ Diese Toolchain automatisiert den kompletten Workflow:
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │  batch_processor.py                                      │   │
 │  │  ├─► excel_to_json_converter.py (PLCConfigExtractor)    │   │
-│  │  │   ├─► Extract PLCs (IO-Boxen Sheet)                  │   │
-│  │  │   ├─► Extract Signals (SIGNALLIST Sheet)             │   │
-│  │  │   ├─► Validate IP Addresses                          │   │
-│  │  │   ├─► Group by Module Type                           │   │
-│  │  │   └─► Calculate Statistics                           │   │
+│  │  │   ├─► Extract PLCs (IO Boxes sheet)                  │   │
+│  │  │   ├─► Extract signals (SIGNALLIST sheet)             │   │
+│  │  │   ├─► Validate IP addresses                          │   │
+│  │  │   ├─► Group by module type                           │   │
+│  │  │   └─► Calculate statistics                           │   │
 │  └──────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
                             │
@@ -123,12 +97,12 @@ Diese Toolchain automatisiert den kompletten Workflow:
 ┌─────────────────────────────────────────────────────────────────┐
 │                       OUTPUT LAYER                               │
 │  ┌──────────────────────────────────────────────────────────┐   │
-│  │  JSON Configurations                                     │   │
+│  │  JSON configurations                                    │   │
 │  │  ├─► PLC_IO020_config.json                              │   │
 │  │  ├─► PLC_IO043_config.json                              │   │
 │  │  └─► PLC_IO251_config.json                              │   │
 │  │                                                          │   │
-│  │  IEC 61131-3 Variable Lists                             │   │
+│  │  IEC 61131-3 variable lists                             │   │
 │  │  ├─► IO020_variables.txt                                │   │
 │  │  ├─► IO043_variables.txt                                │   │
 │  │  └─► IO251_variables.txt                                │   │
@@ -144,12 +118,12 @@ Diese Toolchain automatisiert den kompletten Workflow:
 │                   CODESYS INTEGRATION LAYER                      │
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │  create_codesys_project.py (IronPython)                 │   │
-│  │  ├─► Load Template Project (TEMPLATE_WAGO_750-8210)     │   │
-│  │  ├─► Configure PLC Device (750-8210)                    │   │
-│  │  ├─► Add K-Bus I/O Modules                              │   │
-│  │  ├─► Import Variables (GVL)                             │   │
-│  │  ├─► Set IP Address                                     │   │
-│  │  └─► Save CODESYS Project                               │   │
+│  │  ├─► Load template project (TEMPLATE_WAGO_750-8210)     │   │
+│  │  ├─► Configure PLC device (750-8210)                    │   │
+│  │  ├─► Add K-Bus I/O modules                              │   │
+│  │  ├─► Import variables (GVL)                             │   │
+│  │  ├─► Set IP address                                     │   │
+│  │  └─► Save CODESYS project                               │   │
 │  └──────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
                             │
@@ -164,193 +138,153 @@ Diese Toolchain automatisiert den kompletten Workflow:
 │  └──────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
 ```
-
-### Workflow-Diagramm
-
+### Workflow Diagram
 ```
 START
   │
-  ├──► [1] Excel-Datei bereitstellen
-  │     ├─ Prüfe Sheets: IO-Boxen, SIGNALLIST
-  │     └─ Validiere Struktur (Header-Zeilen)
+  ├──► [1] Provide Excel file
+  │     ├─ Check sheets: IO Boxes, SIGNALLIST
+  │     └─ Validate structure (header rows)
   │
-  ├──► [2] Batch-Verarbeitung starten
+  ├──► [2] Start batch processing
   │     └─ python batch_processor.py --input=file.xls --output=./output
   │
-  ├──► [3] Extraktion & Validierung
-  │     ├─ Parse IO-Boxen (PLCs, IP-Adressen)
-  │     ├─ Parse SIGNALLIST (Signale, Module)
-  │     ├─ Validiere IP-Adressen
-  │     └─ Gruppiere nach PLC & Modultyp
+  ├──► [3] Extraction & validation
+  │     ├─ Parse IO Boxes (PLCs, IP addresses)
+  │     ├─ Parse SIGNALLIST (signals, modules)
+  │     ├─ Validate IP addresses
+  │     └─ Group by PLC & module type
   │
-  ├──► [4] JSON-Generierung
+  ├──► [4] JSON generation
   │     ├─ PLC_IO020_config.json
   │     ├─ PLC_IO043_config.json
   │     ├─ summary.txt
   │     └─ validation_report.txt
   │
-  ├──► [5] Variablenlisten-Generierung
+  ├──► [5] Variable list generation
   │     └─ python codesys_import_example.py --input=./output
   │
-  ├──► [6] CODESYS-Projekt-Erstellung (optional)
-  │     ├─ Öffne CODESYS mit ScriptEngine
-  │     ├─ Führe create_codesys_project.py aus
-  │     └─ Generiere .project Dateien
+  ├──► [6] CODESYS project creation (optional)
+  │     ├─ Open CODESYS with ScriptEngine
+  │     ├─ Run create_codesys_project.py
+  │     └─ Generate .project files
   │
-  └──► [7] Qualitätsprüfung
-        ├─ Überprüfe validation_report.txt
-        ├─ Kontrolliere Statistiken
-        └─ Teste CODESYS-Import
+  └──► [7] Quality check
+        ├─ Review validation_report.txt
+        ├─ Check statistics
+        └─ Test CODESYS import
   │
 END
 ```
-
-### Schnellstart
-
-#### Voraussetzungen
-
-**Python-Umgebung:**
+### Quick Start
+#### Prerequisites
+Python environment:
 ```bash
 Python 3.8+
 pandas >= 1.5.0
-openpyxl >= 3.0.0  # Für .xlsx Support
-xlrd >= 2.0.0      # Für .xls Support
+openpyxl >= 3.0.0  # For .xlsx support
+xlrd >= 2.0.0      # For .xls support
 ```
-
-**CODESYS (optional für Projekt-Generierung):**
+CODESYS (optional for project generation):
 ```
 CODESYS V3.5 SP19+
 WAGO PFC200 Device Description
-IronPython ScriptEngine aktiviert
+IronPython ScriptEngine enabled
 ```
-
 #### Installation
-
 ```bash
-# 1. Repository klonen
+# 1. Clone repository
 git clone <repository-url>
 cd codesys-project-generator
-
-# 2. Abhängigkeiten installieren
+# 2. Install dependencies
 pip install -r requirements.txt
-
-# 3. Verzeichnisstruktur erstellen
+# 3. Create directory structure
 mkdir -p input output projects
 ```
-
-#### Erste Schritte
-
-**Schritt 1: Excel-Datei vorbereiten**
+#### First Steps
+Step 1: Prepare the Excel file
 ```bash
-# Kopiere deine Excel-Datei ins input-Verzeichnis
+# Copy your Excel file into the input directory
 cp /path/to/LIST_OF_MEASURING_POINTS.xls ./input/
 ```
-
-**Schritt 2: Batch-Verarbeitung starten**
+Step 2: Start batch processing
 ```bash
 python batch_processor.py \
   --input=./input/LIST_OF_MEASURING_POINTS.xls \
   --output=./output
 ```
-
-**Schritt 3: Ergebnisse prüfen**
+Step 3: Review results
 ```bash
-# Übersicht anzeigen
+# Show overview
 cat ./output/summary.txt
-
-# Validierungsbericht prüfen
+# Check validation report
 cat ./output/validation_report.txt
-
-# JSON-Dateien ansehen
+# View JSON files
 ls -lh ./output/*.json
 ```
-
-**Schritt 4: Variablenlisten generieren**
+Step 4: Generate variable lists
 ```bash
 python codesys_import_example.py \
   --input=./output
 ```
-
-### Detaillierte Nutzungsanleitung
-
-#### Excel-Dateiformat
-
-##### Sheet: "IO-Boxen"
-Header in **Zeile 4**, Daten ab **Zeile 5**:
-
-| Spalte | Bezeichnung | Beschreibung | Beispiel |
-|--------|-------------|--------------|----------|
-| 1 | IO BOX | Box-Nummer | 36140310.0 |
-| 2 | Location | Standort | I A 3 |
-| 3 | PLC | PLC-Name | IO043 |
-| 6 | IP-Adress | IP-Adresse | 172.16.60.043 |
-
-##### Sheet: "SIGNALLIST"
-Header in **Zeile 1**, Daten ab **Zeile 2**:
-
-| Spalte | Bezeichnung | Beschreibung | Beispiel |
-|--------|-------------|--------------|----------|
-| 5 | PLC | PLC-Zuordnung | IO045 |
-| 6 | Type | Signal-Typ | I (Input) / O (Output) |
-| 11 | Signal | Signalart | NC / 4-20mA / 24V DC |
-| 62 | Mode_Type | IO-Modultyp | 750-432 / 750-554 |
-| 69 | PLC_terminal | Terminal-Adresse | IX 65.3 -A3.5 |
-| 72 | Objektname | Signalname | I0001_Me_MnCoolCmnAlrm |
-
-#### Kommandozeilen-Optionen
-
-##### batch_processor.py
-
+### Detailed Usage Guide
+#### Excel File Format
+Sheet: "IO-Boxes"
+Header in row 4, data from row 5:
+| Column | Name | Description | Example |
+|--------|------|-------------|---------|
+| 1 | IO BOX | Box number | 36140310.0 |
+| 2 | Location | Location | I A 3 |
+| 3 | PLC | PLC name | IO043 |
+| 6 | IP-Adress | IP address | 172.16.60.043 |
+Sheet: "SIGNALLIST"
+Header in row 1, data from row 2:
+| Column | Name | Description | Example |
+|--------|------|-------------|---------|
+| 5 | PLC | PLC assignment | IO045 |
+| 6 | Type | Signal type | I (Input) / O (Output) |
+| 11 | Signal | Signal kind | NC / 4-20mA / 24V DC |
+| 62 | Mode_Type | IO module type | 750-432 / 750-554 |
+| 69 | PLC_terminal | Terminal address | IX 65.3 -A3.5 |
+| 72 | Objektname | Signal name | I0001_Me_MnCoolCmnAlrm |
+#### Command Line Options
+batch_processor.py
 ```bash
 python batch_processor.py [OPTIONS]
-
-Optionen:
-  --input PATH   (erforderlich)  Pfad zur Excel-Datei
-  --output PATH  (erforderlich)  Pfad zum Ausgabeverzeichnis
-
-Beispiele:
-  # Einfache Verarbeitung
+Options:
+  --input PATH   (required)  Path to the Excel file
+  --output PATH  (required)  Path to the output directory
+Examples:
+  # Simple processing
   python batch_processor.py --input=data.xls --output=./configs
-  
-  # Mit absoluten Pfaden
+  # With absolute paths
   python batch_processor.py \
     --input=/home/user/data/measuring_points.xls \
     --output=/home/user/output/configs
 ```
-
-##### codesys_import_example.py
-
+codesys_import_example.py
 ```bash
 python codesys_import_example.py [OPTIONS]
-
-Optionen:
-  --input PATH  (erforderlich)  Verzeichnis mit JSON-Konfigurationen
-  --plc NAME    (optional)      Spezifische PLC (z.B. IO251)
-
-Beispiele:
-  # Alle PLCs verarbeiten
+Options:
+  --input PATH  (required)  Directory with JSON configurations
+  --plc NAME    (optional)  Specific PLC (e.g., IO251)
+Examples:
+  # Process all PLCs
   python codesys_import_example.py --input=./output
-  
-  # Nur eine spezifische PLC
+  # Only a specific PLC
   python codesys_import_example.py --input=./output --plc=IO020
 ```
-
-##### create_codesys_project.py
-
+create_codesys_project.py
 ```bash
-# Muss in CODESYS ScriptEngine ausgeführt werden
-# Konfiguration in Datei anpassen:
-
-AUTO_DETECT_MODE = True  # Findet automatisch alle IO*_variables.txt
+# Must be executed in CODESYS ScriptEngine
+# Adjust configuration in file:
+AUTO_DETECT_MODE = True  # Automatically finds all IO*_variables.txt
 DEFAULT_PROJECT_PATH = r"D:\WAGO\CODESYS\projects"
 DEFAULT_VARIABLES_PATH = r"D:\WAGO\CODESYS\outputs"
 TEMPLATE_PROJECT = r"D:\WAGO\CODESYS\TEMPLATE_WAGO_750-8210.project"
 ```
-
-#### Output-Dateien
-
-##### JSON-Konfiguration (PLC_IO043_config.json)
-
+#### Output Files
+JSON configuration (PLC_IO043_config.json)
 ```json
 {
   "PLC_Info": {
@@ -386,23 +320,18 @@ TEMPLATE_PROJECT = r"D:\WAGO\CODESYS\TEMPLATE_WAGO_750-8210.project"
   }
 }
 ```
-
-##### Variablenliste (IO043_variables.txt)
-
+Variable list (IO043_variables.txt)
 ```iec61131-3
 VAR_GLOBAL
     (* Digital Inputs - 750-432 *)
     I0001_Me_MnCoolCmnAlrm : BOOL;
     I0002_Me_CoolPumpAlrm : BOOL;
-    
     (* Analog Outputs - 750-554 *)
     O0001_So_CoolValvePos : INT;
     O0002_So_PumpSpeed : INT;
 END_VAR
 ```
-
-##### Summary-Report (summary.txt)
-
+Summary report (summary.txt)
 ```
 ======================================================================
 WAGO PLC Configuration - Summary Report
@@ -410,14 +339,11 @@ WAGO PLC Configuration - Summary Report
 Generated: 2025-11-12 10:30:00
 Source File: measuring_points.xls
 ======================================================================
-
 Total PLCs: 3
 Total IO Modules: 15
 Total Signals: 427
-
 PLC Overview:
 ----------------------------------------------------------------------
-
 IO020:
   Type: 750-8210
   IP Address: 172.16.46.020
@@ -425,7 +351,6 @@ IO020:
   IO Box: 36140308
   Modules: 4
   Signals: 669 (I: 7, O: 1)
-
 IO043:
   Type: 750-8210
   IP Address: 172.16.60.043
@@ -434,9 +359,7 @@ IO043:
   Modules: 5
   Signals: 42 (I: 25, O: 17)
 ```
-
-##### Validierungs-Report (validation_report.txt)
-
+Validation report (validation_report.txt)
 ```
 ======================================================================
 WAGO PLC Configuration - Validation Report
@@ -444,10 +367,8 @@ WAGO PLC Configuration - Validation Report
 Generated: 2025-11-12 10:30:00
 Source File: measuring_points.xls
 ======================================================================
-
 Total Warnings: 2
 Total Errors: 0
-
 Validation Log:
 ----------------------------------------------------------------------
 [INFO] Reading IO-Boxen sheet from measuring_points.xls...
@@ -458,60 +379,48 @@ Validation Log:
 [WARNING] PLC IO999: Module 750-999 not found in device descriptors
 [INFO] Generated 3 PLC configuration files
 ```
-
-#### Fehlerbehebung
-
-##### Problem: "No PLC configuration files found"
+#### Troubleshooting
+Problem: "No PLC configuration files found"
 ```bash
-# Lösung 1: Prüfe Dateinamenmuster
+# Solution 1: Check filename pattern
 ls ./output/PLC_*_config.json
-
-# Lösung 2: Prüfe Berechtigungen
+# Solution 2: Check permissions
 chmod -R 755 ./output
-
-# Lösung 3: Führe Batch-Prozessor erneut aus
+# Solution 3: Run batch processor again
 python batch_processor.py --input=data.xls --output=./output
 ```
-
-##### Problem: "Invalid IP address format"
+Problem: "Invalid IP address format"
 ```python
-# In validation_report.txt nachsehen:
+# Check validation_report.txt:
 cat ./output/validation_report.txt | grep "IP"
-
-# Gültige IP-Bereiche:
+# Valid IP ranges:
 # - 172.16.46.020 - 172.16.46.251
 # - 172.16.60.001 - 172.16.60.255
 ```
-
-##### Problem: "Module 750-XXX not found"
+Problem: "Module 750-XXX not found"
 ```python
-# Verfügbare Module prüfen in create_codesys_project.py:
-# WAGO_DEVICE_DESCRIPTORS Dictionary
-
-# Unterstützte Module (Beispiele):
+# Check available modules in create_codesys_project.py:
+# WAGO_DEVICE_DESCRIPTORS dictionary
+# Supported modules (examples):
 # - 750-402, 750-430, 750-432 (Digital Input)
 # - 750-517, 750-530, 750-554 (Analog Output)
-# - 750-610, 750-652 (Serielle Kommunikation)
+# - 750-610, 750-652 (Serial communication)
 ```
-
 ---
-
-## 👨‍💻 Entwickler-Dokumentation
-
-### Projekt-Struktur
-
+## 👨‍💻 Developer Documentation
+### Project Structure
 ```
 codesys-project-generator/
 │
-├── batch_processor.py              # CLI-Wrapper für Excel-Verarbeitung
-├── excel_to_json_converter.py      # Kern-Extraktionslogik
-├── codesys_import_example.py       # Variablenlisten-Generator
-├── create_codesys_project.py       # CODESYS IronPython Integration
+├── batch_processor.py              # CLI wrapper for Excel processing
+├── excel_to_json_converter.py      # Core extraction logic
+├── codesys_import_example.py       # Variable list generator
+├── create_codesys_project.py       # CODESYS IronPython integration
 │
-├── input/                          # Eingabe-Verzeichnis
+├── input/                          # Input directory
 │   └── LIST_OF_MEASURING_POINTS.xls
 │
-├── output/                         # Ausgabe-Verzeichnis
+├── output/                         # Output directory
 │   ├── PLC_IO020_config.json
 │   ├── PLC_IO043_config.json
 │   ├── PLC_IO251_config.json
@@ -521,154 +430,120 @@ codesys-project-generator/
 │   ├── summary.txt
 │   └── validation_report.txt
 │
-├── projects/                       # CODESYS-Projekte
+├── projects/                       # CODESYS projects
 │   ├── IO020.project
 │   ├── IO043.project
 │   └── IO251.project
 │
-├── TEMPLATE_WAGO_750-8210.project  # CODESYS Template
+├── TEMPLATE_WAGO_750-8210.project  # CODESYS template
 │
-├── requirements.txt                # Python-Abhängigkeiten
-├── README.md                       # Diese Datei
-├── PROGRAMMABLAUFPLAN.md           # Workflow-Dokumentation
-├── ENTWICKLER_ZUSAMMENFASSUNG.md   # Entwickler-Notizen
-└── WAGO_PLC_Schnittstellen_Dokumentation.md  # API-Referenz
+├── requirements.txt                # Python dependencies
+├── README.md                       # This file
+├── PROGRAMMABLAUFPLAN.md           # Workflow documentation
+├── ENTWICKLER_ZUSAMMENFASSUNG.md   # Developer notes
+└── WAGO_PLC_Schnittstellen_Dokumentation.md  # API reference
 ```
-
-### Komponenten-Details
-
+### Component Details
 #### 1. batch_processor.py
-
-**Zweck:** CLI-Einstiegspunkt für die Batch-Verarbeitung
-
-**Hauptfunktionen:**
-
+Purpose: CLI entry point for batch processing
+Main functions:
 ```python
 def parse_arguments() -> argparse.Namespace
     """
-    Parst Kommandozeilen-Argumente
-    
+    Parses command line arguments
     Returns:
-        Namespace mit 'input' und 'output' Attributen
+        Namespace with 'input' and 'output' attributes
     """
-
 def main() -> None
     """
-    Hauptausführungslogik:
-    1. Validiere Input-Datei
-    2. Erstelle Output-Verzeichnis
-    3. Initialisiere PLCConfigExtractor
-    4. Verarbeite Excel-Datei
-    5. Gebe Zusammenfassung aus
+    Main execution logic:
+    1. Validate input file
+    2. Create output directory
+    3. Initialize PLCConfigExtractor
+    4. Process Excel file
+    5. Output summary
     """
 ```
-
-**Verwendungsbeispiel:**
-
+Usage example:
 ```python
-# Kommandozeile
+# Command line
 python batch_processor.py --input=data.xls --output=./configs
-
-# Programmaufruf
+# Programmatic call
 from batch_processor import main
 import sys
 sys.argv = ['batch_processor.py', '--input=data.xls', '--output=./configs']
 main()
 ```
-
 #### 2. excel_to_json_converter.py
-
-**Zweck:** Kern-Extraktions- und Konvertierungslogik
-
-**Klasse: PLCConfigExtractor**
-
+Purpose: Core extraction and conversion logic
+Class: PLCConfigExtractor
 ```python
 class PLCConfigExtractor:
     """
-    Extrahiert PLC-Konfigurationen aus Excel und generiert JSON
-    
+    Extracts PLC configurations from Excel and generates JSON
     Attributes:
-        excel_file (str): Pfad zur Excel-Eingabedatei
-        plcs (dict): Dictionary aller extrahierten PLCs
-        validation_log (list): Liste aller Log-Einträge
-        stats (dict): Statistiken zur Verarbeitung
+        excel_file (str): Path to the Excel input file
+        plcs (dict): Dictionary of all extracted PLCs
+        validation_log (list): List of all log entries
+        stats (dict): Processing statistics
     """
-    
-    def __init__(self, excel_file: str):
-        """Initialisiert Extractor mit Excel-Datei"""
-        
+    def **init**(self, excel_file: str):
+        """Initializes extractor with Excel file"""
     def extract_plcs_from_io_boxes(self) -> None:
         """
-        Extrahiert PLC-Informationen aus Sheet 'IO-Boxen'
-        
-        Verarbeitung:
-        1. Lese Sheet mit pandas (Header in Zeile 3 oder 0)
-        2. Iteriere über Zeilen ab Zeile 5
-        3. Extrahiere: PLC-Name, IP, Location, IO Box
-        4. Validiere IP-Adresse
-        5. Speichere in self.plcs
+        Extracts PLC information from sheet 'IO-Boxen'
+        Processing:
+        1. Read sheet with pandas (header in row 3 or 0)
+        2. Iterate over rows starting at row 5
+        3. Extract: PLC name, IP, location, IO box
+        4. Validate IP address
+        5. Store in self.plcs
         """
-        
     def extract_signals_from_signallist(self) -> None:
         """
-        Extrahiert Signale aus Sheet 'SIGNALLIST'
-        
-        Verarbeitung:
-        1. Lese Sheet mit pandas (Header in Zeile 0)
-        2. Iteriere über Zeilen ab Zeile 2
-        3. Gruppiere Signale nach PLC und Modultyp
-        4. Berechne Statistiken (Input/Output-Zähler)
+        Extracts signals from sheet 'SIGNALLIST'
+        Processing:
+        1. Read sheet with pandas (header in row 0)
+        2. Iterate over rows starting at row 2
+        3. Group signals by PLC and module type
+        4. Compute statistics (input/output counters)
         """
-        
     def validate_ip_address(self, ip: str) -> tuple[bool, str]:
         """
-        Validiert IP-Adress-Format
-        
+        Validates IP address format
         Args:
-            ip: IP-Adresse als String
-            
+            ip: IP address as string
         Returns:
             (is_valid, result_or_error_message)
-            
-        Validierungsregeln:
+        Validation rules:
         - Format: xxx.xxx.xxx.xxx
-        - Jedes Oktett: 0-255
-        - Nicht leer
+        - Each octet: 0-255
+        - Not empty
         """
-        
     def generate_json_files(self, output_dir: str) -> list:
         """
-        Generiert JSON-Konfigurationsdateien
-        
+        Generates JSON configuration files
         Args:
-            output_dir: Zielverzeichnis
-            
+            output_dir: Target directory
         Returns:
-            Liste generierter Dateinamen
-            
+            List of generated filenames
         Format:
         - PLC_Info: Name, Type, IP, Location, IO_Box
-        - IO_Modules: Liste von Modulen mit Signalen
-        - Statistics: Zähler
-        - Metadata: Generierungsinfos
+        - IO_Modules: List of modules with signals
+        - Statistics: Counters
+        - Metadata: Generation info
         """
-        
     def generate_summary(self, output_dir: str) -> str:
-        """Generiert summary.txt mit Übersicht"""
-        
+        """Generates summary.txt with overview"""
     def generate_validation_report(self, output_dir: str) -> str:
-        """Generiert validation_report.txt mit Warnungen/Fehlern"""
-        
+        """Generates validation_report.txt with warnings/errors"""
     def process(self, output_dir: str) -> list:
         """
-        Hauptverarbeitungs-Pipeline
-        
+        Main processing pipeline
         Args:
-            output_dir: Ausgabeverzeichnis
-            
+            output_dir: Output directory
         Returns:
-            Liste generierter JSON-Dateien
-            
+            List of generated JSON files
         Workflow:
         1. extract_plcs_from_io_boxes()
         2. extract_signals_from_signallist()
@@ -677,11 +552,9 @@ class PLCConfigExtractor:
         5. generate_validation_report()
         """
 ```
-
-**Datenstrukturen:**
-
+Data structures:
 ```python
-# self.plcs Dictionary-Struktur
+# self.plcs dictionary structure
 {
     "IO043": {
         "PLC_Info": {
@@ -712,15 +585,13 @@ class PLCConfigExtractor:
         }
     }
 }
-
-# validation_log Einträge
+# validation_log entries
 [
     "[INFO] Reading IO-Boxen sheet...",
     "[WARNING] Row 15: Empty PLC field, skipping",
     "[ERROR] PLC IO999: Invalid IP format: 999.999.999.999"
 ]
-
-# stats Dictionary
+# stats dictionary
 {
     'total_plcs': 3,
     'total_signals': 427,
@@ -729,78 +600,59 @@ class PLCConfigExtractor:
     'errors': 0
 }
 ```
-
 #### 3. codesys_import_example.py
-
-**Zweck:** Generiert IEC 61131-3 Variablenlisten aus JSON
-
-**Hauptfunktionen:**
-
+Purpose: Generates IEC 61131-3 variable lists from JSON
+Main functions:
 ```python
 def load_plc_config(json_file: str) -> dict:
     """
-    Lädt JSON-Konfiguration
-    
+    Loads JSON configuration
     Args:
-        json_file: Pfad zur JSON-Datei
-        
+        json_file: Path to the JSON file
     Returns:
-        Dictionary mit PLC-Konfiguration oder None bei Fehler
+        Dictionary with PLC configuration or None on error
     """
-
 def create_variable_list(config: dict, output_file: str) -> None:
     """
-    Erstellt IEC 61131-3 Variablenliste
-    
+    Creates IEC 61131-3 variable list
     Args:
-        config: PLC-Konfiguration aus JSON
-        output_file: Ausgabedatei (z.B. IO043_variables.txt)
-        
-    Generiert:
+        config: PLC configuration from JSON
+        output_file: Output file (e.g., IO043_variables.txt)
+    Generates:
         VAR_GLOBAL
-            (* Kommentare für Modultypen *)
+            (* Comments per module type *)
             variable_name : data_type;
         END_VAR
-        
-    Datentyp-Mapping:
-        - "I" / "O" mit "NC" / "NO" → BOOL
-        - "I" / "O" mit "4-20mA" / "0-10V" → INT
-        - "RS485" / "RS232" → Keine Variable (Kommentar)
+    Data type mapping:
+        - "I" / "O" with "NC" / "NO" → BOOL
+        - "I" / "O" with "4-20mA" / "0-10V" → INT
+        - "RS485" / "RS232" → No variable (comment)
     """
-
 def find_json_configs(directory: str) -> list:
     """
-    Findet alle PLC_*_config.json Dateien
-    
+    Finds all PLC_*_config.json files
     Args:
-        directory: Suchverzeichnis
-        
+        directory: Search directory
     Returns:
-        Liste von Dictionaries mit:
-        - plc_name: PLC-Bezeichnung (z.B. "IO043")
-        - filepath: Vollständiger Pfad zur JSON-Datei
+        List of dictionaries with:
+        - plc_name: PLC identifier (e.g., "IO043")
+        - filepath: Full path to the JSON file
     """
-
 def process_plc(config_info: dict, output_dir: str) -> bool:
     """
-    Verarbeitet eine einzelne PLC
-    
+    Processes a single PLC
     Args:
-        config_info: Dict mit plc_name und filepath
-        output_dir: Ausgabeverzeichnis
-        
+        config_info: Dict with plc_name and filepath
+        output_dir: Output directory
     Returns:
-        True bei Erfolg, False bei Fehler
-        
+        True on success, False on error
     Workflow:
-    1. Lade JSON-Konfiguration
-    2. Zeige Zusammenfassung (PLC-Info, Module, Signale)
-    3. Generiere Variablenliste
+    1. Load JSON configuration
+    2. Show summary (PLC info, modules, signals)
+    3. Generate variable list
     """
 ```
-
-**IEC 61131-3 Ausgabeformat:**
-
+IEC 61131-3 output format:
 ```iec61131-3
 VAR_GLOBAL
     (* ================================================ *)
@@ -809,7 +661,6 @@ VAR_GLOBAL
     (* Location: I A 3 *)
     (* Generated: 2025-11-12 10:30:00 *)
     (* ================================================ *)
-    
     (* -------------------------------- *)
     (* Module: 750-432 (4DI 24 VDC 3ms 2-wire) *)
     (* Total Signals: 4 *)
@@ -818,43 +669,32 @@ VAR_GLOBAL
     I0002_Me_CoolPumpAlrm : BOOL;            (* IX 65.4 -A3.6 | NC *)
     I0003_Me_TempSensorAlrm : BOOL;          (* IX 65.5 -A3.7 | NC *)
     I0004_Me_FlowSensorAlrm : BOOL;          (* IX 65.6 -A3.8 | NC *)
-    
     (* -------------------------------- *)
     (* Module: 750-554 (4AO 0-20mA 12bit single-ended *)
     (* Total Signals: 2 *)
     (* -------------------------------- *)
     O0001_So_CoolValvePos : INT;             (* QW 3 -A5.2 | 4-20mA *)
     O0002_So_PumpSpeed : INT;                (* QW 5 -A5.4 | 4-20mA *)
-    
 END_VAR
-```
-
+``]
 #### 4. create_codesys_project.py
-
-**Zweck:** CODESYS-Projekterstellung via IronPython ScriptEngine
-
-**Wichtige Konstanten:**
-
+Purpose: CODESYS project creation via IronPython ScriptEngine
+Important constants:
 ```python
-# Pfad-Konfiguration
+# Path configuration
 DEFAULT_PROJECT_PATH = r"D:\WAGO\CODESYS\projects"
 DEFAULT_VARIABLES_PATH = r"D:\WAGO\CODESYS\outputs"
 DEFAULT_CONFIG_PATH = r"D:\WAGO\CODESYS\outputs"
-
-# Template-Projekt
+# Template project
 USE_TEMPLATE = True
 TEMPLATE_PROJECT = r"D:\WAGO\CODESYS\TEMPLATE_WAGO_750-8210.project"
-
-# Auto-Detect Modus
-AUTO_DETECT_MODE = True  # Findet automatisch alle IO*_variables.txt
-
-# Manuelle Konfiguration (wenn AUTO_DETECT_MODE = False)
+# Auto-detect mode
+AUTO_DETECT_MODE = True  # Automatically finds all IO*_variables.txt
+# Manual configuration (if AUTO_DETECT_MODE = False)
 SPECIFIC_VARIABLES_FILE = r"...\IO020_variables.txt"
 SPECIFIC_CONFIG_FILE = r"...\PLC_IO020_config.json"
 ```
-
-**WAGO Device Descriptors:**
-
+WAGO Device Descriptors:
 ```python
 WAGO_DEVICE_DESCRIPTORS = {
     "750-432": {
@@ -871,182 +711,145 @@ WAGO_DEVICE_DESCRIPTORS = {
         "name": "750-554",
         "description": "4AO 0-20mA 12bit single-ended"
     },
-    # ... weitere Module
+    # ... more modules
 }
 ```
-
-**Hauptfunktionen:**
-
+Main functions:
 ```python
-def create_project_from_template(plc_name: str, project_path: str, 
+def create_project_from_template(plc_name: str, project_path: str,
                                   template_path: str) -> tuple:
     """
-    Erstellt CODESYS-Projekt aus Template
-    
+    Creates a CODESYS project from a template
     Args:
-        plc_name: PLC-Bezeichnung (z.B. "IO043")
-        project_path: Zielverzeichnis
-        template_path: Pfad zum Template-Projekt
-        
+        plc_name: PLC identifier (e.g., "IO043")
+        project_path: Target directory
+        template_path: Path to the template project
     Returns:
         (project_object, full_path)
-        
     Workflow:
-    1. Kopiere Template zu {plc_name}.project
-    2. Öffne Projekt mit ScriptEngine
-    3. Returniere Projekt-Objekt
+    1. Copy template to {plc_name}.project
+    2. Open project with ScriptEngine
+    3. Return project object
     """
-
 def find_plc_device(proj) -> object:
     """
-    Findet PLC-Device (Type 4096)
-    
+    Finds PLC device (type 4096)
     Args:
         proj: CODESYS Project Object
-        
     Returns:
-        Device Object oder None
-        
-    Suche-Strategie:
-    1. Durchsuche alle Devices rekursiv
-    2. Prüfe device_identification.type == 4096
-    3. Returniere erstes Match
+        Device object or None
+    Search strategy:
+    1. Search all devices recursively
+    2. Check device_identification.type == 4096
+    3. Return first match
     """
-
 def find_kbus(device) -> object:
     """
-    Findet K-Bus unter PLC-Device
-    
+    Finds K-Bus under the PLC device
     Args:
         device: PLC Device Object
-        
     Returns:
-        K-Bus Object oder None
+        K-Bus object or None
     """
-
 def add_io_modules_to_kbus(kbus, config: dict) -> None:
     """
-    Fügt I/O-Module zum K-Bus hinzu
-    
+    Adds I/O modules to the K-Bus
     Args:
         kbus: K-Bus Device Object
-        config: JSON-Konfiguration
-        
+        config: JSON configuration
     Workflow:
-    1. Iteriere über config['IO_Modules']
-    2. Für jedes Modul:
-       a. Hole Device Descriptor aus WAGO_DEVICE_DESCRIPTORS
-       b. Erstelle Device mit create_device()
-       c. Setze Name und Position
+    1. Iterate over config['IO_Modules']
+    2. For each module:
+       a. Get device descriptor from WAGO_DEVICE_DESCRIPTORS
+       b. Create device with create_device()
+       c. Set name and position
     """
-
 def configure_device_ip(proj, device, ip_address: str) -> None:
     """
-    Konfiguriert IP-Adresse des PLC-Devices
-    
+    Configures IP address of the PLC device
     Args:
         proj: Project Object
         device: PLC Device Object
-        ip_address: IP als String (z.B. "172.16.60.043")
-        
+        ip_address: IP as string (e.g., "172.16.60.043")
     Workflow:
-    1. Suche Ethernet-Adapter unter Device
-    2. Setze IP, Subnet, Gateway
+    1. Find Ethernet adapter under device
+    2. Set IP, subnet, gateway
     """
-
 def create_gvl_with_variables(app, gvl_name: str, var_block: str):
     """
-    Erstellt Global Variable List (GVL)
-    
+    Creates Global Variable List (GVL)
     Args:
         app: Application Object
-        gvl_name: Name der GVL (z.B. "GVL_IO043")
-        var_block: IEC 61131-3 VAR_GLOBAL Block
-        
+        gvl_name: Name of the GVL (e.g., "GVL_IO043")
+        var_block: IEC 61131-3 VAR_GLOBAL block
     Workflow:
-    1. Erstelle GVL mit app.create_gvl()
-    2. Setze textual_declaration auf var_block
+    1. Create GVL with app.create_gvl()
+    2. Set textual_declaration to var_block
     """
-
-def create_single_project(var_file: str, config_file: str, 
+def create_single_project(var_file: str, config_file: str,
                          plc_name: str) -> bool:
     """
-    Erstellt ein vollständiges CODESYS-Projekt
-    
+    Creates a complete CODESYS project
     Args:
-        var_file: Pfad zu IO043_variables.txt
-        config_file: Pfad zu PLC_IO043_config.json
-        plc_name: PLC-Bezeichnung
-        
+        var_file: Path to IO043_variables.txt
+        config_file: Path to PLC_IO043_config.json
+        plc_name: PLC identifier
     Returns:
-        True bei Erfolg, False bei Fehler
-        
+        True on success, False on error
     Workflow:
-    1. Parse Variablenliste und JSON-Config
-    2. Erstelle Projekt aus Template
-    3. Suche Application und PLC Device
-    4. Konfiguriere IP-Adresse
-    5. Füge I/O-Module zum K-Bus hinzu
-    6. Erstelle GVL mit Variablen
-    7. Speichere und schließe Projekt
+    1. Parse variable list and JSON config
+    2. Create project from template
+    3. Find Application and PLC device
+    4. Configure IP address
+    5. Add I/O modules to K-Bus
+    6. Create GVL with variables
+    7. Save and close project
     """
-
 def main() -> None:
     """
-    Haupt-Ausführungslogik
-    
+    Main execution logic
     Workflow:
-    1. Zeige verfügbare Device Descriptors
-    2. Sammle Dateien (Auto-Detect oder manuell)
-    3. Für jedes PLC-Paar (variables.txt + config.json):
-       - Erstelle CODESYS-Projekt
-       - Logge Erfolg/Fehler
-    4. Zeige Zusammenfassung
+    1. Show available device descriptors
+    2. Collect files (auto-detect or manual)
+    3. For each PLC pair (variables.txt + config.json):
+       - Create CODESYS project
+       - Log success/error
+    4. Show summary
     """
 ```
-
-**ScriptEngine API-Verwendung:**
-
+ScriptEngine API usage:
 ```python
-# CODESYS ScriptEngine Namespace
+# CODESYS ScriptEngine namespace
 from ScriptEngine import projects
 from ScriptEngine.HostAccess import ScriptTypes
-
-# Projekt öffnen
+# Open project
 proj = projects.open(filepath, None, True)
-
-# Application suchen
+# Find Application
 app = proj.find("Application", True)[0]
-
-# Device erstellen
+# Create device
 device = kbus.create_device(device_descriptor)
-
-# GVL erstellen
+# Create GVL
 gvl = app.create_gvl("GVL_IO043")
 gvl.textual_declaration.replace(var_block)
-
-# Projekt speichern
+# Save project
 proj.save()
 proj.close()
 ```
-
-### Datenfluss & Schnittstellen
-
-#### Datenfluss-Diagramm (detailliert)
-
+### Data Flow & Interfaces
+#### Data Flow Diagram (detailed)
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │ EXCEL: LIST_OF_MEASURING_POINTS.xls                                 │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                      │
-│  Sheet: IO-Boxen (Header Zeile 4)                                   │
+│  Sheet: IO-Boxen (header row 4)                                     │
 │  ┌────────────────────────────────────────────────────────────────┐ │
 │  │ IO BOX | Location | PLC   | ... | IP-Adress      | Type      │ │
 │  ├────────────────────────────────────────────────────────────────┤ │
 │  │ 361403 | I A 3    | IO043 | ... | 172.16.60.043  | 750-8210  │ │
 │  └────────────────────────────────────────────────────────────────┘ │
 │                                                                      │
-│  Sheet: SIGNALLIST (Header Zeile 1)                                 │
+│  Sheet: SIGNALLIST (header row 1)                                   │
 │  ┌────────────────────────────────────────────────────────────────┐ │
 │  │ PLC | Type | Signal | Mode_Type | PLC_terminal | Objektname  │ │
 │  ├────────────────────────────────────────────────────────────────┤ │
@@ -1060,7 +863,7 @@ proj.close()
 │ PLCConfigExtractor.extract_plcs_from_io_boxes()                     │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                      │
-│  DataFrame → Iteration über Zeilen → Validierung                    │
+│  DataFrame → row iteration → validation                              │
 │                                                                      │
 │  self.plcs["IO043"] = {                                             │
 │      "PLC_Info": {                                                  │
@@ -1070,7 +873,7 @@ proj.close()
 │          "Location": "I A 3",                                       │
 │          "IO_Box": "36140310.0"                                     │
 │      },                                                             │
-│      "IO_Modules": {},  # Noch leer                                 │
+│      "IO_Modules": {},  # still empty                               │
 │      "Statistics": {...}                                            │
 │  }                                                                  │
 └─────────────────────────────────────────────────────────────────────┘
@@ -1080,7 +883,7 @@ proj.close()
 │ PLCConfigExtractor.extract_signals_from_signallist()                │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                      │
-│  DataFrame → Gruppierung nach (PLC, Module_Type)                    │
+│  DataFrame → grouping by (PLC, Module_Type)                          │
 │                                                                      │
 │  self.plcs["IO043"]["IO_Modules"]["750-432"] = {                   │
 │      "Module_Type": "750-432",                                      │
@@ -1094,10 +897,10 @@ proj.close()
 │      ]                                                              │
 │  }                                                                  │
 │                                                                      │
-│  Statistics aktualisieren:                                          │
+│  Update statistics:                                                 │
 │  - Total_Modules++                                                  │
 │  - Total_Signals++                                                  │
-│  - Input_Signals++ / Output_Signals++                              │
+│  - Input_Signals++ / Output_Signals++                               │
 └─────────────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
@@ -1105,15 +908,15 @@ proj.close()
 │ PLCConfigExtractor.generate_json_files()                            │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                      │
-│  Für jeden PLC in self.plcs:                                        │
-│      1. Konvertiere IO_Modules dict → list                          │
-│      2. Füge Metadata hinzu                                         │
+│  For each PLC in self.plcs:                                         │
+│      1. Convert IO_Modules dict → list                              │
+│      2. Add metadata                                                │
 │      3. json.dump() → PLC_IO043_config.json                         │
 └─────────────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│ OUTPUT: JSON-Dateien                                                 │
+│ OUTPUT: JSON files                                                  │
 ├─────────────────────────────────────────────────────────────────────┤
 │  PLC_IO043_config.json                                              │
 │  PLC_IO020_config.json                                              │
@@ -1125,24 +928,24 @@ proj.close()
                                 │ codesys_import_example.py
                                 ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│ create_variable_list()                                               │
+│ create_variable_list()                                              │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                      │
-│  Für jeden PLC:                                                     │
-│      Für jedes Module in IO_Modules:                                │
-│          Für jedes Signal:                                          │
-│              Map Signal_Type → IEC Datentyp                         │
-│              Generiere Deklaration                                  │
+│  For each PLC:                                                       │
+│      For each module in IO_Modules:                                  │
+│          For each signal:                                            │
+│              Map Signal_Type → IEC data type                         │
+│              Generate declaration                                    │
 │                                                                      │
-│  VAR_GLOBAL                                                         │
-│      (* Module: 750-432 *)                                          │
-│      I0001_Me_MnCoolCmnAlrm : BOOL;                                 │
-│  END_VAR                                                            │
+│  VAR_GLOBAL                                                          │
+│      (* Module: 750-432 *)                                           │
+│      I0001_Me_MnCoolCmnAlrm : BOOL;                                  │
+│  END_VAR                                                             │
 └─────────────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│ OUTPUT: Variablenlisten                                              │
+│ OUTPUT: Variable lists                                              │
 ├─────────────────────────────────────────────────────────────────────┤
 │  IO043_variables.txt                                                │
 │  IO020_variables.txt                                                │
@@ -1152,71 +955,66 @@ proj.close()
                                 │ create_codesys_project.py (IronPython)
                                 ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│ create_single_project()                                              │
+│ create_single_project()                                             │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                      │
-│  1. Lade IO043_variables.txt → var_block (String)                  │
-│  2. Lade PLC_IO043_config.json → config (Dict)                      │
-│  3. Template kopieren → IO043.project                               │
-│  4. Projekt öffnen mit ScriptEngine                                 │
-│  5. PLC Device suchen (Type 4096)                                   │
-│  6. IP-Adresse konfigurieren                                        │
-│  7. K-Bus suchen                                                    │
-│  8. I/O-Module hinzufügen:                                          │
-│      Für jedes Modul in config['IO_Modules']:                       │
+│  1. Load IO043_variables.txt → var_block (string)                   │
+│  2. Load PLC_IO043_config.json → config (dict)                      │
+│  3. Copy template → IO043.project                                   │
+│  4. Open project with ScriptEngine                                  │
+│  5. Find PLC device (type 4096)                                     │
+│  6. Configure IP address                                            │
+│  7. Find K-Bus                                                      │
+│  8. Add I/O modules:                                                │
+│      For each module in config['IO_Modules']:                       │
 │          descriptor = WAGO_DEVICE_DESCRIPTORS[Module_Type]          │
 │          device = kbus.create_device(descriptor['descriptor'])      │
-│  9. GVL erstellen:                                                  │
+│  9. Create GVL:                                                     │
 │      gvl = app.create_gvl("GVL_IO043")                              │
 │      gvl.textual_declaration.replace(var_block)                     │
-│  10. Projekt speichern & schließen                                  │
+│  10. Save & close project                                           │
 └─────────────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│ OUTPUT: CODESYS-Projekte                                             │
+│ OUTPUT: CODESYS projects                                            │
 ├─────────────────────────────────────────────────────────────────────┤
 │  projects/IO043.project                                             │
 │  projects/IO020.project                                             │
 │  projects/IO251.project                                             │
 └─────────────────────────────────────────────────────────────────────┘
 ```
-
-#### Schnittstellen-Definition
-
-##### Python → JSON (excel_to_json_converter.py)
-
-**Input:** Excel-Datei mit definierten Sheets
-
-**Output:** JSON nach folgendem Schema:
-
+#### Interface Definition
+Python → JSON (excel_to_json_converter.py)
+Input: Excel file with defined sheets
+Output: JSON with the following schema:
 ```json
 {
   "PLC_Info": {
-    "Name": "string",           // PLC-Bezeichnung (z.B. "IO043")
-    "Type": "string",           // PLC-Typ (z.B. "750-8210")
-    "IP_Address": "string",     // IP im Format xxx.xxx.xxx.xxx
-    "Location": "string",       // Standort
-    "IO_Box": "string"          // Box-Nummer
+    "Name": "string",           // PLC identifier (e.g., "IO043")
+    "Type": "string",           // PLC type (e.g., "750-8210")
+    "IP_Address": "string",     // IP in format xxx.xxx.xxx.xxx
+    "Location": "string",       // Location
+    "IO_Box": "string"          // Box number
   },
-  "IO_Modules": [               // Liste aller I/O-Module
+  "IO_Modules": [               // List of all I/O modules
     {
-      "Module_Type": "string",  // WAGO Modultyp (z.B. "750-432")
-      "Signals": [              // Liste aller Signale dieses Moduls
+      "Module_Type": "string",  // WAGO module type (e.g., "750-432")
+      "Signals": [              // List of all signals of this module
         {
-          "Terminal": "string", // Terminal-Adresse (z.B. "IX 65.3 -A3.5")
-          "Object_Name": "string", // Signalname
+          "Terminal": "string", // Terminal address (e.g., "IX 65.3 -A3.5")
+          "Object_Name": "string", // Signal name
           "Signal_Type": "string", // "I", "O", "SI", "SO", "RS485", etc.
-          "Signal": "string"    // Signalart (z.B. "NC", "4-20mA")
+          "Signal": "string"    // Signal kind (e.g., "NC", "4-20mA")
         }
       ]
     }
   ],
   "Statistics": {
-    "Total_Modules": "integer",    // Anzahl Module
-    "Total_Signals": "integer",    // Anzahl Signale
-    "Input_Signals": "integer",    // Anzahl Eingänge
-    "Output_Signals": "integer"    // Anzahl Ausgänge
+    "Total_Modules": "integer",    // Number of modules
+    "Total_Signals": "integer",    // Number of signals
+    "Input_Signals": "integer",    // Number of inputs
+    "Output_Signals": "integer"    // Number of outputs
   },
   "Metadata": {
     "Generated": "ISO 8601 datetime",
@@ -1225,37 +1023,27 @@ proj.close()
   }
 }
 ```
-
-##### JSON → IEC 61131-3 (codesys_import_example.py)
-
-**Input:** JSON wie oben definiert
-
-**Output:** Textdatei im IEC 61131-3 Format
-
-**Mapping-Regeln:**
-
-| Signal_Type | Signal | IEC Datentyp | Beispiel |
-|-------------|--------|--------------|----------|
+JSON → IEC 61131-3 (codesys_import_example.py)
+Input: JSON as defined above
+Output: Text file in IEC 61131-3 format
+Mapping rules:
+| Signal_Type | Signal | IEC Data Type | Example |
+|-------------|--------|---------------|---------|
 | I | NC / NO | BOOL | `I0001_Signal : BOOL;` |
 | O | NC / NO | BOOL | `O0001_Signal : BOOL;` |
 | I | 4-20mA / 0-10V | INT | `I0001_Signal : INT;` |
 | O | 4-20mA / 0-10V | INT | `O0001_Signal : INT;` |
 | SI | INT | INT | `I0001_Signal : INT;` |
 | SO | INT | INT | `O0001_Signal : INT;` |
-| RS485 / RS232 | - | (Kommentar) | `(* Serial Module *)` |
-
-##### IEC 61131-3 + JSON → CODESYS (create_codesys_project.py)
-
-**Input:**
-- IO043_variables.txt (IEC 61131-3 Text)
+| RS485 / RS232 | - | (comment) | `(* Serial Module *)` |
+IEC 61131-3 + JSON → CODESYS (create_codesys_project.py)
+Input:
+- IO043_variables.txt (IEC 61131-3 text)
 - PLC_IO043_config.json (JSON)
-- TEMPLATE_WAGO_750-8210.project (CODESYS Template)
-
-**Output:**
-- IO043.project (CODESYS-Projekt)
-
-**API-Aufrufe:**
-
+- TEMPLATE_WAGO_750-8210.project (CODESYS template)
+Output:
+- IO043.project (CODESYS project)
+API Calls:
 ```python
 # CODESYS ScriptEngine API
 projects.open(filepath) → Project
@@ -1266,210 +1054,161 @@ Application.create_gvl(name) → GVL
 GVL.textual_declaration.replace(text) → None
 Project.save() → None
 ```
-
-### Erweiterung & Anpassung
-
-#### Neue I/O-Module hinzufügen
-
-**1. Device Descriptor ermitteln:**
-
+### Extension & Customization
+#### Add new I/O modules
+1. Determine device descriptor:
 ```python
 # In CODESYS:
-# 1. Öffne Device Repository
-# 2. Suche WAGO Modul (z.B. 750-456)
-# 3. Rechtsklick → Properties → Device Identification
-# 4. Notiere: Device ID, Descriptor String, Version
+# 1. Open Device Repository
+# 2. Search WAGO module (e.g., 750-456)
+# 3. Right-click → Properties → Device Identification
+# 4. Note: Device ID, descriptor string, version
 ```
-
-**2. Zu WAGO_DEVICE_DESCRIPTORS hinzufügen:**
-
+2. Add to WAGO_DEVICE_DESCRIPTORS:
 ```python
 # In create_codesys_project.py
 WAGO_DEVICE_DESCRIPTORS = {
-    # ... bestehende Module
-    
+    # ... existing modules
     "750-456": {
-        "device_id": 32776,                 # Aus CODESYS
-        "descriptor": "8401_0750045600000000",  # Aus CODESYS
-        "version": "2.0.0.10",              # Aus CODESYS
+        "device_id": 32776,                 # From CODESYS
+        "descriptor": "8401_0750045600000000",  # From CODESYS
+        "version": "2.0.0.10",              # From CODESYS
         "name": "750-456",
-        "description": "4DO 24VDC 0.5A"    # Beschreibung
+        "description": "4DO 24VDC 0.5A"    # Description
     },
 }
 ```
-
-**3. Testen:**
-
+3. Test:
 ```python
-# Excel mit 750-456 Modul verarbeiten
+# Process Excel with 750-456 module
 python batch_processor.py --input=test.xls --output=./output
-
-# Prüfen ob Modul erkannt wird
+# Check if module is recognized
 cat ./output/validation_report.txt | grep "750-456"
 ```
-
-#### Neue Signal-Typen hinzufügen
-
-**In codesys_import_example.py:**
-
+#### Add new signal types
+In codesys_import_example.py:
 ```python
 def map_signal_to_datatype(signal_info):
     """Map signal information to IEC 61131-3 data type"""
     signal_type = signal_info.get('Signal_Type', '')
     signal = signal_info.get('Signal', '')
-    
-    # Bestehende Mappings...
-    
-    # NEUE MAPPINGS HINZUFÜGEN:
+    # Existing mappings...
+    # ADD NEW MAPPINGS:
     if signal_type in ['AI'] and 'PT100' in signal:
-        return 'REAL'  # Temperatur als Fließkommazahl
-    
+        return 'REAL'  # Temperature as floating point
     if signal_type in ['AO'] and 'PWM' in signal:
-        return 'WORD'  # PWM als 16-bit Wort
-    
+        return 'WORD'  # PWM as 16-bit word
     # Default
     return 'INT'
 ```
-
-#### Eigene Validierungsregeln
-
-**In excel_to_json_converter.py:**
-
+#### Custom validation rules
+In excel_to_json_converter.py:
 ```python
 class PLCConfigExtractor:
-    
     def custom_validation(self, plc_data):
-        """Eigene Validierungen hinzufügen"""
-        
-        # Beispiel 1: Maximale Anzahl Module pro PLC
+        """Add custom validations"""
+        # Example 1: Maximum number of modules per PLC
         if plc_data['Statistics']['Total_Modules'] > 64:
             self.log_warning(
                 f"PLC {plc_data['PLC_Info']['Name']}: "
-                f"Mehr als 64 Module ({plc_data['Statistics']['Total_Modules']})"
+                f"More than 64 modules ({plc_data['Statistics']['Total_Modules']})"
             )
-        
-        # Beispiel 2: Prüfe auf doppelte Terminal-Adressen
+        # Example 2: Check for duplicate terminal addresses
         terminals = []
         for module in plc_data['IO_Modules']:
             for signal in module['Signals']:
                 terminal = signal['Terminal']
                 if terminal in terminals:
                     self.log_error(
-                        f"Doppelte Terminal-Adresse: {terminal}"
+                        f"Duplicate terminal address: {terminal}"
                     )
                 terminals.append(terminal)
-        
-        # Beispiel 3: Prüfe Namenskonvention
+        # Example 3: Check naming convention
         for module in plc_data['IO_Modules']:
             for signal in module['Signals']:
                 name = signal['Object_Name']
                 if not name.startswith(('I', 'O')):
                     self.log_warning(
-                        f"Signal {name}: Entspricht nicht Namenskonvention"
+                        f"Signal {name}: Does not follow naming convention"
                     )
-    
     def process(self, output_dir):
-        """Erweiterte Verarbeitung mit Custom Validation"""
-        # ... bestehender Code
-        
-        # Custom Validations ausführen
+        """Extended processing with custom validation"""
+        # ... existing code
+        # Run custom validations
         for plc_name, plc_data in self.plcs.items():
             self.custom_validation(plc_data)
-        
-        # ... weiter wie gehabt
+        # ... continue as before
 ```
-
-#### Template-Projekt anpassen
-
-**1. Neues Template erstellen:**
-
+#### Adjust template project
+1. Create new template:
 ```
-1. Öffne CODESYS
-2. Erstelle neues Projekt mit WAGO PFC200 (750-8210)
-3. Konfiguriere:
-   - Ethernet-Einstellungen (Standard-IP)
-   - Task-Konfiguration
-   - Bibliotheken (z.B. Standard, Util)
-4. Speichere als: TEMPLATE_WAGO_750-8210_v2.project
+1. Open CODESYS
+2. Create new project with WAGO PFC200 (750-8210)
+3. Configure:
+   - Ethernet settings (default IP)
+   - Task configuration
+   - Libraries (e.g., Standard, Util)
+4. Save as: TEMPLATE_WAGO_750-8210_v2.project
 ```
-
-**2. In create_codesys_project.py aktualisieren:**
-
+2. Update in create_codesys_project.py:
 ```python
 TEMPLATE_PROJECT = r"D:\WAGO\CODESYS\TEMPLATE_WAGO_750-8210_v2.project"
 ```
-
-**3. Template-spezifische Anpassungen:**
-
+3. Template-specific customizations:
 ```python
 def customize_template_project(proj, config):
-    """Template-spezifische Anpassungen nach Erstellung"""
-    
-    # Beispiel: Setze Projekt-Informationen
+    """Template-specific adjustments after creation"""
+    # Example: Set project information
     proj.set_project_information("Author", "Automation Team")
     proj.set_project_information("Company", config['PLC_Info'].get('Location', ''))
-    
-    # Beispiel: Konfiguriere Task
+    # Example: Configure task
     app = proj.active_application
     tasks = app.find("Task Configuration", True)
     if tasks:
         task = tasks[0]
-        # Setze Zykluszeit auf 10ms
-        task.cycle_time = 10000  # Mikrosekunden
+        # Set cycle time to 10ms
+        task.cycle_time = 10000  # microseconds
 ```
-
-#### Batch-Verarbeitung mit Filterung
-
+#### Batch processing with filtering
 ```python
-# In batch_processor.py erweitern
+# Extend in batch_processor.py
 def process_with_filter(input_file, output_dir, plc_filter=None):
     """
-    Verarbeite nur bestimmte PLCs
-    
+    Process only specific PLCs
     Args:
-        plc_filter: Liste von PLC-Namen (z.B. ['IO020', 'IO043'])
+        plc_filter: List of PLC names (e.g., ['IO020', 'IO043'])
     """
-    
     extractor = PLCConfigExtractor(input_file)
     extractor.extract_plcs_from_io_boxes()
     extractor.extract_signals_from_signallist()
-    
-    # Filtern
+    # Filtering
     if plc_filter:
         filtered_plcs = {
             name: data for name, data in extractor.plcs.items()
             if name in plc_filter
         }
         extractor.plcs = filtered_plcs
-    
-    # Weiterverarbeitung
+    # Further processing
     json_files = extractor.generate_json_files(output_dir)
     # ...
 ```
-
-**Verwendung:**
-
+Usage:
 ```python
-# Nur bestimmte PLCs verarbeiten
+# Process only specific PLCs
 process_with_filter(
     'measuring_points.xls',
     './output',
     plc_filter=['IO020', 'IO043']
 )
 ```
-
-#### Logging erweitern
-
+#### Extend logging
 ```python
 import logging
-
 # In excel_to_json_converter.py
 class PLCConfigExtractor:
-    
-    def __init__(self, excel_file):
-        # ... bestehender Code
-        
-        # Logger konfigurieren
+    def **init**(self, excel_file):
+        # ... existing code
+        # Configure logger
         self.logger = logging.getLogger('PLCExtractor')
         handler = logging.FileHandler('extraction.log')
         formatter = logging.Formatter(
@@ -1478,41 +1217,28 @@ class PLCConfigExtractor:
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
         self.logger.setLevel(logging.DEBUG)
-    
     def log_info(self, message):
         self.logger.info(message)
         print(f"INFO: {message}")
-    
     def log_debug(self, message):
         self.logger.debug(message)
-        # Nicht auf Console ausgeben
+        # Do not print to console
 ```
-
 ---
+## 📚 Additional Resources
+### External Documentation
+- CODESYS ScriptEngine: See ScriptEngine.md in the project directory
+- WAGO PLC Documentation: WAGO_PLC_Interfaces_Documentation.md
+- Workflow Description: PROGRAM_EXECUTION_FLOW.md
 
-## 📚 Zusätzliche Ressourcen
-
-### Externe Dokumentation
-
-- **CODESYS ScriptEngine**: Siehe `ScriptEngine.md` im Projektverzeichnis
-- **WAGO PLC Dokumentation**: `WAGO_PLC_Schnittstellen_Dokumentation.md`
-- **Workflow-Beschreibung**: `PROGRAMMABLAUFPLAN.md`
-- **Entwickler-Notizen**: `ENTWICKLER_ZUSAMMENFASSUNG.md`
-
-### Support & Kontakt
-
-Bei Fragen oder Problemen:
-
-1. Prüfe `validation_report.txt` auf Warnungen/Fehler
-2. Konsultiere dieses README
-3. Prüfe Log-Dateien in Output-Verzeichnis
-
-### Lizenz & Copyright
-
-© 2025 - Alle Rechte vorbehalten
-
+### Support & Contact
+If you have questions or issues:
+1. Check validation_report.txt for warnings/errors
+2. Consult this README
+3. Check log files in the output directory
+### License & Copyright
+© 2025 - All rights reserved
 ---
-
-**Version:** 2.0  
-**Stand:** November 2025  
-**Maintainer:** Automation Team
+Version: 2.0  
+Status: November 2025  
+Maintainer: Automation Team
