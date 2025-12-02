@@ -1239,6 +1239,6 @@ If you have questions or issues:
 ### License & Copyright
 © 2025 - All rights reserved
 ---
-Version: 2.0  
+Version: 2.1  
 Status: November 2025  
-Maintainer: Automation Team
+
