@@ -65,11 +65,16 @@
         "instance": "oMqttClient",
         "description": "MQTT Client Instanz",
         "params": {
-          "sHostname": "'broker.hivemq.com'",
+          "xEnable": "TRUE",
+          "sHostname": "'192.168.2.17'",
           "uiPort": "1883",
-          "sClientID": "'WAGO_PLC_001'",
-          "tKeepAlive": "T#60S",
-          "xEnableLog": "TRUE",
+          "sClientId": "'WAGO_PLC_001'",
+          "xCleanSession": "TRUE",
+          "uiKeepAlive": "60",
+          "xUseTLS": "FALSE",
+          "xWillRetain": "FALSE",
+          "pbWillMessage": "0",
+          "uiWillMessageSize": "0",
           "sStatus =>": "sMqttStatus",
           "xConnected =>": "xMqttConnected"
         }
