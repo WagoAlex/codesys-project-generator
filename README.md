@@ -398,7 +398,44 @@ cd "C:\Program Files\CODESYS 3.5.21.10\CODESYS\Common"
 - `--profile` - installed CODESYS-Version
 - `--runscript` - Path to IronPython-Script
 
+## Configuration
 
+### INI File: `WAGO_ProjectGenerator_Config.ini`
+
+**Adjust paths:**
+```ini
+[CODESYS]
+InstallPath=C:\Program Files\CODESYS 3.5.21.10\CODESYS\Common
+Profile=CODESYS V3.5 SP21 Patch 1
+
+[PATHS]
+ScriptDirectory=\scripts
+ProjectDirectory=\projects
+OutputDirectory=\outputs
+
+[SCRIPTS]
+DefaultScript=create_codesys_project_enhanced.py
+```
+
+---
+
+### Python Script: `create_codesys_project_enhanced.py`
+
+**Adjust paths :**
+```python
+# Paths
+CONFIG_PATH = r"\configs\PLC_IO020_config.json"
+TEMPLATE_PATH = r"\templates\WAGO_Template.project"
+OUTPUT_DIR = r"\outputs"
+LOG_DIR = r"\logs"
+```
+
+**Important:** 
+- Replace `<YOUR_PROJECT_ROOT>` with your actual project directory
+- All paths must be absolute and formatted with `r"..."`
+- Use backslashes `\` for Windows paths
+
+- 
 #### Troubleshooting
 Problem: "No PLC configuration files found"
 ```bash
