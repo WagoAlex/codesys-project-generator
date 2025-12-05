@@ -351,9 +351,9 @@ def main():
                 print("  - {0}".format(warning))
         
         if is_valid:
-            print("\n✓ Konfiguration ist gültig!")
+            print("\n Konfiguration ist gültig!")
         else:
-            print("\n✗ Konfiguration ist ungültig!")
+            print("\n Konfiguration ist ungültig!")
             sys.exit(1)
     
     elif args.command == 'summary':
