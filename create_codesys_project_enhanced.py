@@ -20,18 +20,38 @@ import glob
 # =============================================================================
 # KONFIGURATION / Configuration
 # =============================================================================
-DEFAULT_PROJECT_PATH = r"D:\WAGO\CODESYS\scripting\besecke\projects"
-DEFAULT_VARIABLES_PATH = r"D:\WAGO\CODESYS\scripting\besecke\outputs"
-DEFAULT_CONFIG_PATH = r"D:\WAGO\CODESYS\scripting\besecke\outputs"
-CONFIG_JSON_PATH = r"D:\WAGO\CODESYS\scripting\besecke\library_fb_config.json"
 
+PROJECT_ROOT = r"<YOUR_PROJECT_ROOT>"
+
+# Project Paths
+DEFAULT_PROJECT_PATH = os.path.join(PROJECT_ROOT, "projects")
+DEFAULT_VARIABLES_PATH = os.path.join(PROJECT_ROOT, "outputs")
+DEFAULT_CONFIG_PATH = os.path.join(PROJECT_ROOT, "outputs")
+CONFIG_JSON_PATH = os.path.join(PROJECT_ROOT, "library_fb_config.json")
+
+# Template Configuration
 USE_TEMPLATE = True
-TEMPLATE_PROJECT = r"D:\WAGO\CODESYS\scripting\besecke\TEMPLATE_WAGO_750-8210.project"
+TEMPLATE_PROJECT = os.path.join(PROJECT_ROOT, "TEMPLATE_WAGO_750-8210.project")
 
+# Auto-Detection Mode
 AUTO_DETECT_MODE = True
+SPECIFIC_VARIABLES_FILE = os.path.join(PROJECT_ROOT, "outputs", "IO020_variables.txt")
+SPECIFIC_CONFIG_FILE = os.path.join(PROJECT_ROOT, "outputs", "PLC_IO020_config.json")
+# =============================================================================
+# Example Paths in Windows  
+# =============================================================================
+#DEFAULT_PROJECT_PATH = r"D:\WAGO\CODESYS\scripting\besecke\projects"
+#DEFAULT_VARIABLES_PATH = r"D:\WAGO\CODESYS\scripting\besecke\outputs"
+#DEFAULT_CONFIG_PATH = r"D:\WAGO\CODESYS\scripting\besecke\outputs"
+#CONFIG_JSON_PATH = r"D:\WAGO\CODESYS\scripting\besecke\library_fb_config.json"
 
-SPECIFIC_VARIABLES_FILE = r"D:\WAGO\CODESYS\scripting\besecke\outputs\IO020_variables.txt"
-SPECIFIC_CONFIG_FILE = r"D:\WAGO\CODESYS\scripting\besecke\outputs\PLC_IO020_config.json"
+#USE_TEMPLATE = True
+#TEMPLATE_PROJECT = r"D:\WAGO\CODESYS\scripting\besecke\TEMPLATE_WAGO_750-8210.project"
+
+#AUTO_DETECT_MODE = True
+
+#SPECIFIC_VARIABLES_FILE = r"D:\WAGO\CODESYS\scripting\besecke\outputs\IO020_variables.txt"
+#SPECIFIC_CONFIG_FILE = r"D:\WAGO\CODESYS\scripting\besecke\outputs\PLC_IO020_config.json"
 
 TOTAL_STEPS_PER_PROJECT = 12
 CURRENT_STEP = 0
