@@ -439,8 +439,6 @@ codesys-project-generator/
 │
 ├── requirements.txt                # Python dependencies
 ├── README.md                       # This file
-├── PROGRAMMABLAUFPLAN.md           # Workflow documentation
-├── ENTWICKLER_ZUSAMMENFASSUNG.md   # Developer notes
 └── WAGO_PLC_Schnittstellen_Dokumentation.md  # API reference
 ```
 ### Component Details
