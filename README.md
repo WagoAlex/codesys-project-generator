@@ -498,7 +498,7 @@ codesys-project-generator/
 │
 ├── requirements.txt                # Python dependencies
 ├── README.md                       # This file
-└── WAGO_PLC_Schnittstellen_Dokumentation.md  # API reference
+└── WAGO_PLC_Interfaces_Documentation.md  # API reference
 ```
 ### Component Details
 #### 1. batch_processor.py
