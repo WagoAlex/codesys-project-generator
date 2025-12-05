@@ -379,6 +379,26 @@ Validation Log:
 [WARNING] PLC IO999: Module 750-999 not found in device descriptors
 [INFO] Generated 3 PLC configuration files
 ```
+## Execution (CLI)
+
+### 1. Navigate to CODESYS Path
+```powershell
+cd "C:\Program Files\CODESYS 3.5.21.10\CODESYS\Common"
+```
+
+### 2. Run Script
+```powershell
+.\Codesys.exe --noUI --profile="CODESYS V3.5 SP21 Patch 1" --runscript="D:\path\to\script\create_codesys_project.py"
+```
+
+---
+
+**Parameter:**
+- `--noUI` - start CODESYS headless (without UI)
+- `--profile` - installed CODESYS-Version
+- `--runscript` - Path to IronPython-Script
+
+
 #### Troubleshooting
 Problem: "No PLC configuration files found"
 ```bash
@@ -406,6 +426,8 @@ Problem: "Module 750-XXX not found"
 # - 750-517, 750-530, 750-554 (Analog Output)
 # - 750-610, 750-652 (Serial communication)
 ```
+
+
 ---
 ## 👨‍💻 Developer Documentation
 ### Project Structure
