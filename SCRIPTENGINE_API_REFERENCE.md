@@ -1,5 +1,5 @@
 # CODESYS ScriptEngine API Reference
-## Methods Used in Project Generator V8
+## Methods Used in Project Generator
 
 This document describes all CODESYS ScriptEngine API methods used in the project generator, with examples and limitations.
 
