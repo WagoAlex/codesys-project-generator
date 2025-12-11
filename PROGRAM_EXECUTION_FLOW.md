@@ -1,657 +1,613 @@
 # PROGRAM EXECUTION FLOW
-## CODESYS Project Generator V7.0 - Enhanced Edition - Function Call Hierarchy
+
+**CODESYS Project Generator**  
+**Version:** 0.8.2 (Beta)  
+**Author:** Alexander Fugmann  
+**Last Updated:** 2024-12-11
 
 ---
 
-## 📊 MAIN EXECUTION FLOW (main)
+## 📊 HIGH-LEVEL OVERVIEW
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                         START                               │
-│                      main()                                 │
-└──────────────────────┬──────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│                         MAIN WORKFLOW                            │
+└──────────────────────────────────────────────────────────────────┘
+
+1. Initialize logging system
+2. Load project configuration (project_config.json)
+3. Discover input files (auto-detect or specific mode)
+4. FOR EACH PLC pair (variable file + config file):
+   ├─► Execute 13-step generation process
+   └─► Generate CODESYS project file
+5. Output summary statistics
+6. Close and cleanup
+
+Duration: ~3-5 seconds per project
+Batch Performance: 78 projects in ~6.5 minutes
+```
+
+---
+
+## 🔧 MAIN EXECUTION FLOW
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      main()                                      │
+└──────────────────────┬──────────────────────────────────────────┘
                        │
-                       ├─► init_logging()
-                       │   └─► Creates log file with timestamp
+                       ├─► init_logging(script_name)
+                       │   ├─► Create log directory if missing
+                       │   ├─► Generate timestamped log file
+                       │   │   Format: codesys_project_generator_local_log_YYYYMMDD_HHMMSS.txt
+                       │   └─► Initialize color-coded console output
                        │
-                       ├─► show_available_descriptors()
-                       │   └─► Shows all 15 available WAGO modules
-                       │
-                       ├─► find_all_files()  [2x]
-                       │   ├─► Search: IO*_variables.txt
-                       │   └─► Search: PLC_IO*_config.json
-                       │
-                       ├─► match_files()
-                       │   └─► Pairs Variables ↔ Config (e.g., IO020)
-                       │
-                       ├─► FOR EACH matched_pair (78x):
+                       ├─► log_step("Collect Files")
                        │   │
-                       │   └─► create_single_project()  ◄─── CORE FUNCTION
-                       │       │
-                       │       └─► [see DETAILED FLOW below]
+                       │   ├─► IF AUTO_DETECT_MODE:
+                       │   │   ├─► find_all_files("IO*_variables.txt")
+                       │   │   ├─► find_all_files("PLC_IO*_config.json")
+                       │   │   └─► match_files() → pairs
+                       │   │       └─► Regex: IO(\d+)_variables.txt ↔ PLC_IO\1_config.json
+                       │   │
+                       │   └─► ELSE:
+                       │       └─► Use SPECIFIC_VARIABLES_FILE + SPECIFIC_CONFIG_FILE
                        │
-                       └─► Output: Summary
-                           ├─► Total: 78
-                           ├─► Successful: 78
-                           ├─► Failed: 0
-                           └─► Duration: 2 Min 36 Sec
+                       ├─► FOR EACH (var_file, config_file, plc_id) in matched_pairs:
+                       │   │
+                       │   ├─► log("PROJECT {current}/{total}: {plc_id}")
+                       │   │
+                       │   ├─► create_single_project(var_file, config_file, plc_id)
+                       │   │   └─► [13-step process - see DETAILED FLOW]
+                       │   │
+                       │   └─► Update success_count or failure_count
+                       │
+                       └─► Output Summary:
+                           ├─► Total projects processed
+                           ├─► Successful count
+                           ├─► Failed count
+                           ├─► Total duration (formatted)
+                           └─► Log file path
 ```
 
 ---
 
-## 🔍 DETAILED FLOW (create_single_project)
+## 🎯 13-STEP DETAILED FLOW
+
+### create_single_project(var_file, config_file, plc_name)
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│          create_single_project(var_file, config_file)       │
-└──────────────────────┬──────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 1/13: Load JSON Configuration                 │
+└──────────────────────┬──────────────────────────────────────────┘
                        │
-    ┌──────────────────┴──────────────────────┐
-    │  STEP 1/12: Load JSON Configuration     │  ◄─── NEW!
-    └──────────────────┬──────────────────────┘
+                       └─► load_config_from_json(CONFIG_JSON_PATH)
+                           ├─► Parse libraries section
+                           │   └─► Extract: name, vendor, version, namespace, required
+                           │
+                           ├─► Parse function_blocks section
+                           │   └─► Extract: fb_type, instance, params
+                           │
+                           ├─► Parse xml_imports section
+                           │   ├─► Check auto_detect.enabled
+                           │   ├─► IF enabled:
+                           │   │   └─► auto_detect_xml_files()
+                           │   │       ├─► Scan directory (e.g., "exports")
+                           │   │       ├─► Apply pattern (e.g., "*.xml")
+                           │   │       ├─► Exclude patterns (e.g., "*_backup.xml")
+                           │   │       └─► Build xml_imports list
+                           │   └─► ELSE:
+                           │       └─► Use manual_files list
+                           │
+                           └─► Returns: (libraries, fb_instances, xml_imports, settings)
+
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 2/13: Parse Input Files                       │
+└──────────────────────┬──────────────────────────────────────────┘
                        │
-                       └─► load_config_from_json()
-                           ├─► Loads: library_fb_config.json
-                           ├─► Parses: Required libraries
-                           ├─► Parses: Function block instances
-                           └─► Returns: libs, fbs, settings
-                       
-    ┌──────────────────────────────────────┐
-    │  STEP 2/12: Parse Input Files       │
-    └──────────────────┬──────────────────┘
+                       ├─► parse_variables_file(var_file)
+                       │   ├─► Open file with UTF-8 encoding
+                       │   ├─► Read entire content
+                       │   │   Expected format: IEC 61131-3 VAR_GLOBAL block
+                       │   └─► Returns: var_block (string)
                        │
-                       ├─► parse_variables_file()
-                       │   ├─► Opens: IO020_variables.txt
-                       │   ├─► Searches: VAR_GLOBAL ... END_VAR
-                       │   └─► Returns: var_block (String)
-                       │
-                       └─► parse_config_json()
-                           ├─► Opens: PLC_IO020_config.json
-                           ├─► Validates: PLC_Info present?
-                           └─► Returns: config (Dictionary)
-                       
-    ┌──────────────────────────────────────┐
-    │  STEP 3/12: Create CODESYS Project   │
-    └──────────────────┬──────────────────┘
+                       └─► parse_config_json(config_file)
+                           ├─► Open JSON with UTF-8 encoding
+                           ├─► Validate: "PLC_Info" key present
+                           ├─► Extract:
+                           │   ├─► PLC_Info.Name
+                           │   ├─► PLC_Info.Type
+                           │   ├─► PLC_Info.IP_Address
+                           │   └─► IO_Modules[] array
+                           └─► Returns: config (dict)
+
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 3/13: Create CODESYS Project                  │
+└──────────────────────┬──────────────────────────────────────────┘
                        │
                        └─► create_project_from_template()
-                           ├─► Copies: TEMPLATE_WAGO_750-8210.project
-                           ├─► Renames: IO020.project
-                           └─► projects.open()
-                               └─► Returns: proj (Project object)
-                       
-    ┌──────────────────────────────────────┐
-    │  STEP 4/12: Find Application         │
-    └──────────────────┬──────────────────┘
-                       │
-                       └─► find_or_create_application()
-                           ├─► proj.find("Application")
-                           ├─► or: proj.active_application
-                           └─► Returns: app (Application object)
-                       
-    ┌──────────────────────────────────────────────┐
-    │  STEP 5/12: Install Libraries with Repository│  ◄─── NEW!
-    └──────────────────┬──────────────────────────┘
-                       │
-                       └─► install_libraries_enhanced()
-                           ├─► librarymanager.primary_repository
-                           ├─► repo.search(library_name, vendor)
-                           ├─► FOR EACH library:
-                           │   └─► install_library_from_repository()
-                           │       ├─► repo.search() → placeholder
-                           │       ├─► placeholder.install()
-                           │       └─► Resolves dependencies automatically
-                           └─► NOTE: Uses namespace from lib.name, NOT lib.title
-                       
-    ┌──────────────────────────────────────┐
-    │  STEP 6/12: Find PLC Device          │
-    └──────────────────┬──────────────────┘
-                       │
-                       └─► find_plc_device()
-                           ├─► proj.get_children(recursive=True)
-                           ├─► FOR EACH obj:
-                           │   └─► IF obj.is_device AND type == 4096:
-                           │       └─► RETURN obj
-                           └─► Returns: device (PLC object)
-                       
-    ┌──────────────────────────────────────┐
-    │  STEP 7/12: Configure IP Address     │
-    └──────────────────┬──────────────────┘
-                       │
-                       └─► configure_device_ip()
-                           ├─► Normalizes: "172.16.46.020" → "172.16.46.20"
-                           ├─► TRIES: Gateway method
-                           ├─► TRIES: device.ip_address
-                           ├─► TRIES: Ethernet Interface
-                           └─► WARNING: Manual configuration needed (known issue)
-                       
-    ┌──────────────────────────────────────┐
-    │  STEP 8/12: Configure Kbus           │  ◄─── MOST CRITICAL STEP
-    └──────────────────┬──────────────────┘
-                       │
-                       ├─► find_kbus()
-                       │   ├─► device.find('Kbus', recursive=True)
-                       │   └─► Returns: kbus (Kbus object)
-                       │
-                       └─► add_io_modules_to_kbus()  ◄─── CORE LOGIC
+                           ├─► Verify TEMPLATE_PROJECT exists
+                           │   └─► Path: files/TEMPLATE_WAGO_750-8210.project
                            │
-                           ├─► FOR EACH module in config["IO_Modules"]:
-                           │   │
-                           │   ├─► is_blacklisted()?
-                           │   │   └─► SKIP if PLC (750-88x, 750-89x)
-                           │   │
-                           │   ├─► is_greylisted()?
-                           │   │   └─► SKIP if no Process Data (750-610, 750-614)
-                           │   │
-                           │   ├─► get_device_descriptor()  ◄─── XML LOOKUP
-                           │   │   ├─► Searches: WAGO_DEVICE_DESCRIPTORS
-                           │   │   ├─► Finds: descriptor, version, name
-                           │   │   └─► Example: "750-432" → "8401_0750043200000000"
-                           │   │
-                           │   └─► kbus.add()  ◄─── CODESYS API
-                           │       ├─► Parameter: device_name
-                           │       ├─► Parameter: device_id (32776)
-                           │       ├─► Parameter: descriptor
-                           │       └─► Parameter: version
+                           ├─► Build output path
+                           │   └─► files/projects/{plc_name}.project
                            │
-                           └─► Statistics:
-                               ├─► success_count
-                               ├─► fail_count
-                               ├─► skipped_blacklist
-                               └─► skipped_greylist
-                       
-    ┌──────────────────────────────────────┐
-    │  STEP 9/12: Find/Update PLC_PRG      │
-    └──────────────────┬──────────────────┘
-                       │
-                       └─► find_or_update_plc_prg()
-                           ├─► app.find("PLC_PRG")
-                           ├─► or: app.create_pou("PLC_PRG")
-                           └─► Inserts: Default code
-                       
-    ┌──────────────────────────────────────────────┐
-    │  STEP 10/12: Instantiate Function Blocks    │  ◄─── NEW!
-    └──────────────────┬──────────────────────────┘
-                       │
-                       └─► add_fb_instances_to_plc_prg()
-                           ├─► FOR EACH fb in FB_INSTANCES:
-                           │   ├─► Namespace: Uses lib.name (e.g., "MQTT")
-                           │   ├─► NOT lib.title (e.g., "MQTT_Client_SL")
-                           │   │
-                           │   ├─► DECLARATION (in PLC_PRG declaration):
-                           │   │   └─► VAR instance_name : FB_Type; END_VAR
-                           │   │
-                           │   └─► IMPLEMENTATION (in PLC_PRG body):
-                           │       └─► instance_name(...);
+                           ├─► Create projects directory if missing
                            │
-                           └─► CRITICAL: FB calls in implementation, NOT declaration
-                       
-    ┌──────────────────────────────────────┐
-    │  STEP 11/12: Create GVL              │
-    └──────────────────┬──────────────────┘
+                           ├─► Delete old project file if exists
+                           │
+                           ├─► Copy template using shutil.copy2()
+                           │   └─► Preserves file metadata
+                           │
+                           └─► Open project
+                               ├─► projects.open(full_path, None, True)
+                               └─► Returns: (proj, full_path)
+
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 4/13: Find Application                        │
+└──────────────────────┬──────────────────────────────────────────┘
                        │
-                       └─► create_gvl_with_variables()
-                           ├─► app.create_gvl("GVL_IO020")
-                           ├─► gvl.textual_declaration.replace()
-                           └─► Inserts: var_block (VAR_GLOBAL...END_VAR)
-                       
-    ┌──────────────────────────────────────┐
-    │  STEP 12/12: Save Project            │
-    └──────────────────┬──────────────────┘
+                       └─► find_or_create_application(proj)
+                           ├─► Method 1: proj.find("Application", True)
+                           │   └─► Search recursively for Application node
+                           │
+                           ├─► Method 2: Traverse all project objects
+                           │   └─► proj.get_children(True)
+                           │       └─► Check type and name for "Application"
+                           │
+                           └─► Method 3: Use active application
+                               └─► proj.active_application
+                               └─► Returns: app (Application object)
+
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 5/13: Install Libraries                       │
+└──────────────────────┬──────────────────────────────────────────┘
+                       │
+                       └─► install_libraries_enhanced(proj, app, libraries)
+                           │
+                           ├─► get_library_manager_object(app)
+                           │   ├─► app.get_children(recursive=True)
+                           │   └─► Find object with: hasattr(obj, 'is_libman')
+                           │
+                           └─► FOR EACH library in libraries:
+                               │
+                               ├─► find_library_in_repositories(name, vendor, version)
+                               │   │
+                               │   ├─► Access: librarymanager.repositories
+                               │   │   NOTE: Direct access, NOT system.librarymanager
+                               │   │
+                               │   ├─► FOR EACH repo in repositories:
+                               │   │   └─► librarymanager.get_all_libraries(repo)
+                               │   │       └─► FOR EACH lib:
+                               │   │           ├─► Match: lib.title == name
+                               │   │           ├─► Match: lib.company == vendor
+                               │   │           └─► Match: lib.version == version
+                               │   │
+                               │   └─► extract_namespace_from_library(lib)
+                               │       ├─► Try: lib.name (primary)
+                               │       ├─► Try: lib.namespace (secondary)
+                               │       ├─► Try: lib.default_namespace (tertiary)
+                               │       └─► Fallback: lib.title
+                               │
+                               └─► add_library_to_application(libman, lib)
+                                   ├─► libman.add_library(target_lib)
+                                   └─► Track: added/skipped/failed counts
+
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 6/13: Import XML Files                        │
+└──────────────────────┬──────────────────────────────────────────┘
+                       │
+                       └─► import_xml_files(proj, xml_imports, conflict_mode)
+                           │
+                           ├─► Find Application object
+                           │   └─► proj.find("Application", True)[0]
+                           │
+                           └─► FOR EACH xml_item in xml_imports:
+                               │
+                               ├─► Verify file exists
+                               │   ├─► IF not found AND required:
+                               │   │   └─► Log error, increment error_count
+                               │   └─► IF not found AND optional:
+                               │       └─► Log warning, increment skipped_count
+                               │
+                               ├─► detect_xml_format(filepath)
+                               │   ├─► Read first 500 characters
+                               │   ├─► Check for: "<ExportFile" → 'export'
+                               │   ├─► Check for: "plcopen.org/xml/tc6" → 'plcopenxml'
+                               │   ├─► Check for: "<project" → 'projectxml'
+                               │   └─► Returns: format type
+                               │
+                               ├─► Validate format
+                               │   └─► IF 'export':
+                               │       └─► ERROR: Not supported (ISVNode required)
+                               │
+                               ├─► get_conflict_resolve_mode(mode_str)
+                               │   ├─► "replace" → 0
+                               │   ├─► "copy" → 1
+                               │   └─► "skip" → 2
+                               │
+                               └─► app.import_xml(conflict_mode, filepath, True)
+                                   └─► Imports POUs to Application node
+
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 7/13: Find PLC Device                         │
+└──────────────────────┬──────────────────────────────────────────┘
+                       │
+                       └─► find_plc_device(proj)
+                           ├─► proj.find('Device', True)
+                           │   └─► Returns array of Device objects
+                           │
+                           ├─► Filter by device name
+                           │   └─► IF '750' in name OR 'PFC' in name:
+                           │       └─► Likely WAGO controller
+                           │
+                           └─► Fallback: Use first device
+                               └─► Returns: device (Device object)
+
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 8/13: Configure IP Address                    │
+└──────────────────────┬──────────────────────────────────────────┘
+                       │
+                       └─► configure_device_ip(proj, device, ip_address)
+                           │
+                           ├─► Normalize IP address
+                           │   └─► "172.16.46.020" → "172.16.46.20"
+                           │       └─► Remove leading zeros from octets
+                           │
+                           ├─► Get gateway object
+                           │   └─► get_first_gateway()
+                           │       ├─► Access: online.gateways
+                           │       └─► Returns: gateway object (not string!)
+                           │
+                           └─► Set IP address
+                               ├─► device.set_gateway_and_ip_address(gateway, ip)
+                               │   └─► NOTE: Requires gateway OBJECT, not string
+                               │
+                               └─► IF fails:
+                                   └─► Log warning: Manual configuration needed
+
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 9/13: Configure K-Bus with IO Modules         │
+└──────────────────────┬──────────────────────────────────────────┘
+                       │
+                       ├─► find_kbus(device)
+                       │   ├─► device.find('Kbus', True)
+                       │   └─► Fallback: Search in device.get_children()
+                       │       └─► Look for name containing "Kbus" or "KBus"
+                       │
+                       └─► add_io_modules_to_kbus(kbus, config)
+                           │
+                           └─► FOR EACH module in config["IO_Modules"]:
+                               │
+                               ├─► Extract module_type (e.g., "750-432")
+                               │
+                               ├─► is_blacklisted(module_type)?
+                               │   └─► Blacklist: ["750-88", "750-89"]
+                               │       └─► SKIP: PLC devices, not I/O modules
+                               │
+                               ├─► is_greylisted(module_type)?
+                               │   └─► Greylist: ["750-610", "750-614"]
+                               │       └─► SKIP: No process data
+                               │
+                               ├─► get_device_descriptor(module_type)
+                               │   │
+                               │   ├─► Lookup in WAGO_DEVICE_DESCRIPTORS
+                               │   │   └─► 16 module types supported
+                               │   │
+                               │   ├─► Fallback for 750-652:
+                               │   │   └─► IF base == "750-652":
+                               │   │       └─► Return "750-652#48" descriptor
+                               │   │
+                               │   └─► Returns: {device_id, descriptor, version, name}
+                               │
+                               ├─► Refresh Kbus reference
+                               │   └─► parent_device.find('Kbus', True)[0]
+                               │       └─► Ensures up-to-date object reference
+                               │
+                               └─► Add module to K-Bus
+                                   ├─► kbus.add(device_name, device_id, descriptor, version)
+                                   │   └─► NOTE: Uses .add() method, NOT .create_child()
+                                   │
+                                   └─► Track: success_count/fail_count/skipped_count
+
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 10/13: Find/Update PLC_PRG                    │
+└──────────────────────┬──────────────────────────────────────────┘
+                       │
+                       └─► find_or_update_plc_prg(app)
+                           ├─► app.find("PLC_PRG", True)
+                           │   └─► Search for existing PLC_PRG
+                           │
+                           ├─► IF found:
+                           │   └─► Update declaration and implementation
+                           │       ├─► decl = pou.textual_declaration
+                           │       └─► impl = pou.textual_implementation
+                           │
+                           └─► IF not found:
+                               └─► app.create_pou("PLC_PRG", PouType.Program, None)
+                                   └─► Create new program POU
+
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 11/13: Instantiate Function Blocks            │
+└──────────────────────┬──────────────────────────────────────────┘
+                       │
+                       └─► add_fb_instances_to_plc_prg(app, fb_instances)
+                           │
+                           ├─► Find PLC_PRG
+                           │   └─► app.find("PLC_PRG", True)[0]
+                           │
+                           └─► FOR EACH fb_config in fb_instances:
+                               │
+                               ├─► create_fb_instance_code(fb_config)
+                               │   │
+                               │   ├─► Build VAR declaration
+                               │   │   └─► "{instance} : {fb_type};"
+                               │   │       Example: "oMQTTClient : MQTT.MQTTClient;"
+                               │   │
+                               │   └─► Build implementation call
+                               │       ├─► Parse params dictionary
+                               │       ├─► Build parameter list
+                               │       │   ├─► Input: "param := value"
+                               │       │   └─► Output: "param => variable"
+                               │       └─► "{instance}({params});"
+                               │           Example: "oMQTTClient(xEnable := xEnable);"
+                               │
+                               ├─► Update PLC_PRG declaration
+                               │   ├─► Get current: pou.textual_declaration.text
+                               │   ├─► Append: VAR block with FB instances
+                               │   └─► Replace: pou.textual_declaration.replace(new_decl)
+                               │
+                               └─► Update PLC_PRG implementation
+                                   ├─► Get current: pou.textual_implementation.text
+                                   ├─► Append: FB calls
+                                   └─► Replace: pou.textual_implementation.replace(new_impl)
+
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 12/13: Create GVL with Variables              │
+└──────────────────────┬──────────────────────────────────────────┘
+                       │
+                       └─► create_gvl_with_variables(app, gvl_name, var_block)
+                           │
+                           ├─► Build GVL name
+                           │   └─► "GVL_{plc_name}" (e.g., "GVL_IO020")
+                           │
+                           ├─► app.create_gvl(gvl_name)
+                           │   └─► Creates new Global Variable List
+                           │
+                           └─► IF var_block provided:
+                               └─► gvl.textual_declaration.replace(var_block)
+                                   └─► Insert variable declarations
+                                       Format: IEC 61131-3 VAR_GLOBAL block
+
+┌─────────────────────────────────────────────────────────────────┐
+│              STEP 13/13: Save Project                           │
+└──────────────────────┬──────────────────────────────────────────┘
                        │
                        ├─► proj.save()
+                       │   └─► Writes all changes to .project file
+                       │
                        ├─► proj.close()
-                       └─► Log: "PROJECT SUCCESSFUL: IO020"
+                       │   └─► Releases file handles and resources
+                       │
+                       └─► Log success message
+                           ├─► "PROJECT SUCCESSFUL: {plc_name}"
+                           └─► "Path: {full_path}"
 ```
 
 ---
 
-## 🔑 CORE FUNCTIONS (by Importance)
+## 🔑 CRITICAL API CALLS
 
-### 1. **add_io_modules_to_kbus()** - CRITICAL
-```
-Responsible for: Adding all IO modules
-├─► Blacklist check (filter PLCs)
-├─► Greylist check (filter modules without PD)
-├─► Device Descriptor Lookup (XML mapping)
-└─► CODESYS API Call: kbus.add()
+### Library Management
 
-Uses:
-├─► is_blacklisted()
-├─► is_greylisted()
-├─► get_device_descriptor()  ◄─── Core logic for XML mapping
-└─► WAGO_DEVICE_DESCRIPTORS Dictionary
+```python
+# CORRECT (v0.8.1+)
+repos = librarymanager.repositories              # Direct access
+libman = get_library_manager_object(app)         # Find through app.get_children()
+libman.add_library(target_lib)                   # Add to project
 
-Success rate: 100% (0 errors in 78 projects)
+# INCORRECT (v0.8.0)
+repos = system.librarymanager.repositories       # Does not exist
 ```
 
-### 2. **install_libraries_enhanced()** - CRITICAL (NEW!)
-```
-Responsible for: Installing libraries via Repository API
-├─► librarymanager.primary_repository
-├─► repo.search(library_name, vendor_name)
-├─► placeholder.install()
-└─► Automatic dependency resolution
+### K-Bus Module Addition
 
-CRITICAL LEARNINGS:
-├─► Library namespace ≠ Library display title
-│   Example: "MQTT_Client_SL" title → "MQTT" namespace
-├─► Use lib.name for namespace resolution
-└─► ScriptEngine resolves namespaces automatically
+```python
+# CORRECT (v0.8.1+)
+kbus.add(device_name, device_id, descriptor, version)
 
-Replaces: Manual library installation (download/import)
-Benefits: Version management, dependency resolution
+# INCORRECT (v0.8.0)
+kbus.create_child(device_id, 0, descriptor, version)  # Method does not exist
 ```
 
-### 3. **get_device_descriptor()** - CRITICAL
-```
-Responsible for: Mapping Module → Device ID
-├─► Searches exact match: "750-432" → Dictionary
-├─► Searches base module: "750-472" → "750-472#04"
-├─► Handles variable PD: "750-652" → "750-652#48"
-└─► Returns: {descriptor, version, name, description}
+### IP Configuration
 
-Return example:
+```python
+# CORRECT (v0.8.1+)
+gateway = get_first_gateway()                    # Get gateway object
+device.set_gateway_and_ip_address(gateway, ip)  # Pass object
+
+# INCORRECT (v0.8.0)
+device.set_gateway_and_ip_address(gateway_str, ip)  # Causes GUID error
+```
+
+### XML Import
+
+```python
+# CORRECT - Import to Application
+app = proj.find("Application", True)[0]
+app.import_xml(conflict_mode, filepath, True)   # POUs appear under Application
+
+# INCORRECT - Import to Project
+proj.import_xml(conflict_mode, filepath, True)  # POUs appear in separate tab
+```
+
+---
+
+## 📊 DATA STRUCTURES
+
+### Configuration File (project_config.json)
+
+```python
 {
-    "device_id": 32776,
-    "descriptor": "8401_0750043200000000",
-    "version": "2.0.0.11",
-    "name": "750-432",
-    "description": "4DI 24 VDC 3ms 2-wire"
+  "libraries": {
+    "items": [
+      {
+        "name": str,          # Display name in CODESYS
+        "vendor": str,        # "CODESYS", "WAGO", or "3S"
+        "version": str|None,  # Specific version or None for latest
+        "namespace": str,     # Internal namespace for FB references
+        "required": bool      # Fail if not found?
+      }
+    ]
+  },
+  "function_blocks": {
+    "items": [
+      {
+        "fb_type": str,       # Fully qualified (e.g., "MQTT.MQTTClient")
+        "instance": str,      # Variable name
+        "params": dict        # Parameter assignments
+      }
+    ]
+  },
+  "xml_imports": {
+    "auto_detect": {
+      "enabled": bool,              # Enable auto-detection?
+      "directory": str,             # Scan directory
+      "pattern": str,               # File pattern
+      "exclude_patterns": [str],    # Exclusion patterns
+      "default_conflict_resolve": str  # "replace", "copy", "skip"
+    }
+  }
 }
 ```
 
-### 4. **add_fb_instances_to_plc_prg()** - IMPORTANT (NEW!)
-```
-Responsible for: Instantiating function blocks from libraries
-├─► Parses FB config from JSON
-├─► Adds declarations to PLC_PRG
-├─► Adds implementation calls to PLC_PRG
-└─► Handles namespace resolution
-
-CRITICAL RULES:
-├─► FB instances declared in declaration section
-├─► FB calls placed in implementation section
-├─► Namespace prefix omitted (CODESYS resolves)
-└─► Example:
-    Declaration:  VAR fbMqtt : MQTT.MqttClient; END_VAR
-    Implementation: fbMqtt(...);
-```
-
-### 5. **create_project_from_template()** - IMPORTANT
-```
-Responsible for: Project initialization
-├─► Copies template
-├─► Renames (IO020.project)
-├─► Opens in CODESYS
-└─► Returns: proj, full_path
-
-Prerequisite: TEMPLATE_WAGO_750-8210.project must exist
-```
-
-### 6. **match_files()** - IMPORTANT
-```
-Responsible for: Auto-detect mode
-├─► Reads: IO*_variables.txt
-├─► Reads: PLC_IO*_config.json
-├─► Regex match: IO(\d+)_variables.txt → PLC_IO\1_config.json
-└─► Returns: [(var_file, config_file, plc_id), ...]
-
-Example:
-IO020_variables.txt + PLC_IO020_config.json → ("...", "...", "IO020")
-```
-
----
-
-## 📋 DATA FLOW
-
-```
-INPUT FILES
-    ↓
-┌───────────────────────────────────────────────────────────┐
-│  IO020_variables.txt (IEC 61131-3 Variable declarations)  │
-│  ├─ VAR_GLOBAL                                            │
-│  │   I0001_Me_MnCoolCmnAlrm AT %IX65.3 : BOOL;           │
-│  │   O0001_So_MnCool3WAYETPOIn AT %QW3 : WORD;           │
-│  └─ END_VAR                                               │
-└───────────────────────────────────────────────────────────┘
-    ↓
-┌───────────────────────────────────────────────────────────┐
-│  PLC_IO020_config.json (PLC and module configuration)    │
-│  ├─ PLC_Info                                              │
-│  │   ├─ Name: "IO020"                                    │
-│  │   ├─ Type: "750-8210"                                 │
-│  │   └─ IP_Address: "172.16.60.020"                      │
-│  └─ IO_Modules                                            │
-│      ├─ [0]: Module_Type: "750-432"                      │
-│      └─ [1]: Module_Type: "750-554"                      │
-└───────────────────────────────────────────────────────────┘
-    ↓
-┌───────────────────────────────────────────────────────────┐
-│  library_fb_config.json (Library and FB configuration)   │  ◄─── NEW!
-│  ├─ required_libraries                                    │
-│  │   ├─ [0]: name: "MQTT_Client_SL"                      │
-│  │   └─ [1]: name: "JSON_Utilities_SL"                   │
-│  └─ fb_instances                                          │
-│      ├─ [0]: instance_name: "fbMqtt"                      │
-│      │       fb_type: "MQTT.MqttClient"                   │
-│      └─ [1]: instance_name: "fbJson"                      │
-│              fb_type: "JSON.JSONByteArrayParser"          │
-└───────────────────────────────────────────────────────────┘
-                  ↓
-    ┌─────────────────────────────────┐
-    │  Python Parsing Functions       │
-    │  ├─► parse_variables_file()     │
-    │  ├─► parse_config_json()        │
-    │  └─► load_config_from_json()    │
-    └─────────────────────────────────┘
-                  ↓
-    ┌─────────────────────────────────┐
-    │  CODESYS API                    │
-    │  ├─► projects.open()            │
-    │  ├─► librarymanager.repositories│  ◄─── NEW!
-    │  ├─► device.find()              │
-    │  ├─► kbus.add()  ◄─── Core!     │
-    │  ├─► pou.textual_declaration    │  ◄─── NEW!
-    │  ├─► gvl.create()               │
-    │  └─► proj.save()                │
-    └─────────────────────────────────┘
-                  ↓
-OUTPUT FILES
-    ↓
-┌───────────────────────────────────────────────────────────┐
-│  projects/IO020.project  (Complete CODESYS project)       │
-│  ├─► Device (750-8210)                                    │
-│  ├─► Kbus + IO modules (750-432, 750-461, ...)           │
-│  ├─► Libraries (MQTT_Client_SL, JSON_Utilities_SL)       │  ◄─── NEW!
-│  ├─► PLC_PRG (Main program with FB instances)            │  ◄─── ENHANCED!
-│  └─► GVL_IO020 (Global variables)                        │
-└───────────────────────────────────────────────────────────┘
-                  ↓
-┌───────────────────────────────────────────────────────────┐
-│  Log file (Detailed protocol)                             │
-└───────────────────────────────────────────────────────────┘
-```
-
----
-
-## ⚙️ CONFIGURATION DATA FLOW
-
-```
-WAGO_DEVICE_DESCRIPTORS Dictionary
-    ↓
-┌───────────────────────────────────────────────────────────┐
-│  "750-432": {                                             │
-│      "device_id": 32776,                                  │
-│      "descriptor": "8401_0750043200000000",  ◄─── XML!   │
-│      "version": "2.0.0.11",                               │
-│      "name": "750-432",                                   │
-│      "description": "4DI 24 VDC 3ms 2-wire"               │
-│  }                                                        │
-└───────────────────────────────────────────────────────────┘
-    ↓
-get_device_descriptor("750-432")
-    ↓
-┌───────────────────────────────────────────────────────────┐
-│  descriptor_info = {                                      │
-│      "device_id": 32776,                                  │
-│      "descriptor": "8401_0750043200000000",               │
-│      "version": "2.0.0.11",                               │
-│      "name": "750-432",                                   │
-│      "description": "4DI 24 VDC 3ms 2-wire"               │
-│  }                                                        │
-└───────────────────────────────────────────────────────────┘
-    ↓
-kbus.add(
-    device_name="750-432",
-    device_id=32776,
-    descriptor="8401_0750043200000000",
-    version="2.0.0.11"
-)
-    ↓
-┌───────────────────────────────────────────────────────────┐
-│  Module successfully added to CODESYS Kbus!               │
-└───────────────────────────────────────────────────────────┘
-```
-
----
-
-## 🔄 LOOP: Batch Processing (78 Projects)
-
-```
-main()
-    ↓
-matched_pairs = [
-    ("IO020_variables.txt", "PLC_IO020_config.json", "IO020"),
-    ("IO021_variables.txt", "PLC_IO021_config.json", "IO021"),
-    ...
-    ("IO251_variables.txt", "PLC_IO251_config.json", "IO251")
-]  ← 78 pairs
-    ↓
-FOR idx = 1 TO 78:
-    ↓
-    ├─► var_file   = matched_pairs[idx][0]
-    ├─► config_file = matched_pairs[idx][1]
-    ├─► plc_id     = matched_pairs[idx][2]
-    ↓
-    └─► create_single_project(var_file, config_file, plc_id)
-        ├─► Steps 1-12 (see above)
-        ├─► Log: "PROJECT {idx}/78: {plc_id}"
-        └─► IF successful: success_count++
-            IF failed: failure_count++
-    ↓
-NEXT idx
-    ↓
-Output:
-├─► Total: 78
-├─► Successful: 78
-├─► Failed: 0
-└─► Duration: 2 Min 36 Sec
-```
-
----
-
-## 🚨 ERROR HANDLING
-
-```
-TRY:
-    create_single_project()
-        ↓
-        TRY:
-            parse_variables_file()
-        EXCEPT:
-            log("[ERROR] Parsing failed")
-            RETURN False
-        ↓
-        TRY:
-            load_config_from_json()  ◄─── NEW!
-        EXCEPT:
-            log("[WARNING] No JSON config, using defaults")
-        ↓
-        TRY:
-            create_project_from_template()
-        EXCEPT:
-            log("[ERROR] Template error")
-            RETURN False
-        ↓
-        TRY:
-            install_libraries_enhanced()  ◄─── NEW!
-                ↓
-                FOR EACH library:
-                    TRY:
-                        repo.search(lib_name, vendor)
-                        placeholder.install()
-                    EXCEPT:
-                        log("[ERROR] Library installation failed")
-                        CONTINUE
-        EXCEPT:
-            log("[WARNING] Library installation issues")
-        ↓
-        TRY:
-            add_io_modules_to_kbus()
-                ↓
-                FOR EACH module:
-                    TRY:
-                        descriptor = get_device_descriptor()
-                        IF descriptor is None:
-                            log("[ERROR] No device descriptor")
-                            fail_count++
-                            CONTINUE
-                        ↓
-                        kbus.add(...)
-                        success_count++
-                    EXCEPT:
-                        log("[ERROR] Adding failed")
-                        fail_count++
-        EXCEPT:
-            log("[ERROR] Kbus configuration failed")
-            RETURN False
-        ↓
-        TRY:
-            add_fb_instances_to_plc_prg()  ◄─── NEW!
-                ↓
-                FOR EACH fb:
-                    TRY:
-                        Add declaration
-                        Add implementation
-                    EXCEPT:
-                        log("[WARNING] FB instantiation failed")
-        EXCEPT:
-            log("[WARNING] FB processing issues")
-        ↓
-        proj.save()
-        proj.close()
-        ↓
-        RETURN True
-        
-EXCEPT:
-    log("CRITICAL ERROR")
-    traceback.print_exc()
-    RETURN False
-```
-
----
-
-## 📊 PERFORMANCE ANALYSIS
-
-### Time Distribution (per project):
-
-```
-Total: ~2 seconds/project
-
-├─► Step 1 (JSON Config):     0.02s  (1%)    ◄─── NEW!
-├─► Step 2 (Parse):           0.05s  (2.5%)
-├─► Step 3 (Template):        0.20s  (10%)
-├─► Step 4 (Application):     0.05s  (2.5%)
-├─► Step 5 (Libraries):       0.15s  (7.5%)  ◄─── NEW!
-├─► Step 6 (Device):          0.10s  (5%)
-├─► Step 7 (IP):              0.10s  (5%)
-├─► Step 8 (Kbus):            1.00s  (50%)   ◄─── Bottleneck
-├─► Step 9 (PLC_PRG):         0.10s  (5%)
-├─► Step 10 (FB Instances):   0.08s  (4%)    ◄─── NEW!
-├─► Step 11 (GVL):            0.20s  (10%)
-└─► Step 12 (Save):           0.20s  (10%)
-```
-
-### Optimization Potential:
-
-- ✅ **Device Descriptor Lookup:** 1 attempt instead of 20 (V4 vs V7)
-- ✅ **No unnecessary polling:** Direct API calls
-- ✅ **Library installation:** Repository API > Manual download
-- ⚠️ **Kbus.add() takes time:** CODESYS-internal (not optimizable)
-
----
-
-## 🎯 CRITICAL PATHS
-
-### Must-Succeed Functions:
-1. `parse_variables_file()` - Without variables, no GVL
-2. `parse_config_json()` - Without config, no modules
-3. `create_project_from_template()` - Without project, nothing
-4. `get_device_descriptor()` - Without descriptor, no module
-5. `kbus.add()` - CODESYS API - Core of everything
-
-### Nice-to-Have Functions:
-- `configure_device_ip()` - Can be manually configured later
-- `find_or_update_plc_prg()` - Template usually has PLC_PRG already
-- `install_libraries_enhanced()` - Manual installation possible
-- `add_fb_instances_to_plc_prg()` - Manual instantiation possible
-
----
-
-## 📝 USED CODESYS API FUNCTIONS
+### PLC Configuration File (PLC_IO020_config.json)
 
 ```python
-# Project Management
-projects.open(path, ...)
-proj.save()
-proj.close()
-proj.find("Application", recursive=True)
-proj.get_children(recursive=True)
-
-# Library Management (NEW!)
-librarymanager.primary_repository
-repo.search(library_name, vendor_name)
-placeholder.install()
-lib.name  # Internal namespace (NOT lib.title)
-
-# Device Management
-device.get_device_identification()
-device.find('Kbus', recursive=True)
-device.get_children(False)
-
-# Kbus Management
-kbus.add(device_name, device_id, descriptor, version)  ◄─── CORE!
-
-# Application Management
-app.find("PLC_PRG", False)
-app.create_pou(name, type, ...)
-app.create_gvl(name)
-
-# Code Management (ENHANCED!)
-pou.textual_declaration.replace(code)  # Declaration section
-pou.textual_implementation.replace(code)  # Implementation section
-gvl.textual_declaration.replace(var_block)
+{
+  "PLC_Info": {
+    "Name": str,          # PLC identifier (e.g., "IO020")
+    "Type": str,          # Controller type (e.g., "750-8210")
+    "IP_Address": str,    # IP address with optional leading zeros
+    "Location": str,      # Physical location
+    "IO_Box": str         # Box number
+  },
+  "IO_Modules": [
+    {
+      "Module_Type": str,     # WAGO module (e.g., "750-432")
+      "Signals": [
+        {
+          "Terminal": str,      # Terminal address (e.g., "IX 0.0")
+          "Object_Name": str,   # Variable name
+          "Signal_Type": str,   # "I" or "O"
+          "Signal": str         # Signal type (e.g., "24V DC")
+        }
+      ]
+    }
+  ]
+}
 ```
 
 ---
 
-## 🏁 SUMMARY
+## ⚡ PERFORMANCE METRICS
 
-**Total Functions:** ~30  
-**Critical Functions:** 6  
-**API Calls per Project:** ~15-60 (depending on module count)  
-**Success Rate:** 100% (78/78)  
-**Average:** 2 Sec/Project  
+### Single Project
 
-**Core Innovation V7:** 
-- XML-based Device Descriptors → 0 errors instead of 186
-- Library Repository API → Automatic version and dependency management
-- FB instantiation in implementation → Proper IEC 61131-3 compliance
-- Namespace resolution via lib.name → No more library title confusion
+| Step | Duration | Percentage |
+|------|----------|------------|
+| 1. Load Configuration | 0.1s | 2% |
+| 2. Parse Files | 0.1s | 2% |
+| 3. Create Project | 0.5s | 14% |
+| 4. Find Application | 0.1s | 2% |
+| 5. Install Libraries | 1.0s | 28% |
+| 6. Import XML | 0.5s | 14% |
+| 7. Find Device | 0.1s | 2% |
+| 8. Configure IP | 0.3s | 8% |
+| 9. Configure K-Bus | 0.5s | 14% |
+| 10. Find PLC_PRG | 0.1s | 2% |
+| 11. Instantiate FBs | 0.2s | 6% |
+| 12. Create GVL | 0.2s | 6% |
+| 13. Save Project | 0.1s | 2% |
+| **Total** | **~3.6s** | **100%** |
 
-**Key Improvements V5 → V7:**
-1. **Library Management:** Manual download/import → Repository API
-2. **FB Instantiation:** No FB support → Full FB declaration + implementation
-3. **Configuration:** Hardcoded → JSON-based external config
-4. **Steps:** 9 steps → 12 steps (more modular)
-5. **Namespace Handling:** lib.title (wrong) → lib.name (correct)
+### Batch Processing
+
+- **3 PLCs**: ~9-15 seconds
+- **10 PLCs**: ~30-50 seconds
+- **78 PLCs**: ~6-7 minutes
+
+**Time Savings:**
+- Manual: 6-13 hours per project
+- Automated: 3-5 seconds per project
+- **Improvement: 99.2%**
 
 ---
 
-## 🔬 VERSION HISTORY
+## 🛠️ ERROR HANDLING HIERARCHY
 
-| Version | Key Feature | Status |
-|---------|-------------|--------|
-| V1-V3   | Basic project creation | Deprecated |
-| V4      | Device descriptor trial-and-error | Deprecated |
-| V5      | XML-based descriptors | Working |
-| V6      | Library installation attempts | Experimental |
-| V7      | Repository API + FB instantiation | **Current** |
+```
+try:
+    create_single_project()
+    │
+    ├─► Step 1-13 execution
+    │   │
+    │   └─► Each step has try/except:
+    │       ├─► Log warning/error
+    │       ├─► Increment fail counters
+    │       └─► Continue or return False
+    │
+    └─► IF any critical failure:
+        └─► Return False → Update failure_count
+
+except Exception as e:
+    ├─► Log critical error
+    ├─► Print traceback
+    └─► Return False
+```
+
+### Fallback Mechanisms
+
+**Library Installation:**
+- Primary: Search in all repositories
+- Fallback: Skip if optional
+- Critical: Fail if required
+
+**IP Configuration:**
+- Primary: Gateway discovery + set_gateway_and_ip_address()
+- Fallback: Log warning (manual configuration needed)
+
+**K-Bus Modules:**
+- Blacklist: Skip automatically
+- Greylist: Skip with info message
+- Unknown: Log error, continue with next
+
+**XML Import:**
+- Format detection first
+- Skip .export files (not supported)
+- Continue on optional file errors
+- Fail on required file errors
 
 ---
 
-**Document Version:** 2.0  
-**Created:** 2025-01-15  
-**Updated:** 2025-11-21  
-**Based on:** create_codesys_project_enhanced.py V7.0
+## 📝 LOGGING LEVELS
+
+```
+[INFO]     - Step progression, general information
+[SUCCESS]  - Successful operations (green, bold)
+[WARNING]  - Non-critical issues (yellow)
+[ERROR]    - Failed operations (red, bold)
+[DEBUG]    - Detailed diagnostic info (magenta)
+```
+
+**Log File Location:**
+```
+files/logs/codesys_project_generator_local_log_YYYYMMDD_HHMMSS.txt
+```
+
+---
+
+**Document Version:** 0.8.2  
+**Last Updated:** 2024-12-11  
+**Maintained By:** Alexander Fugmann
