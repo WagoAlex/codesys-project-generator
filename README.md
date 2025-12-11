@@ -96,17 +96,17 @@ This toolchain automates the entire workflow:
 ┌──────────────────────────────────────────────────────────────────┐
 │                          INPUT LAYER                             │
 │                                                                  │
-│  ┌─────────────────┐  ┌──────────────────┐  ┌────────────────┐  │
-│  │  Variable Files │  │  PLC Config JSON │  │  XML Exports   │  │
-│  │  IO020_vars.txt │  │  PLC_IO020.json  │  │  Program.xml   │  │
-│  └─────────────────┘  └──────────────────┘  └────────────────┘  │
+│  ┌─────────────────┐  ┌──────────────────┐  ┌────────────────┐   │
+│  │  Variable Files │  │  PLC Config JSON │  │  XML Exports   │   │
+│  │  IO020_vars.txt │  │  PLC_IO020.json  │  │  Program.xml   │   │
+│  └─────────────────┘  └──────────────────┘  └────────────────┘   │
 │                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │  Configuration: project_config.json                      │   │
-│  │  ├─ Libraries (MQTT, JSON, WagoAppCloud)                 │   │
-│  │  ├─ Function Blocks (MQTTClient, MQTTPublish)            │   │
-│  │  └─ XML Import Settings (auto-detect enabled)            │   │
-│  └──────────────────────────────────────────────────────────┘   │
+│  ┌──────────────────────────────────────────────────────────┐    │
+│  │  Configuration: project_config.json                      │    │
+│  │  ├─ Libraries (MQTT, JSON, WagoAppCloud)                 │    │
+│  │  ├─ Function Blocks (MQTTClient, MQTTPublish)            │    │
+│  │  └─ XML Import Settings (auto-detect enabled)            │    │
+│  └──────────────────────────────────────────────────────────┘    │
 └──────────────────────────────────────────────────────────────────┘
                                │
                                ▼
@@ -114,19 +114,19 @@ This toolchain automates the entire workflow:
 │                      PROCESSING LAYER                            │
 │                codesys_project_generator_local.py                │
 │                                                                  │
-│  Step 1:  Load JSON Configuration                               │
-│  Step 2:  Parse Input Files (variables + PLC config)            │
-│  Step 3:  Create CODESYS Project (template copy)                │
-│  Step 4:  Find Application Node                                 │
-│  Step 5:  Install Libraries (from repositories)                 │
-│  Step 6:  Import XML Files (PLCopenXML to Application)          │
-│  Step 7:  Find PLC Device                                       │
-│  Step 8:  Configure IP Address (with gateway)                   │
-│  Step 9:  Configure K-Bus with IO Modules                       │
-│  Step 10: Find/Update PLC_PRG                                   │
-│  Step 11: Instantiate Function Blocks                           │
-│  Step 12: Create GVL with Variables                             │
-│  Step 13: Save and Close Project                                │
+│  Step 1:  Load JSON Configuration                                │
+│  Step 2:  Parse Input Files (variables + PLC config)             │
+│  Step 3:  Create CODESYS Project (template copy)                 │
+│  Step 4:  Find Application Node                                  │
+│  Step 5:  Install Libraries (from repositories)                  │
+│  Step 6:  Import XML Files (PLCopenXML to Application)           │
+│  Step 7:  Find PLC Device                                        │
+│  Step 8:  Configure IP Address (with gateway)                    │
+│  Step 9:  Configure K-Bus with IO Modules                        │
+│  Step 10: Find/Update PLC_PRG                                    │
+│  Step 11: Instantiate Function Blocks                            │
+│  Step 12: Create GVL with Variables                              │
+│  Step 13: Save and Close Project                                 │
 │                                                                  │
 │  Duration: ~3-5 seconds per project                              │
 └──────────────────────────────────────────────────────────────────┘
@@ -135,18 +135,18 @@ This toolchain automates the entire workflow:
 ┌──────────────────────────────────────────────────────────────────┐
 │                        OUTPUT LAYER                              │
 │                                                                  │
-│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────┐   │
-│  │  CODESYS Project │  │  Log Files       │  │  Statistics  │   │
-│  │  IO020.project   │  │  generator.log   │  │  summary.txt │   │
-│  └──────────────────┘  └──────────────────┘  └──────────────┘   │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────┐    │
+│  │  CODESYS Project │  │  Log Files       │  │  Statistics  │    │
+│  │  IO020.project   │  │  generator.log   │  │  summary.txt │    │
+│  └──────────────────┘  └──────────────────┘  └──────────────┘    │
 │                                                                  │
 │  Project Contents:                                               │
-│  ├─ Device (750-8210) with IP 172.16.46.020                     │
-│  ├─ K-Bus with IO modules (750-432, 750-461, 750-515)           │
-│  ├─ Libraries (MQTT Client SL, JSON Utilities SL)               │
-│  ├─ POUs from XML imports (MQTT_Program, Utilities)             │
-│  ├─ Function Blocks (oMQTTClient, oMQTTPublish)                 │
-│  └─ GVL_IO020 with variable declarations                        │
+│  ├─ Device (750-8210) with IP 172.16.46.020                      │
+│  ├─ K-Bus with IO modules (750-432, 750-461, 750-515)            │
+│  ├─ Libraries (MQTT Client SL, JSON Utilities SL)                │
+│  ├─ POUs from XML imports (MQTT_Program, Utilities)              │
+│  ├─ Function Blocks (oMQTTClient, oMQTTPublish)                  │
+│  └─ GVL_IO020 with variable declarations                         │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
