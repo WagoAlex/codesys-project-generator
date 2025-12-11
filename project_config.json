@@ -1,0 +1,172 @@
+{
+  "configuration": {
+    "description": "CODESYS Project Generator Configuration",
+    "author": "Alexander Fugmann",
+    "version": "2.1",
+    "project_settings": {
+      "template_path": "TEMPLATE_WAGO_750-8210.project",
+      "auto_detect_mode": true
+    },
+    "namespace_mapping": {
+      "info": "Mapping between Library Title and Namespace - CRITICAL!",
+      "MQTT Client SL": "MQTT",
+      "MQTT_Client_SL": "MQTT",
+      "JSON Utilities SL": "JSON",
+      "JSON_Utilities_SL": "JSON",
+      "Web Client SL": "WEB_CLIENT",
+      "WagoAppCloud": "WagoAppCloud",
+      "WagoAppJSON": "WagoAppJSON",
+      "WagoSysString": "WagoSysString"
+    }
+  },
+  
+  "libraries": {
+    "description": "Required CODESYS libraries to be installed",
+    "items": [
+      {
+        "name": "MQTT Client SL",
+        "vendor": "CODESYS",
+        "version": "1.10.0.0",
+        "namespace": "MQTT",
+        "required": false,
+        "notes": "IMPORTANT: Title is 'MQTT Client SL', Namespace is 'MQTT'"
+      },
+      {
+        "name": "WagoSysString",
+        "vendor": "WAGO",
+        "version": null,
+        "namespace": "WagoSysString",
+        "required": false,
+        "notes": "WAGO string manipulation utilities"
+      },
+      {
+        "name": "JSON Utilities SL",
+        "vendor": "CODESYS",
+        "version": "1.9.0.0",
+        "namespace": "JSON",
+        "required": false,
+        "notes": "JSON parsing and creation"
+      },
+      {
+        "name": "WagoAppCloud",
+        "vendor": "WAGO",
+        "version": "1.3.5.7",
+        "namespace": "WagoAppCloud",
+        "required": false,
+        "notes": "WAGO Cloud connectivity"
+      },
+      {
+        "name": "WagoAppJSON",
+        "vendor": "WAGO",
+        "version": "1.1.0.32",
+        "namespace": "WagoAppJSON",
+        "required": false,
+        "notes": "WAGO JSON utilities"
+      }
+    ]
+  },
+  
+  "function_blocks": {
+    "description": "Function Block instances to be created in PLC_PRG",
+    "items": [
+      {
+        "library": "MQTT Client SL",
+        "library_namespace": "MQTT",
+        "fb_type": "MQTT.MQTTClient",
+        "instance": "oMQTTClient",
+        "location": "PLC_PRG",
+        "description": "MQTT Client instance for broker communication",
+        "params": {
+          "xEnable": "xEnable",
+          "sHostname": "sHostname",
+          "uiPort": "uiPort",
+          "sClientId": "CONCAT('WAGOClient_', INT_TO_STRING(index))",
+          "xCleanSession": "TRUE",
+          "uiKeepAlive": "60",
+          "xUseTLS": "FALSE",
+          "xWillRetain": "FALSE",
+          "pbWillMessage": "0",
+          "uiWillMessageSize": "0"
+        }
+      },
+      {
+        "library": "MQTT Client SL",
+        "library_namespace": "MQTT",
+        "fb_type": "MQTT.MQTTPublish",
+        "instance": "oMQTTPublish",
+        "location": "PLC_PRG",
+        "description": "MQTT Publish instance for sending messages",
+        "params": {
+          "xExecute": "xExecute",
+          "udiTimeOut": "udiTimeOut",
+          "eQoS": "MQTT.MQTT_QOS.QoS0",
+          "xRetain": "FALSE",
+          "pbPayload": "pbPayloadPtr",
+          "udiPayloadSize": "udiPayloadLen",
+          "mqttClient": "oMQTTClient",
+          "wsTopicName": "wsTopic",
+          "eMQTTError =>": "eMQTTPublishError"
+        },
+        "additional_code": {
+          "declaration": "pbPayloadPtr : POINTER TO BYTE;\nudiPayloadLen : UDINT;\nsPayload_WAGO_JSON : STRING(1024);",
+          "implementation": "pbPayloadPtr := ADR(sPayload_WAGO_JSON);\nudiPayloadLen := WagoSysString.strnlen(p := ADR(sPayload_WAGO_JSON), udiSize := SIZEOF(sPayload_WAGO_JSON));"
+        }
+      },
+      {
+        "library": "JSON Utilities SL",
+        "library_namespace": "JSON",
+        "fb_type": "JSON.JSONFileReader",
+        "instance": "oJSONFileReader",
+        "location": "PLC_PRG",
+        "description": "JSON file reader for configuration",
+        "params": {
+          "xExecute": "xExecute",
+          "sFilename": "sFilename",
+          "xIgnoreValueStringLength": "TRUE",
+          "xAsyncMode": "TRUE",
+          "jsonData =>": "jsonData",
+          "xDone =>": "xDone",
+          "xBusy =>": "xBusy",
+          "xError =>": "xError",
+          "eError =>": "eError",
+          "xValueTruncated =>": "xValueTruncated"
+        }
+      }
+    ]
+  },
+  
+  "xml_imports": {
+    "description": "XML import settings - supports auto-detection of all .xml files in directory",
+    "auto_detect": {
+      "enabled": true,
+      "directory": "exports",
+      "pattern": "*.xml",
+      "recursive": false,
+      "exclude_patterns": ["*_backup.xml", "*_old.xml"],
+      "default_conflict_resolve": "replace",
+      "treat_all_as_optional": false
+    },
+    "manual_files": [
+    ]
+  },
+  
+  "import_settings": {
+    "default_conflict_resolve": "replace",
+    "import_folder_structure": true,
+    "save_after_import": true,
+    "continue_on_error": true
+  },
+  
+  "debugging": {
+    "enable_detailed_logging": true,
+    "log_language": "en",
+    "test_library_access_first": false,
+    "notes": [
+      "If 'Library not found' error occurs:",
+      "1. Check if library is installed in CODESYS",
+      "2. Check namespace in library_repositories_list.txt",
+      "3. Update namespace_mapping in this file",
+      "4. Use test_library_access() function"
+    ]
+  }
+}
