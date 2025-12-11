@@ -1,0 +1,3265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP21 Patch 1" creationDateTime="2025-12-10T09:36:45.4965596" />
+  <contentHeader name="PFC200_8212_SPS-2025-Inferenz_MQTT_PublishFW29.project" modificationDateTime="2025-12-09T18:28:43.4444648">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+    <addData>
+      <data name="http://www.3s-software.com/plcopenxml/projectinformation" handleUnknown="implementation">
+        <ProjectInformation />
+      </data>
+    </addData>
+  </contentHeader>
+  <types>
+    <dataTypes>
+      <dataType name="eHelmetState">
+        <baseType>
+          <enum>
+            <values>
+              <value name="idle" value="0" />
+              <value name="head" value="1" />
+              <value name="blue_helmet" value="2" />
+              <value name="white_helmet" value="3" />
+            </values>
+          </enum>
+        </baseType>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/attributes" handleUnknown="implementation">
+            <Attributes>
+              <Attribute Name="qualified_only" Value="" />
+              <Attribute Name="strict" Value="" />
+            </Attributes>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>b559a871-a4a4-4131-988d-40cafd896a4e</ObjectId>
+          </data>
+        </addData>
+      </dataType>
+      <dataType name="typMQTTPayload">
+        <baseType>
+          <struct>
+            <variable name="liTimestamp">
+              <type>
+                <LINT />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> UNIX Epoch Time in ms</xhtml>
+              </documentation>
+            </variable>
+            <variable name="usiSeq">
+              <type>
+                <USINT />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Sequence (0…255 → rollover)</xhtml>
+              </documentation>
+            </variable>
+            <variable name="atypMetrics">
+              <type>
+                <array>
+                  <dimension lower="0" upper="49" />
+                  <baseType>
+                    <derived name="typMetric" />
+                  </baseType>
+                </array>
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> e.g  Metric Values</xhtml>
+              </documentation>
+            </variable>
+            <variable name="usiMetricCnt">
+              <type>
+                <USINT />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> tatsächliche Anzahl genutzter Metrics</xhtml>
+              </documentation>
+            </variable>
+          </struct>
+        </baseType>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>17d3a1e4-8c42-4923-bfdc-e3d8e7cb2f6a</ObjectId>
+          </data>
+        </addData>
+      </dataType>
+      <dataType name="typMetric">
+        <baseType>
+          <struct>
+            <variable name="sName">
+              <type>
+                <string length="64" />
+              </type>
+            </variable>
+            <variable name="rValue">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="usiTypeID">
+              <type>
+                <USINT />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">  Sparkplug Payload (defined by Spec)</xhtml>
+              </documentation>
+            </variable>
+          </struct>
+        </baseType>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>11994ecc-4fa1-4601-9bde-feb714a8b7d6</ObjectId>
+          </data>
+        </addData>
+      </dataType>
+      <dataType name="eMetricType">
+        <baseType>
+          <enum>
+            <values>
+              <value name="eMETRIC_BOOL" value="1" />
+              <value name="eMETRIC_INT" value="3" />
+              <value name="eMETRIC_FLOAT" value="9" />
+              <value name="eMETRIC_STRING" value="12" />
+            </values>
+          </enum>
+        </baseType>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/attributes" handleUnknown="implementation">
+            <Attributes>
+              <Attribute Name="qualified_only" Value="" />
+              <Attribute Name="strict" Value="" />
+            </Attributes>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>6f741580-63eb-4fbd-835f-3b8ac71c291b</ObjectId>
+          </data>
+        </addData>
+      </dataType>
+    </dataTypes>
+    <pous>
+      <pou name="Prg_MQTT" pouType="program">
+        <interface>
+          <localVars>
+            <variable name="oFbSubscribeMQTT">
+              <type>
+                <derived name="FbSubscribeMQTT" />
+              </type>
+            </variable>
+            <variable name="oJsonParser">
+              <type>
+                <derived name="WagoAppJSON.Fb_JSON_ParseAndModify" />
+              </type>
+            </variable>
+            <variable name="oGetValue">
+              <type>
+                <derived name="WagoAppJSON.typJSON_Pointer" />
+              </type>
+            </variable>
+            <variable name="xSubscribe">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="TRUE" />
+              </initialValue>
+            </variable>
+            <variable name="sTopic">
+              <type>
+                <string length="255" />
+              </type>
+              <initialValue>
+                <simpleValue value="'inference/yolov5m-results'" />
+              </initialValue>
+            </variable>
+            <variable name="eQoS">
+              <type>
+                <derived name="WagoAppCloud.eQualityOfService" />
+              </type>
+              <initialValue>
+                <simpleValue value="WagoAppCloud.eQualityOfService.QoS0" />
+              </initialValue>
+            </variable>
+            <variable name="aPayloadData">
+              <type>
+                <array>
+                  <dimension lower="0" upper="UPPERBOUND" />
+                  <baseType>
+                    <BYTE />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="xBusy">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="xError">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="xDataReceived">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="xDataTruncated">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="dwRxNBytes">
+              <type>
+                <DWORD />
+              </type>
+            </variable>
+            <variable name="sReceivedTopic">
+              <type>
+                <string length="255" />
+              </type>
+            </variable>
+            <variable name="oStatus">
+              <type>
+                <derived name="WagoAppCloud.WagoSysErrorBase.FbResult" />
+              </type>
+            </variable>
+            <variable name="bState">
+              <type>
+                <derived name="eHelmetState" />
+              </type>
+              <initialValue>
+                <simpleValue value="eHelmetState.idle" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> State</xhtml>
+              </documentation>
+            </variable>
+            <variable name="sJsonMessage">
+              <type>
+                <string length="200" />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> JSON message as string</xhtml>
+              </documentation>
+            </variable>
+            <variable name="xTriggerParse">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> JSON parsing triggers</xhtml>
+              </documentation>
+            </variable>
+            <variable name="xTriggerGetTimestamp">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="xTriggerGetClass">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="xTriggerGetConfidence">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="sJsonPointer">
+              <type>
+                <string length="255" />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Detection data</xhtml>
+              </documentation>
+            </variable>
+            <variable name="sDetectionClass">
+              <type>
+                <string length="50" />
+              </type>
+            </variable>
+            <variable name="sConfidenceValue">
+              <type>
+                <string length="20" />
+              </type>
+            </variable>
+            <variable name="rConfidence">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="sTimestampValue">
+              <type>
+                <string length="20" />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Timestamp monitoring</xhtml>
+              </documentation>
+            </variable>
+            <variable name="liTimestampMs">
+              <type>
+                <LINT />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Timestamp in milliseconds</xhtml>
+              </documentation>
+            </variable>
+            <variable name="dtLastDetectionUTC">
+              <type>
+                <DT />
+              </type>
+            </variable>
+            <variable name="dtLastDetectionCET">
+              <type>
+                <DT />
+              </type>
+            </variable>
+            <variable name="dtLastDetectionCEST">
+              <type>
+                <DT />
+              </type>
+            </variable>
+            <variable name="udiUnixTimestamp">
+              <type>
+                <UDINT />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Unix timestamp in seconds</xhtml>
+              </documentation>
+            </variable>
+            <variable name="bParseState">
+              <type>
+                <INT />
+              </type>
+              <initialValue>
+                <simpleValue value="0" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> State machine</xhtml>
+              </documentation>
+            </variable>
+            <variable name="xParsingDone">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Helper variables</xhtml>
+              </documentation>
+            </variable>
+            <variable name="xParseData">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="xLowConfidence">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="LED_White">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> LED outputs</xhtml>
+              </documentation>
+            </variable>
+            <variable name="LED_Blue">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="LED_Red">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="xWrongType">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="oFbCustomPayload">
+              <type>
+                <derived name="FbCreateCustomPayload" />
+              </type>
+            </variable>
+            <variable name="aMQTTClient">
+              <type>
+                <array>
+                  <dimension lower="ciFIRST_INDEX" upper="ciLAST_INDEX" />
+                  <baseType>
+                    <derived name="MQTT.MQTTClient" />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="aMQTTPublish">
+              <type>
+                <array>
+                  <dimension lower="ciFIRST_INDEX" upper="ciLAST_INDEX" />
+                  <baseType>
+                    <derived name="MQTT.MQTTPublish" />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="aMQTTClient2">
+              <type>
+                <array>
+                  <dimension lower="ciFIRST_INDEX" upper="ciLAST_INDEX" />
+                  <baseType>
+                    <derived name="MQTT.MQTTClient" />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="aMQTTPublishComplex">
+              <type>
+                <array>
+                  <dimension lower="ciFIRST_INDEX" upper="ciLAST_INDEX" />
+                  <baseType>
+                    <derived name="MQTT.MQTTPublish" />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="xExecutePublishMqtt">
+              <type>
+                <array>
+                  <dimension lower="ciFIRST_INDEX" upper="ciLAST_INDEX" />
+                  <baseType>
+                    <BOOL />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="index">
+              <type>
+                <INT />
+              </type>
+              <initialValue>
+                <simpleValue value="1" />
+              </initialValue>
+            </variable>
+            <variable name="xTrigger_MQTT">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="sIndexTopic">
+              <type>
+                <string length="JSON_MAX_PARAMETER_STRING" />
+              </type>
+              <initialValue>
+                <simpleValue value="'default'" />
+              </initialValue>
+            </variable>
+            <variable name="sIndexTopic2">
+              <type>
+                <string length="JSON_MAX_PARAMETER_STRING" />
+              </type>
+              <initialValue>
+                <simpleValue value="'default'" />
+              </initialValue>
+            </variable>
+            <variable name="xEnable">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="TRUE" />
+              </initialValue>
+            </variable>
+            <variable name="udiTimeOut">
+              <type>
+                <UDINT />
+              </type>
+              <initialValue>
+                <simpleValue value="60" />
+              </initialValue>
+            </variable>
+            <variable name="wsTopic">
+              <type>
+                <wstring length="1024" />
+              </type>
+            </variable>
+            <variable name="wsTopic2">
+              <type>
+                <wstring length="1024" />
+              </type>
+            </variable>
+            <variable name="sPayload_FormatX">
+              <type>
+                <string length="512" />
+              </type>
+            </variable>
+            <variable name="xFirstCycle">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="TRUE" />
+              </initialValue>
+            </variable>
+            <variable name="sJSON_BaseFrame">
+              <type>
+                <string length="JSON_MAX_STRING" />
+              </type>
+              <initialValue>
+                <simpleValue value="'$N$T{$N$T$T&quot;timestamp&quot;: #Parameter,$N$T$T&quot;seq&quot;: #Parameter,$N$T$T&quot;MetricCnt&quot;: #Parameter,$N$T$T&quot;MetricValue&quot;: #Parameter,$N$T$T&quot;MetricName&quot;: &quot;#Parameter&quot;,$N$T$T&quot;MetricValue2&quot;: #Parameter,$N$T$T&quot;MetricName2&quot;: &quot;#Parameter&quot;,$N$T$T&quot;MetricValue3&quot;: #Parameter,$N$T$T&quot;MetricName3&quot;: &quot;#Parameter&quot;$N$T}'" />
+              </initialValue>
+            </variable>
+            <variable name="sValueArray">
+              <type>
+                <array>
+                  <dimension lower="0" upper="8" />
+                  <baseType>
+                    <string length="JSON_MAX_PARAMETER_STRING" />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="oFb_JSON_Writer_02">
+              <type>
+                <derived name="Fb_JSON_Writer_02" />
+              </type>
+            </variable>
+            <variable name="xTriggerJSONWriter">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="TRUE" />
+              </initialValue>
+            </variable>
+            <variable name="sPayload_WAGO_JSON">
+              <type>
+                <string length="JSON_MAX_STRING" />
+              </type>
+            </variable>
+            <variable name="xExecute">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="TRUE" />
+              </initialValue>
+            </variable>
+            <variable name="oTP1">
+              <type>
+                <derived name="TP" />
+              </type>
+            </variable>
+            <variable name="oTP2">
+              <type>
+                <derived name="TP" />
+              </type>
+            </variable>
+            <variable name="tPublishTime">
+              <type>
+                <TIME />
+              </type>
+              <initialValue>
+                <simpleValue value="TIME#10ms" />
+              </initialValue>
+            </variable>
+            <variable name="pbPayloadPtr">
+              <type>
+                <pointer>
+                  <baseType>
+                    <string length="JSON_MAX_STRING" />
+                  </baseType>
+                </pointer>
+              </type>
+            </variable>
+            <variable name="udiPayloadLen">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+            <variable name="pbPayloadPtr2">
+              <type>
+                <pointer>
+                  <baseType>
+                    <string length="16384" />
+                  </baseType>
+                </pointer>
+              </type>
+            </variable>
+            <variable name="udiPayloadLen2">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+            <variable name="udiLenTmp">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+          </localVars>
+          <localVars constant="true">
+            <variable name="CONFIDENCE_THRESHOLD">
+              <type>
+                <REAL />
+              </type>
+              <initialValue>
+                <simpleValue value="0.7" />
+              </initialValue>
+            </variable>
+            <variable name="UPPERBOUND">
+              <type>
+                <INT />
+              </type>
+              <initialValue>
+                <simpleValue value="200" />
+              </initialValue>
+            </variable>
+            <variable name="cPublishFBs">
+              <type>
+                <INT />
+              </type>
+              <initialValue>
+                <simpleValue value="6" />
+              </initialValue>
+            </variable>
+            <variable name="sHostname">
+              <type>
+                <string />
+              </type>
+              <initialValue>
+                <simpleValue value="'192.168.2.165'" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> or broker.wago.local</xhtml>
+              </documentation>
+            </variable>
+            <variable name="uiPort">
+              <type>
+                <UINT />
+              </type>
+              <initialValue>
+                <simpleValue value="1883" />
+              </initialValue>
+            </variable>
+            <variable name="ciFIRST_INDEX">
+              <type>
+                <INT />
+              </type>
+              <initialValue>
+                <simpleValue value="1" />
+              </initialValue>
+            </variable>
+            <variable name="ciLAST_INDEX">
+              <type>
+                <INT />
+              </type>
+              <initialValue>
+                <simpleValue value="6" />
+              </initialValue>
+            </variable>
+          </localVars>
+        </interface>
+        <actions>
+          <action name="ACT_Publish">
+            <body>
+              <ST>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">(* ============================================================================
+   Payload Generation and MQTT Publishing for Yacht Fleet Monitoring
+   ============================================================================ 
+   Description: 
+     - Generates telemetry payload containing timestamp, sequence number, and metrics 
+     - Creates JSON-formatted payloads using two methods (WagoAppJSON and Format9) 
+     - Publishes data to MQTT broker for multiple yacht clients 
+   
+   Author: Alexander Fugmann
+   Date: 2025-11-21
+   Version: 1.0
+   ============================================================================ 
+*)
+
+	oTP1(IN := NOT oTP2.Q, PT := tPublishTime);   // Timer 1: ON phasen)
+	xExecute := oTP1.Q;
+	oTP2(IN := NOT oTP1.Q, PT := tPublishTime);   // Timer 2: OFF phase 
+// Publish only when client is connected to broker
+
+
+(* --------------------------------------------------------------------------
+   SECTION 1: Payload Data Preparation
+   -------------------------------------------------------------------------- *)
+// Update custom payload structure with current sensor/metric values
+oFbCustomPayload(xEnable := xEnable);
+
+// Populate parameter value array for JSON template substitution
+// Note: Array indices 0-8 correspond to #Parameter placeholders in sJSON_BaseFrame
+sValueArray[0] := LINT_TO_STRING(oFbCustomPayload.typPayloadOut.liTimestamp);      // Unix timestamp (ms)
+sValueArray[1] := INT_TO_STRING(oFbCustomPayload.typPayloadOut.usiSeq);            // Sequence number
+sValueArray[2] := INT_TO_STRING(oFbCustomPayload.typPayloadOut.usiMetricCnt);      // Total metric count
+sValueArray[3] := REAL_TO_STRING(oFbCustomPayload.typPayloadOut.atypMetrics[1].rValue);  // Metric 1 value
+sValueArray[4] := oFbCustomPayload.typPayloadOut.atypMetrics[1].sName;             // Metric 1 name
+sValueArray[5] := REAL_TO_STRING(oFbCustomPayload.typPayloadOut.atypMetrics[2].rValue);  // Metric 2 value
+sValueArray[6] := oFbCustomPayload.typPayloadOut.atypMetrics[2].sName;             // Metric 2 name
+sValueArray[7] := REAL_TO_STRING(oFbCustomPayload.typPayloadOut.atypMetrics[3].rValue);  // Metric 3 value
+sValueArray[8] := oFbCustomPayload.typPayloadOut.atypMetrics[3].sName;             // Metric 3 name
+
+(* --------------------------------------------------------------------------
+   SECTION 2: JSON Payload Generation (Method 1 - WagoAppJSON)
+   -------------------------------------------------------------------------- *)
+// Trigger JSON writer if no error condition exists
+IF NOT oFb_JSON_Writer_02.xError THEN 
+    xTriggerJSONWriter := TRUE;
+END_IF
+
+// Generate JSON string by substituting #Parameter placeholders with actual values
+oFb_JSON_Writer_02(
+    sJSON_BaseFrame    := sJSON_BaseFrame,      // Template with #Parameter placeholders
+    aParameterValues   := sValueArray,          // Array of substitution values
+    xTrigger           := xTriggerJSONWriter,   // Execution trigger
+    sOutput            := sPayload_WAGO_JSON    // Resulting JSON string
+);
+
+(* --------------------------------------------------------------------------
+   SECTION 3: JSON Payload Generation (Method 2 - Format9)
+   -------------------------------------------------------------------------- *)
+// Alternative method using Format9 for direct JSON string formatting
+// Format specifiers: %li=LINT, %i=INT, %.2f=REAL (2 decimals), %s=STRING
+sPayload_FormatX := Format9(
+    sFormat := '{"timestamp":%li,"seq":%i,"MetricCnt":%i,"MetricValue":%.2f,"MetricName":"%s","MetricValue2":%.2f,"MetricName2":"%s","MetricValue3":%.2f,"MetricName3":"%s"}',
+    p1 := ADR(oFbCustomPayload.typPayloadOut.liTimestamp),          // Pointer to timestamp
+    p2 := ADR(oFbCustomPayload.typPayloadOut.usiSeq),               // Pointer to sequence
+    p3 := ADR(oFbCustomPayload.typPayloadOut.usiMetricCnt),         // Pointer to metric count
+    p4 := ADR(oFbCustomPayload.typPayloadOut.atypMetrics[1].rValue), // Pointer to metric 1 value
+    p5 := ADR(oFbCustomPayload.typPayloadOut.atypMetrics[1].sName),  // Pointer to metric 1 name
+    p6 := ADR(oFbCustomPayload.typPayloadOut.atypMetrics[2].rValue), // Pointer to metric 2 value
+    p7 := ADR(oFbCustomPayload.typPayloadOut.atypMetrics[2].sName),  // Pointer to metric 2 name
+    p8 := ADR(oFbCustomPayload.typPayloadOut.atypMetrics[3].rValue), // Pointer to metric 3 value
+    p9 := ADR(oFbCustomPayload.typPayloadOut.atypMetrics[3].sName)   // Pointer to metric 3 name
+);
+
+(* --------------------------------------------------------------------------
+   SECTION 4: MQTT Client Management and Publishing
+   -------------------------------------------------------------------------- *)
+   IF xFirstCycle THEN 
+	   xFirstCycle:=FALSE;
+		FOR index := ciFIRST_INDEX TO ciLAST_INDEX DO
+		   
+			
+			sIndexTopic := Format1(sFormat := 'yachtFleet/%i/data', p1 := ADR(index));
+			wsTopic := TO_WSTRING(sIndexTopic);  // Convert to WSTRING for MQTT library
+			
+			sIndexTopic2 := Format1(sFormat := 'yachtFleetDetailed/%i/data', p1 := ADR(index));
+			wsTopic2 := TO_WSTRING(sIndexTopic2);  // Convert to WSTRING for MQTT library
+			
+			// Configure and maintain MQTT client connection
+			aMQTTClient[index](
+				xEnable            := xEnable,              // Master enable for client
+				sHostname          := sHostname,            // MQTT broker hostname/IP
+				uiPort             := uiPort,               // MQTT broker port (typically 1883)
+				sClientId          := CONCAT('YachtClient_', INT_TO_STRING(index)),  // Unique client ID
+				xCleanSession      := TRUE,                 // Start with clean session (no persistent state)
+				uiKeepAlive        := 60,                   // Keep-alive interval in seconds
+				xUseTLS            := FALSE,                // TLS/SSL encryption disabled (set TRUE for production)
+				xWillRetain        := FALSE,                // Last Will message not retained
+				pbWillMessage      := 0,                    // No Last Will message configured
+				uiWillMessageSize  := 0                     // Last Will message size
+			);
+			aMQTTClient2[index](
+				xEnable            := xEnable,              // Master enable for client
+				sHostname          := sHostname,            // MQTT broker hostname/IP
+				uiPort             := uiPort,               // MQTT broker port (typically 1883)
+				sClientId          := CONCAT('YachtClient2_', INT_TO_STRING(index)),  // Unique client ID
+				xCleanSession      := TRUE,                 // Start with clean session (no persistent state)
+				uiKeepAlive        := 60,                   // Keep-alive interval in seconds
+				xUseTLS            := FALSE,                // TLS/SSL encryption disabled (set TRUE for production)
+				xWillRetain        := FALSE,                // Last Will message not retained
+				pbWillMessage      := 0,                    // No Last Will message configured
+				uiWillMessageSize  := 0                     // Last Will message size
+			);
+		END_FOR
+	
+  END_IF
+// Iterate through all yacht clients in the fleet
+FOR index := ciFIRST_INDEX TO ciLAST_INDEX DO
+    
+    // Generate unique MQTT topic for each yacht: "yachtFleet/&lt;index&gt;/data"
+
+    
+    (* ----------------------------------------------------------------------
+       SECTION 4.1: Publish Logic with Timing Control
+       ---------------------------------------------------------------------- *)
+
+   IF aMQTTClient[index].xConnectedToBroker THEN
+
+    // Pulse generator for periodic publishing (alternating timers create continuous pulse train)
+
+
+
+	// Pointer und Länge für den kleineren Payload
+	pbPayloadPtr := ADR(sPayload_WAGO_JSON);
+	udiPayloadLen := WagoSysString.strnlen(p := ADR(sPayload_WAGO_JSON), udiSize := SIZEOF(sPayload_WAGO_JSON));
+
+
+	
+	aMQTTPublish[index](
+		xExecute       := xExecute,
+		udiTimeOut     := udiTimeOut,
+		eQoS           := MQTT.MQTT_QOS.QoS0,
+		xRetain        := FALSE,
+		pbPayload      := pbPayloadPtr,
+		udiPayloadSize := udiPayloadLen,
+		mqttClient     := aMQTTClient[index],
+		wsTopicName    := wsTopic,
+		eMQTTError     =&gt; 
+	);
+	
+
+
+	// Pointer und Länge für das große GVL-Feld
+	//MEMUtils.MemSet(pbyBuffer := ADR(sPayload_WAGO_JSON),byValue := 0,dwSize := SIZEOF(sPayload_WAGO_JSON));
+	pbPayloadPtr2 := ADR(GVL_Fast.sJSONMetricOutput);
+	udiPayloadLen2 := WagoSysString.strnlen(p := ADR(GVL_Fast.sJSONMetricOutput), udiSize := SIZEOF(GVL_Fast.sJSONMetricOutput));
+	 
+
+	aMQTTPublishComplex[index](
+		xExecute       := xExecute,
+		udiTimeOut     := udiTimeOut,
+		eQoS           := MQTT.MQTT_QOS.QoS0,
+		xRetain        := FALSE,
+		pbPayload      := pbPayloadPtr2,
+		udiPayloadSize := udiPayloadLen2,
+		mqttClient     := aMQTTClient2[index],
+		wsTopicName    := wsTopic2,
+		eMQTTError     =&gt; 
+	);
+
+	END_IF
+    
+END_FOR
+
+(* ============================================================================
+   END OF PUBLISHING ROUTINE
+   ============================================================================ *)</xhtml>
+              </ST>
+            </body>
+            <addData>
+              <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                <ObjectId>67e8e549-fe66-4f99-98aa-2965d31a1aeb</ObjectId>
+              </data>
+            </addData>
+          </action>
+          <action name="ACT_Subscribe">
+            <body>
+              <ST>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">
+// ============================================
+// MQTT Subscribe Function Block
+// ============================================
+oFbSubscribeMQTT(
+    xSubscribe          := xSubscribe, 
+    sTopic              := sTopic, 
+    eQoS                := eQoS, 
+    aPayloadData        := aPayloadData, 
+    xBusy               =&gt; xBusy, 
+    xError              =&gt; xError, 
+    oStatus             =&gt; oStatus, 
+    xDataReceived       =&gt; xDataReceived, 
+    dwRxNBytes          =&gt; dwRxNBytes, 
+    xDataTruncated      =&gt; xDataTruncated, 
+    sReceivedTopic      =&gt; sReceivedTopic
+);
+
+
+// ============================================
+// Process received MQTT data
+// ============================================
+IF xDataReceived THEN
+    // Copy byte array to string using MemCopySecure 
+    MemCopySecure(
+        pDest           := ADR(sJsonMessage),
+        udiDestSize     := SIZEOF(sJsonMessage),
+        pSource         := ADR(aPayloadData),
+        udiSourceSize   := dwRxNBytes,
+        bPadding        := 0
+    );
+    
+    xDataReceived := FALSE;
+    xTriggerParse := TRUE;
+    bParseState := 0;
+END_IF;
+
+// ============================================
+// JSON Parsing State Machine
+// ============================================
+CASE bParseState OF
+    
+    0: // Idle state
+        IF xTriggerParse THEN
+            bParseState := 1;
+            xTriggerParse := TRUE;  // Set trigger for parsing
+        END_IF;
+    
+    1: // Parse JSON structure
+        oJsonParser(
+            pData           := ADR(aPayloadData),
+            udiSizeData     := dwRxNBytes,
+            xTrigger        := xTriggerParse
+        );
+        
+        // Check if parsing is complete
+        IF oJsonParser.xDone THEN
+            xTriggerParse := FALSE;  // Reset trigger
+            bParseState := 2;  // Move to get timestamp
+        ELSIF oJsonParser.xError THEN
+            xTriggerParse := FALSE;  // Reset trigger
+            bParseState := 0;  // Reset on error
+        END_IF;
+    
+    2: // Get timestamp
+        sJsonPointer := '/timestamp';
+        
+        IF NOT xTriggerGetTimestamp THEN
+            xTriggerGetTimestamp := TRUE;  // Trigger method once
+        END_IF;
+        
+        oGetValue := oJsonParser.GetValueByPath(
+            sPointer    := sJsonPointer,
+            xTrigger    := xTriggerGetTimestamp
+        );
+        
+        IF oGetValue.eReturn = 0 THEN  // 0 = Values are valid
+            IF oGetValue.eType = WagoAppJSON.JSON_NUMBER THEN
+                sTimestampValue := oGetValue.sValue;
+                liTimestampMs := STRING_TO_LINT(sTimestampValue); //TimeStamp conversation
+                udiUnixTimestamp := LINT_TO_UDINT(liTimestampMs / 1000);
+                dtLastDetectionUTC := UDINT_TO_DT(udiUnixTimestamp);
+				dtLastDetectionCET := UDINT_TO_DT(udiUnixTimestamp+7200);
+				dtLastDetectionCEST :=UDINT_TO_DT(udiUnixTimestamp+10800);
+            END_IF;
+            xTriggerGetTimestamp := FALSE;
+            bParseState := 3;  // Move to get class
+        ELSIF oGetValue.eReturn &lt; 0 THEN  // &lt;0 = Values invalid (error)
+            xTriggerGetTimestamp := FALSE;
+            bParseState := 3;  // Continue anyway
+        END_IF;
+    
+    3: // Get detection class from first detection
+        sJsonPointer := '/detections/0/class';
+        
+        IF NOT xTriggerGetClass THEN
+            xTriggerGetClass := TRUE;  // Trigger method once
+        END_IF;
+        
+        oGetValue := oJsonParser.GetValueByPath(
+            sPointer    := sJsonPointer,
+            xTrigger    := xTriggerGetClass
+        );
+        
+        IF oGetValue.eReturn = 0 THEN  // 0 = Values are valid
+            IF oGetValue.eType = WagoAppJSON.JSON_STRING THEN
+                sDetectionClass := oGetValue.sValue;
+                xTriggerGetClass := FALSE;
+                bParseState := 4;  // Move to get confidence
+            ELSE
+                xTriggerGetClass := FALSE;
+                xLowConfidence := TRUE;
+                bParseState := 0;
+            END_IF;
+        ELSIF oGetValue.eReturn &lt; 0 THEN  // &lt;0 = Values invalid (error)
+            xTriggerGetClass := FALSE;
+            xLowConfidence := TRUE;
+            bParseState := 0;
+        END_IF;
+    
+    4: // Get confidence from first detection
+        sJsonPointer := '/detections/0/confidence';
+        
+        IF NOT xTriggerGetConfidence THEN
+            xTriggerGetConfidence := TRUE;  // Trigger method once
+        END_IF;
+        
+        oGetValue := oJsonParser.GetValueByPath(
+            sPointer    := sJsonPointer,
+            xTrigger    := xTriggerGetConfidence
+        );
+        
+        IF oGetValue.eReturn = 0 THEN  // 0 = Values are valid
+            IF oGetValue.eType = WagoAppJSON.JSON_NUMBER THEN
+                sConfidenceValue := oGetValue.sValue;
+                rConfidence := STRING_TO_REAL(sConfidenceValue);
+                xTriggerGetConfidence := FALSE;
+                bParseState := 5;  // Move to update state
+            ELSE
+                xTriggerGetConfidence := FALSE;
+                xLowConfidence := TRUE;
+                bParseState := 0;
+            END_IF;
+        ELSIF oGetValue.eReturn &lt; 0 THEN  // &lt;0 = Values invalid (error)
+            xTriggerGetConfidence := FALSE;
+            xLowConfidence := TRUE;
+            bParseState := 0;
+        END_IF;
+    
+    5: // Update helmet state based on detection
+        IF rConfidence &gt;= CONFIDENCE_THRESHOLD THEN
+            xLowConfidence := FALSE;
+            
+            IF sDetectionClass = 'white helmet' THEN
+                bState := eHelmetState.white_helmet;
+            ELSIF sDetectionClass = 'blue helmet' THEN
+                bState := eHelmetState.blue_helmet;
+            ELSIF sDetectionClass = 'head' THEN
+                bState := eHelmetState.head;
+            ELSE
+                bState := eHelmetState.idle;
+            END_IF;
+        ELSE
+            xLowConfidence := TRUE;
+        END_IF;
+        
+        bParseState := 0;  // Return to idle
+        
+ELSE
+    bParseState := 0;  // Safety: return to idle
+END_CASE;
+
+// ============================================
+// LED Control State Machine
+// ============================================
+IF xLowConfidence or xWrongType THEN
+    // Low confidence or error - all LEDs off (default)
+    LED_White := FALSE;
+    LED_Blue  := FALSE;
+    LED_Red   := FALSE;
+ELSE
+    // Normal operation - control LEDs based on state
+    CASE bState OF
+        eHelmetState.white_helmet:
+            LED_White := TRUE;
+            LED_Blue  := FALSE;
+            LED_Red   := FALSE;
+
+        eHelmetState.blue_helmet:
+            LED_White := FALSE;
+            LED_Blue  := TRUE;
+            LED_Red   := FALSE;
+
+        eHelmetState.head:
+            LED_White := FALSE;
+            LED_Blue  := FALSE;
+            LED_Red   := TRUE;
+    ELSE
+        // Default or error handling (idle state)
+        LED_White := FALSE;
+        LED_Blue  := FALSE;
+        LED_Red   := FALSE;
+    END_CASE;
+END_IF;
+</xhtml>
+              </ST>
+            </body>
+            <addData>
+              <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                <ObjectId>a28a90d4-b4b6-4296-8693-36d4298043d8</ObjectId>
+              </data>
+            </addData>
+          </action>
+        </actions>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">GVL.typCurrentTime:=FuGetLocalTimeComponents();
+GVL.dtCurrentTime:=FuGetLocalDateAndTime();
+
+
+ACT_Publish();
+ACT_Subscribe();
+(*
+
+Erstelle einen weiteren JSON_BaseFrame mit dem namen JSON_BaseFrameBesecke im UNS ISA 95 format für eine Yacht mit 142 sinnvollen Datenpunkten und ein passendes sValueArray							: ARRAY[0..8] OF STRING(JSON_MAX_PARAMETER_STRING);
+
+*)
+
+</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>bf9d5ced-951f-4b29-8014-e690fcb6ec9e</ObjectId>
+          </data>
+        </addData>
+      </pou>
+      <pou name="FbCreateCustomPayload" pouType="functionBlock">
+        <interface>
+          <inputVars>
+            <variable name="xEnable">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+          </inputVars>
+          <localVars>
+            <variable name="uiSeqCounter">
+              <type>
+                <UINT />
+              </type>
+              <initialValue>
+                <simpleValue value="0" />
+              </initialValue>
+            </variable>
+            <variable name="rTimeSeconds">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Elapsed time in seconds for waveform generation</xhtml>
+              </documentation>
+            </variable>
+            <variable name="rPhaseOffset">
+              <type>
+                <REAL />
+              </type>
+              <initialValue>
+                <simpleValue value="0.0" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Phase offset for variation between yachts</xhtml>
+              </documentation>
+            </variable>
+            <variable name="rNoiseAccum">
+              <type>
+                <REAL />
+              </type>
+              <initialValue>
+                <simpleValue value="0.0" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Pseudo-random noise accumulator</xhtml>
+              </documentation>
+            </variable>
+          </localVars>
+          <outputVars>
+            <variable name="typPayloadOut">
+              <type>
+                <derived name="typMQTTPayload" />
+              </type>
+            </variable>
+          </outputVars>
+          <documentation>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml"> ============================================================================
+   Custom Payload Generator with Dynamic Simulation Values
+   ============================================================================
+   Description:
+     Generates realistic, time-varying telemetry data for yacht fleet simulation
+     using mathematical functions (sin, cos, sawtooth, noise approximation)
+   ============================================================================ 
+</xhtml>
+          </documentation>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">
+IF xEnable THEN
+    
+    (* ----------------------------------------------------------------------
+       Sequence Counter with Rollover Protection
+       ---------------------------------------------------------------------- *)
+    IF uiSeqCounter &gt;= 255 THEN
+        uiSeqCounter := 0;
+    ELSE
+        uiSeqCounter := uiSeqCounter + 1;
+    END_IF;
+    
+    (* ----------------------------------------------------------------------
+       Timestamp Generation (milliseconds since system start)
+       ---------------------------------------------------------------------- *)
+    typPayloadOut.liTimestamp := TO_LINT(TIME_TO_LTIME(TIME()));
+    typPayloadOut.usiSeq := TO_USINT(uiSeqCounter);
+    
+    (* ----------------------------------------------------------------------
+       Time Base for Waveform Generation
+       ---------------------------------------------------------------------- *)
+    // Convert sequence counter to time-based value (assuming ~100ms cycle time)
+    rTimeSeconds := UINT_TO_REAL(uiSeqCounter) * 0.1;  // Approximate time in seconds
+    
+    (* ----------------------------------------------------------------------
+       METRIC 0: Protocol Version (Static)
+       ---------------------------------------------------------------------- *)
+    typPayloadOut.atypMetrics[0].sName := 'Version';
+    typPayloadOut.atypMetrics[0].rValue := 42.64;  // Static protocol version
+    typPayloadOut.atypMetrics[0].usiTypeID := 9;   // REAL type
+    
+    (* ----------------------------------------------------------------------
+       METRIC 1: GPS Latitude (Sinusoidal Wave - Simulates North/South drift)
+       ---------------------------------------------------------------------- *)
+    // Base: 43.20123° + amplitude ±0.001° with 60-second period
+    typPayloadOut.atypMetrics[1].sName := 'GPS.Latitude';
+    typPayloadOut.atypMetrics[1].rValue := 43.20123 + 
+                                            0.001 * SIN(rTimeSeconds * 0.1047);  // 2π/60
+    typPayloadOut.atypMetrics[1].usiTypeID := 9;  // REAL type
+    
+    (* ----------------------------------------------------------------------
+       METRIC 2: Engine Power (Cosine + Sawtooth - Simulates Load Variation)
+       ---------------------------------------------------------------------- *)
+    // Base: 1850 kW with ±150 kW cosine variation + 50 kW sawtooth
+    typPayloadOut.atypMetrics[2].sName := 'Engine.Power_kW';
+    typPayloadOut.atypMetrics[2].rValue := 1850.0 + 
+                                            150.0 * COS(rTimeSeconds * 0.0628) +  // 2π/100
+                                            50.0 * (TO_INT(rTimeSeconds) MOD 10) / 10.0; // Sawtooth 0-10s
+    typPayloadOut.atypMetrics[2].usiTypeID := 9;  // REAL type
+    
+    (* ----------------------------------------------------------------------
+       METRIC 3: GPS Longitude (Cosine Wave - Simulates East/West drift)
+       ---------------------------------------------------------------------- *)
+    // Base: 7.31234° + amplitude ±0.0015° with 80-second period (phase shifted)
+    typPayloadOut.atypMetrics[3].sName := 'GPS.Longitude';
+    typPayloadOut.atypMetrics[3].rValue := 7.31234 + 
+                                            0.0015 * COS(rTimeSeconds * 0.0785 + 1.57);  // π/2 phase shift
+    typPayloadOut.atypMetrics[3].usiTypeID := 9;  // REAL type
+    
+    (* ----------------------------------------------------------------------
+       METRIC 4: Engine RPM (Triangle Wave - Simulates Throttle Changes)
+       ---------------------------------------------------------------------- *)
+    // Triangle wave between 1200-2400 RPM with 20-second period
+    typPayloadOut.atypMetrics[4].sName := 'Engine.RPM';
+    IF (UINT_TO_REAL(uiSeqCounter MOD 200) &lt; 100.0) THEN
+        // Rising edge: 1200 -&gt; 2400
+        typPayloadOut.atypMetrics[4].rValue := 1200.0 + 
+                                                1200.0 * UINT_TO_REAL(uiSeqCounter MOD 100) / 100.0;
+    ELSE
+        // Falling edge: 2400 -&gt; 1200
+        typPayloadOut.atypMetrics[4].rValue := 2400.0 - 
+                                                1200.0 * UINT_TO_REAL(uiSeqCounter MOD 100) / 100.0;
+    END_IF;
+    typPayloadOut.atypMetrics[4].usiTypeID := 9;  // REAL type
+    
+    (* ----------------------------------------------------------------------
+       METRIC 5: Battery State of Charge (Exponential Decay + Sine Ripple)
+       ---------------------------------------------------------------------- *)
+    // Slow discharge from 100% to 75% with ±2% charging ripple
+    typPayloadOut.atypMetrics[5].sName := 'Battery.StateOfCharge';
+    typPayloadOut.atypMetrics[5].rValue := 100.0 - 
+                                            (rTimeSeconds * 0.01) +  // Slow discharge 1%/100s
+                                            2.0 * SIN(rTimeSeconds * 0.314);  // Fast ripple 2π/20
+    // Clamp between 75-100%
+    IF typPayloadOut.atypMetrics[5].rValue &lt; 75.0 THEN
+        typPayloadOut.atypMetrics[5].rValue := 75.0;
+    ELSIF typPayloadOut.atypMetrics[5].rValue &gt; 100.0 THEN
+        typPayloadOut.atypMetrics[5].rValue := 100.0;
+    END_IF;
+    typPayloadOut.atypMetrics[5].usiTypeID := 9;  // REAL type
+    
+    (* ----------------------------------------------------------------------
+       METRIC 6: Shore Power Connection (Pseudo-Random Toggle)
+       ---------------------------------------------------------------------- *)
+    // Simulates intermittent shore power connection using sequence-based toggle
+    typPayloadOut.atypMetrics[6].sName := 'ShorePower.Connected';
+    // Toggle every ~50 counts with pseudo-random behavior
+    typPayloadOut.atypMetrics[6].rValue := BOOL_TO_REAL((uiSeqCounter MOD 47) &lt; 23);  // ~50% duty
+    typPayloadOut.atypMetrics[6].usiTypeID := 9;  // REAL type
+    
+    (* ----------------------------------------------------------------------
+       METRIC 7: Water Temperature (Slow Sine + Fast Noise)
+       ---------------------------------------------------------------------- *)
+    // Base: 18.5°C with ±2°C daily variation + ±0.3°C sensor noise
+    typPayloadOut.atypMetrics[7].sName := 'Sensors.WaterTemp_C';
+    
+    // Pseudo-random noise using sequence counter hash
+    rNoiseAccum := UINT_TO_REAL((uiSeqCounter * 127 + 31) MOD 100) / 100.0 - 0.5;  // Range: -0.5 to 0.5
+    
+    typPayloadOut.atypMetrics[7].rValue := 18.5 + 
+                                            2.0 * SIN(rTimeSeconds * 0.000727) +  // 24-hour period
+                                            0.3 * rNoiseAccum;  // Sensor noise ±0.3°C
+    typPayloadOut.atypMetrics[7].usiTypeID := 9;  // REAL type
+    
+    (* ----------------------------------------------------------------------
+       METRIC 8: Wind Speed (Gusty Wind Simulation - Multiple Harmonics)
+       ---------------------------------------------------------------------- *)
+    // Base wind + slow variation + fast gusts
+    typPayloadOut.atypMetrics[8].sName := 'Weather.WindSpeed_kts';
+    typPayloadOut.atypMetrics[8].rValue := 12.0 +                           // Base: 12 knots
+                                            5.0 * SIN(rTimeSeconds * 0.0314) +  // Slow variation: 200s period
+                                            2.0 * COS(rTimeSeconds * 0.628) +   // Fast gusts: 10s period
+                                            1.0 * SIN(rTimeSeconds * 1.257);    // Turbulence: 5s period
+    // Clamp to realistic values (0-30 knots)
+    IF typPayloadOut.atypMetrics[8].rValue &lt; 0.0 THEN
+        typPayloadOut.atypMetrics[8].rValue := 0.0;
+    ELSIF typPayloadOut.atypMetrics[8].rValue &gt; 30.0 THEN
+        typPayloadOut.atypMetrics[8].rValue := 30.0;
+    END_IF;
+    typPayloadOut.atypMetrics[8].usiTypeID := 9;  // REAL type
+    
+    (* ----------------------------------------------------------------------
+       METRIC 9: Fuel Level (Linear Decay with Step Changes)
+       ---------------------------------------------------------------------- *)
+    // Simulates fuel consumption with occasional refueling
+    typPayloadOut.atypMetrics[9].sName := 'Fuel.Level_Liters';
+    
+    // Linear decay: 5000L -&gt; 1000L over 400 counts, then reset
+    IF (uiSeqCounter MOD 400) = 0 THEN
+        typPayloadOut.atypMetrics[9].rValue := 5000.0;  // Refuel event
+    ELSE
+        typPayloadOut.atypMetrics[9].rValue := 5000.0 - 
+                                                (10.0 * UINT_TO_REAL(uiSeqCounter MOD 400));
+    END_IF;
+    typPayloadOut.atypMetrics[9].usiTypeID := 9;  // REAL type
+    
+    (* ----------------------------------------------------------------------
+       Set Active Metric Count
+       ---------------------------------------------------------------------- *)
+    typPayloadOut.usiMetricCnt := 10;  // Updated to include all new metrics
+    
+END_IF
+
+(* ============================================================================
+   Waveform Summary:
+   - Metric 1: SIN (smooth oscillation - GPS Latitude)
+   - Metric 2: COS + Sawtooth (periodic + ramp - Engine Power)
+   - Metric 3: COS with phase shift (offset oscillation - GPS Longitude)
+   - Metric 4: Triangle wave (symmetric ramp - Engine RPM)
+   - Metric 5: Linear + SIN (decay + ripple - Battery SoC)
+   - Metric 6: Pseudo-random toggle (binary state - Shore Power)
+   - Metric 7: SIN + noise (slow + fast - Water Temperature)
+   - Metric 8: Multi-harmonic (complex wind simulation - Wind Speed)
+   - Metric 9: Step function (discrete events - Fuel Level)
+   ============================================================================ *)</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>b6415b19-fc20-4254-ad30-b3967482ac21</ObjectId>
+          </data>
+        </addData>
+      </pou>
+      <pou name="PRG_SimJsonAnalytics" pouType="program">
+        <interface>
+          <localVars>
+            <variable name="o1Fb_JSON_Writer_02">
+              <type>
+                <derived name="Fb_JSON_Writer_02" />
+              </type>
+            </variable>
+            <variable name="sJSON_BaseFrameYacht">
+              <type>
+                <string length="8196" />
+              </type>
+              <initialValue>
+                <simpleValue value="'{$N    &quot;timestamp&quot;: #Parameter,$N    &quot;seq&quot;: #Parameter,$N$N    &quot;engine_rpm_port&quot;: #Parameter,$N    &quot;engine_rpm_starboard&quot;: #Parameter,$N    &quot;engine_temp_port&quot;: #Parameter,$N    &quot;engine_temp_starboard&quot;: #Parameter,$N    &quot;engine_oil_pressure_port&quot;: #Parameter,$N    &quot;engine_oil_pressure_starboard&quot;: #Parameter,$N    &quot;engine_load_port&quot;: #Parameter,$N    &quot;engine_load_starboard&quot;: #Parameter,$N    &quot;engine_coolant_level_port&quot;: #Parameter,$N    &quot;engine_coolant_level_starboard&quot;: #Parameter,$N$N    &quot;generator_rpm&quot;: #Parameter,$N    &quot;generator_load&quot;: #Parameter,$N    &quot;generator_oil_pressure&quot;: #Parameter,$N    &quot;generator_temp&quot;: #Parameter,$N$N    &quot;fuel_level_main&quot;: #Parameter,$N    &quot;fuel_level_daytank&quot;: #Parameter,$N    &quot;fuel_flow_port&quot;: #Parameter,$N    &quot;fuel_flow_starboard&quot;: #Parameter,$N    &quot;fuel_temp&quot;: #Parameter,$N    &quot;fuel_pressure&quot;: #Parameter,$N$N    &quot;battery_voltage_service&quot;: #Parameter,$N    &quot;battery_voltage_start_port&quot;: #Parameter,$N    &quot;battery_voltage_start_starboard&quot;: #Parameter,$N    &quot;battery_soc_service&quot;: #Parameter,$N    &quot;battery_soc_backup&quot;: #Parameter,$N    &quot;battery_current_service&quot;: #Parameter,$N$N    &quot;shore_power_connected&quot;: #Parameter,$N    &quot;shore_power_voltage&quot;: #Parameter,$N    &quot;shore_power_current&quot;: #Parameter,$N    &quot;inverter_status&quot;: #Parameter,$N    &quot;inverter_load&quot;: #Parameter,$N    &quot;inverter_temp&quot;: #Parameter,$N    &quot;charger_status&quot;: #Parameter,$N    &quot;charger_output_current&quot;: #Parameter,$N$N    &quot;water_level_fresh&quot;: #Parameter,$N    &quot;water_level_grey&quot;: #Parameter,$N    &quot;water_level_black&quot;: #Parameter,$N    &quot;water_pump_status&quot;: #Parameter,$N    &quot;watermaker_status&quot;: #Parameter,$N    &quot;watermaker_output_lph&quot;: #Parameter,$N$N    &quot;gps_latitude&quot;: #Parameter,$N    &quot;gps_longitude&quot;: #Parameter,$N    &quot;gps_speed_over_ground&quot;: #Parameter,$N    &quot;gps_course_over_ground&quot;: #Parameter,$N    &quot;gps_fix_quality&quot;: #Parameter,$N$N    &quot;wind_speed&quot;: #Parameter,$N    &quot;wind_direction&quot;: #Parameter,$N    &quot;barometric_pressure&quot;: #Parameter,$N    &quot;air_temperature&quot;: #Parameter,$N    &quot;air_humidity&quot;: #Parameter,$N$N    &quot;depth_below_keel&quot;: #Parameter,$N    &quot;depth_below_transducer&quot;: #Parameter,$N    &quot;sea_temperature&quot;: #Parameter,$N$N    &quot;speed_through_water&quot;: #Parameter,$N    &quot;rudder_angle_port&quot;: #Parameter,$N    &quot;rudder_angle_starboard&quot;: #Parameter,$N    &quot;trim_tab_position_port&quot;: #Parameter,$N    &quot;trim_tab_position_starboard&quot;: #Parameter,$N$N    &quot;gyro_heading&quot;: #Parameter,$N    &quot;magnetic_heading&quot;: #Parameter,$N    &quot;roll_angle&quot;: #Parameter,$N    &quot;pitch_angle&quot;: #Parameter,$N    &quot;yaw_rate&quot;: #Parameter,$N$N    &quot;autopilot_mode&quot;: #Parameter,$N    &quot;autopilot_set_heading&quot;: #Parameter,$N    &quot;autopilot_status&quot;: #Parameter,$N$N    &quot;navigation_lights_status&quot;: #Parameter,$N    &quot;anchor_light_status&quot;: #Parameter,$N    &quot;deck_light_status&quot;: #Parameter,$N    &quot;underwater_lights_status&quot;: #Parameter,$N$N    &quot;bilge_water_level_fwd&quot;: #Parameter,$N    &quot;bilge_water_level_mid&quot;: #Parameter,$N    &quot;bilge_water_level_aft&quot;: #Parameter,$N    &quot;bilge_pump_fwd_status&quot;: #Parameter,$N    &quot;bilge_pump_mid_status&quot;: #Parameter,$N    &quot;bilge_pump_aft_status&quot;: #Parameter,$N    &quot;bilge_alarm_fwd&quot;: #Parameter,$N    &quot;bilge_alarm_mid&quot;: #Parameter,$N    &quot;bilge_alarm_aft&quot;: #Parameter,$N$N    &quot;fire_alarm_engine_room&quot;: #Parameter,$N    &quot;fire_alarm_galley&quot;: #Parameter,$N    &quot;fire_alarm_cabin&quot;: #Parameter,$N$N    &quot;door_main_status&quot;: #Parameter,$N    &quot;door_cabin_status&quot;: #Parameter,$N    &quot;hatch_bow_status&quot;: #Parameter,$N    &quot;hatch_stern_status&quot;: #Parameter,$N$N    &quot;generator_fuel_level&quot;: #Parameter,$N    &quot;engine_room_temp&quot;: #Parameter,$N    &quot;engine_room_humidity&quot;: #Parameter,$N    &quot;engine_room_fan_status&quot;: #Parameter,$N$N    &quot;thruster_bow_status&quot;: #Parameter,$N    &quot;thruster_bow_current&quot;: #Parameter,$N    &quot;thruster_stern_status&quot;: #Parameter,$N    &quot;thruster_stern_current&quot;: #Parameter,$N$N    &quot;stabilizer_status&quot;: #Parameter,$N    &quot;stabilizer_fin_angle_port&quot;: #Parameter,$N    &quot;stabilizer_fin_angle_starboard&quot;: #Parameter,$N    &quot;stabilizer_oil_temp&quot;: #Parameter,$N$N    &quot;radar_status&quot;: #Parameter,$N    &quot;radar_range&quot;: #Parameter,$N    &quot;radar_target_count&quot;: #Parameter,$N$N    &quot;ais_status&quot;: #Parameter,$N    &quot;ais_target_count&quot;: #Parameter,$N$N    &quot;nav_chart_zoom&quot;: #Parameter,$N    &quot;nav_route_active&quot;: #Parameter,$N    &quot;nav_waypoint_name&quot;: &quot;#Parameter&quot;,$N$N    &quot;hvac_saloon_temp_set&quot;: #Parameter,$N    &quot;hvac_saloon_temp_actual&quot;: #Parameter,$N    &quot;hvac_cabin1_temp_set&quot;: #Parameter,$N    &quot;hvac_cabin1_temp_actual&quot;: #Parameter,$N    &quot;hvac_cabin2_temp_set&quot;: #Parameter,$N    &quot;hvac_cabin2_temp_actual&quot;: #Parameter,$N$N    &quot;refrigerator_temp&quot;: #Parameter,$N    &quot;freezer_temp&quot;: #Parameter,$N    &quot;winecooler_temp&quot;: #Parameter,$N$N    &quot;security_cameras_online&quot;: #Parameter,$N    &quot;security_motion_detected&quot;: #Parameter,$N$N    &quot;satcom_signal_strength&quot;: #Parameter,$N    &quot;satcom_data_rate&quot;: #Parameter,$N$N    &quot;wifi_status&quot;: #Parameter,$N    &quot;wifi_signal_strength&quot;: #Parameter,$N    &quot;lte_status&quot;: #Parameter,$N    &quot;lte_signal_strength&quot;: #Parameter,$N$N    &quot;entertainment_system_status&quot;: #Parameter,$N    &quot;tv_status&quot;: #Parameter,$N    &quot;audio_zone1_volume&quot;: #Parameter,$N    &quot;audio_zone2_volume&quot;: #Parameter,$N$N    &quot;engine_alarm_port&quot;: #Parameter,$N    &quot;engine_alarm_starboard&quot;: #Parameter,$N    &quot;generator_alarm&quot;: #Parameter,$N    &quot;gps_alarm&quot;: #Parameter,$N    &quot;autopilot_alarm&quot;: #Parameter,$N    &quot;bilge_alarm&quot;: #Parameter,$N$N    &quot;custom_metric_1&quot;: #Parameter,$N    &quot;custom_metric_2&quot;: #Parameter,$N    &quot;custom_metric_3&quot;: #Parameter,$N    &quot;custom_metric_4&quot;: #Parameter,$N    &quot;custom_metric_5&quot;: #Parameter,$N    &quot;custom_metric_6&quot;: #Parameter,$N    &quot;custom_metric_7&quot;: #Parameter,$N    &quot;custom_metric_8&quot;: #Parameter $N}'" />
+              </initialValue>
+            </variable>
+            <variable name="sJSON_BaseFrameYacht2">
+              <type>
+                <string length="8196" />
+              </type>
+              <initialValue>
+                <simpleValue value="'{ &quot;timestamp&quot;:#Parameter,&quot;seq&quot;:#Parameter,&quot;engine_rpm_port&quot;:#Parameter,&quot;engine_rpm_starboard&quot;:#Parameter,&quot;engine_temp_port&quot;:#Parameter,&quot;engine_temp_starboard&quot;:#Parameter,&quot;engine_oil_pressure_port&quot;:#Parameter,&quot;engine_oil_pressure_starboard&quot;:#Parameter,&quot;engine_load_port&quot;:#Parameter,&quot;engine_load_starboard&quot;:#Parameter,&quot;engine_coolant_level_port&quot;:#Parameter,&quot;engine_coolant_level_starboard&quot;:#Parameter,&quot;generator_rpm&quot;:#Parameter,&quot;generator_load&quot;:#Parameter,&quot;generator_oil_pressure&quot;:#Parameter,&quot;generator_temp&quot;:#Parameter,&quot;fuel_level_main&quot;:#Parameter,&quot;fuel_level_daytank&quot;:#Parameter,&quot;fuel_flow_port&quot;:#Parameter,&quot;fuel_flow_starboard&quot;:#Parameter,&quot;fuel_temp&quot;:#Parameter,&quot;fuel_pressure&quot;:#Parameter,&quot;battery_voltage_service&quot;:#Parameter,&quot;battery_voltage_start_port&quot;:#Parameter,&quot;battery_voltage_start_starboard&quot;:#Parameter,&quot;battery_soc_service&quot;:#Parameter,&quot;battery_soc_backup&quot;:#Parameter,&quot;battery_current_service&quot;:#Parameter,&quot;shore_power_connected&quot;:#Parameter,&quot;shore_power_voltage&quot;:#Parameter,&quot;shore_power_current&quot;:#Parameter,&quot;inverter_status&quot;:#Parameter,&quot;inverter_load&quot;:#Parameter,&quot;inverter_temp&quot;:#Parameter,&quot;charger_status&quot;:#Parameter,&quot;charger_output_current&quot;:#Parameter,&quot;water_level_fresh&quot;:#Parameter,&quot;water_level_grey&quot;:#Parameter,&quot;water_level_black&quot;:#Parameter,&quot;water_pump_status&quot;:#Parameter,&quot;watermaker_status&quot;:#Parameter,&quot;watermaker_output_lph&quot;:#Parameter,&quot;gps_latitude&quot;:#Parameter,&quot;gps_longitude&quot;:#Parameter,&quot;gps_speed_over_ground&quot;:#Parameter,&quot;gps_course_over_ground&quot;:#Parameter,&quot;gps_fix_quality&quot;:#Parameter,&quot;wind_speed&quot;:#Parameter,&quot;wind_direction&quot;:#Parameter,&quot;barometric_pressure&quot;:#Parameter,&quot;air_temperature&quot;:#Parameter,&quot;air_humidity&quot;:#Parameter,&quot;depth_below_keel&quot;:#Parameter,&quot;depth_below_transducer&quot;:#Parameter,&quot;sea_temperature&quot;:#Parameter,&quot;speed_through_water&quot;:#Parameter,&quot;rudder_angle_port&quot;:#Parameter,&quot;rudder_angle_starboard&quot;:#Parameter,&quot;trim_tab_position_port&quot;:#Parameter,&quot;trim_tab_position_starboard&quot;:#Parameter,&quot;gyro_heading&quot;:#Parameter,&quot;magnetic_heading&quot;:#Parameter,&quot;roll_angle&quot;:#Parameter,&quot;pitch_angle&quot;:#Parameter,&quot;yaw_rate&quot;:#Parameter,&quot;autopilot_mode&quot;:#Parameter,&quot;autopilot_set_heading&quot;:#Parameter,&quot;autopilot_status&quot;:#Parameter,&quot;navigation_lights_status&quot;:#Parameter,&quot;anchor_light_status&quot;:#Parameter,&quot;deck_light_status&quot;:#Parameter,&quot;underwater_lights_status&quot;:#Parameter,&quot;bilge_water_level_fwd&quot;:#Parameter,&quot;bilge_water_level_mid&quot;:#Parameter,&quot;bilge_water_level_aft&quot;:#Parameter,&quot;bilge_pump_fwd_status&quot;:#Parameter,&quot;bilge_pump_mid_status&quot;:#Parameter,&quot;bilge_pump_aft_status&quot;:#Parameter,&quot;bilge_alarm_fwd&quot;:#Parameter,&quot;bilge_alarm_mid&quot;:#Parameter,&quot;bilge_alarm_aft&quot;:#Parameter,&quot;fire_alarm_engine_room&quot;:#Parameter,&quot;fire_alarm_galley&quot;:#Parameter,&quot;fire_alarm_cabin&quot;:#Parameter,&quot;door_main_status&quot;:#Parameter,&quot;door_cabin_status&quot;:#Parameter,&quot;hatch_bow_status&quot;:#Parameter,&quot;hatch_stern_status&quot;:#Parameter,&quot;generator_fuel_level&quot;:#Parameter,&quot;engine_room_temp&quot;:#Parameter,&quot;engine_room_humidity&quot;:#Parameter,&quot;engine_room_fan_status&quot;:#Parameter,&quot;thruster_bow_status&quot;:#Parameter,&quot;thruster_bow_current&quot;:#Parameter,&quot;thruster_stern_status&quot;:#Parameter,&quot;thruster_stern_current&quot;:#Parameter,&quot;stabilizer_status&quot;:#Parameter,&quot;stabilizer_fin_angle_port&quot;:#Parameter,&quot;stabilizer_fin_angle_starboard&quot;:#Parameter,&quot;stabilizer_oil_temp&quot;:#Parameter,&quot;radar_status&quot;:#Parameter,&quot;radar_range&quot;:#Parameter,&quot;radar_target_count&quot;:#Parameter,&quot;ais_status&quot;:#Parameter,&quot;ais_target_count&quot;:#Parameter,&quot;nav_chart_zoom&quot;:#Parameter,&quot;nav_route_active&quot;:#Parameter,&quot;nav_waypoint_name&quot;:&quot;#Parameter&quot;,&quot;hvac_saloon_temp_set&quot;:#Parameter,&quot;hvac_saloon_temp_actual&quot;:#Parameter,&quot;hvac_cabin1_temp_set&quot;:#Parameter,&quot;hvac_cabin1_temp_actual&quot;:#Parameter,&quot;hvac_cabin2_temp_set&quot;:#Parameter,&quot;hvac_cabin2_temp_actual&quot;:#Parameter,&quot;refrigerator_temp&quot;:#Parameter,&quot;freezer_temp&quot;:#Parameter,&quot;winecooler_temp&quot;:#Parameter,&quot;security_cameras_online&quot;:#Parameter,&quot;security_motion_detected&quot;:#Parameter,&quot;satcom_signal_strength&quot;:#Parameter,&quot;satcom_data_rate&quot;:#Parameter,&quot;wifi_status&quot;:#Parameter,&quot;wifi_signal_strength&quot;:#Parameter,&quot;lte_status&quot;:#Parameter,&quot;lte_signal_strength&quot;:#Parameter,&quot;entertainment_system_status&quot;:#Parameter,&quot;tv_status&quot;:#Parameter,&quot;audio_zone1_volume&quot;:#Parameter,&quot;audio_zone2_volume&quot;:#Parameter,&quot;engine_alarm_port&quot;:#Parameter,&quot;engine_alarm_starboard&quot;:#Parameter,&quot;generator_alarm&quot;:#Parameter,&quot;gps_alarm&quot;:#Parameter,&quot;autopilot_alarm&quot;:#Parameter,&quot;bilge_alarm&quot;:#Parameter,&quot;custom_metric_1&quot;:#Parameter,&quot;custom_metric_2&quot;:#Parameter,&quot;custom_metric_3&quot;:#Parameter,&quot;custom_metric_4&quot;:#Parameter,&quot;custom_metric_5&quot;:#Parameter,&quot;custom_metric_6&quot;:#Parameter,&quot;custom_metric_7&quot;:#Parameter } '" />
+              </initialValue>
+            </variable>
+            <variable name="axASA">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <BOOL />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="oAnomaly">
+              <type>
+                <derived name="WagoAppAnalytics.FbAnomalyDetection" />
+              </type>
+            </variable>
+            <variable name="xTrigger">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="TRUE" />
+              </initialValue>
+            </variable>
+            <variable name="oFb_SimulateAnalyticsMetrics">
+              <type>
+                <derived name="FB_SimulateAnalyticsMetrics" />
+              </type>
+            </variable>
+            <variable name="xEnableAnomaly">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="TRUE" />
+              </initialValue>
+            </variable>
+            <variable name="asValuesString">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <string length="20" />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="pbPayloadPtr2">
+              <type>
+                <pointer>
+                  <baseType>
+                    <string length="JSON_MAX_STRING" />
+                  </baseType>
+                </pointer>
+              </type>
+            </variable>
+            <variable name="udiPayloadLen2">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <FBD>
+            <vendorElement localId="10000000000">
+              <position x="0" y="0" />
+              <alternativeText>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">FBD Implementation Attributes</xhtml>
+              </alternativeText>
+              <addData>
+                <data name="http://www.3s-software.com/plcopenxml/fbd/implementationattributes" handleUnknown="implementation">
+                  <fbdattributes xmlns="">
+                    <attribute name="BoxInputFlagsSupported" value="true" />
+                  </fbdattributes>
+                </data>
+              </addData>
+            </vendorElement>
+            <inVariable localId="10000000001">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression>TRUE</expression>
+            </inVariable>
+            <block localId="10000000002" typeName="EXECUTE">
+              <position x="0" y="0" />
+              <inputVariables>
+                <variable formalParameter="EN">
+                  <connectionPointIn>
+                    <connection refLocalId="10000000001" />
+                  </connectionPointIn>
+                </variable>
+              </inputVariables>
+              <inOutVariables />
+              <outputVariables>
+                <variable formalParameter="ENO">
+                  <connectionPointOut />
+                </variable>
+              </outputVariables>
+              <addData>
+                <data name="http://www.3s-software.com/plcopenxml/fbdcalltype" handleUnknown="implementation">
+                  <CallType xmlns="">execute</CallType>
+                </data>
+                <data name="http://www.3s-software.com/plcopenxml/inputparamtypes" handleUnknown="implementation">
+                  <InputParamTypes xmlns="">BOOL</InputParamTypes>
+                </data>
+                <data name="http://www.3s-software.com/plcopenxml/outputparamtypes" handleUnknown="implementation">
+                  <OutputParamTypes xmlns="">BOOL</OutputParamTypes>
+                </data>
+                <data name="http://www.3s-software.com/plcopenxml/stcode" handleUnknown="implementation">
+                  <STCode xmlns="">IF o1Fb_JSON_Writer_02.xDone THEN
+	xTrigger:=TRUE;
+END_IF</STCode>
+                </data>
+              </addData>
+            </block>
+            <inVariable localId="20000000000">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression>TRUE</expression>
+            </inVariable>
+            <inVariable localId="20000000001">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression>axASA</expression>
+            </inVariable>
+            <inVariable localId="20000000002">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression />
+            </inVariable>
+            <inVariable localId="20000000003">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression />
+            </inVariable>
+            <block localId="20000000004" typeName="FB_SimulateAnalyticsMetrics" instanceName="oFb_SimulateAnalyticsMetrics">
+              <position x="0" y="0" />
+              <inputVariables>
+                <variable formalParameter="xEnable">
+                  <connectionPointIn>
+                    <connection refLocalId="20000000000" />
+                  </connectionPointIn>
+                </variable>
+                <variable formalParameter="axAnomalySimulateArray">
+                  <connectionPointIn>
+                    <connection refLocalId="20000000001" />
+                  </connectionPointIn>
+                </variable>
+                <variable formalParameter="rGlobalNoiseLevel">
+                  <connectionPointIn>
+                    <connection refLocalId="20000000002" />
+                  </connectionPointIn>
+                </variable>
+                <variable formalParameter="rTimeBase">
+                  <connectionPointIn>
+                    <connection refLocalId="20000000003" />
+                  </connectionPointIn>
+                </variable>
+              </inputVariables>
+              <inOutVariables />
+              <outputVariables>
+                <variable formalParameter="aValuesString20">
+                  <connectionPointOut>
+                    <expression />
+                  </connectionPointOut>
+                </variable>
+                <variable formalParameter="aValuesString">
+                  <connectionPointOut>
+                    <expression />
+                  </connectionPointOut>
+                </variable>
+                <variable formalParameter="aMinString">
+                  <connectionPointOut>
+                    <expression />
+                  </connectionPointOut>
+                </variable>
+                <variable formalParameter="aMaxString">
+                  <connectionPointOut>
+                    <expression />
+                  </connectionPointOut>
+                </variable>
+                <variable formalParameter="aMetricNames">
+                  <connectionPointOut>
+                    <expression />
+                  </connectionPointOut>
+                </variable>
+                <variable formalParameter="bValid">
+                  <connectionPointOut />
+                </variable>
+                <variable formalParameter="bParsingError">
+                  <connectionPointOut>
+                    <expression />
+                  </connectionPointOut>
+                </variable>
+                <variable formalParameter="rRawValues">
+                  <connectionPointOut>
+                    <expression />
+                  </connectionPointOut>
+                </variable>
+              </outputVariables>
+              <addData>
+                <data name="http://www.3s-software.com/plcopenxml/fbdcalltype" handleUnknown="implementation">
+                  <CallType xmlns="">functionblock</CallType>
+                </data>
+                <data name="http://www.3s-software.com/plcopenxml/inputparamtypes" handleUnknown="implementation">
+                  <InputParamTypes xmlns="">BOOL ARRAY [0..141] OF BOOL REAL REAL</InputParamTypes>
+                </data>
+                <data name="http://www.3s-software.com/plcopenxml/outputparamtypes" handleUnknown="implementation">
+                  <OutputParamTypes xmlns="">ARRAY [0..141] OF STRING(20) ARRAY [0..141] OF STRING(JSON_MAX_PARAMETER_STRING) ARRAY [0..141] OF STRING(20) ARRAY [0..141] OF STRING(20) ARRAY [0..141] OF STRING(64) BOOL BOOL ARRAY [0..141] OF REAL</OutputParamTypes>
+                </data>
+              </addData>
+            </block>
+            <inVariable localId="30000000000">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression>sJSON_BaseFrameYacht2</expression>
+            </inVariable>
+            <inVariable localId="30000000001">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression />
+            </inVariable>
+            <inVariable localId="30000000002">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression>oFb_SimulateAnalyticsMetrics.aValuesString</expression>
+            </inVariable>
+            <inVariable localId="30000000003">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression>xTrigger</expression>
+            </inVariable>
+            <inVariable localId="30000000004">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression>GVL_Fast.sJSONMetricOutput</expression>
+            </inVariable>
+            <block localId="30000000005" typeName="Fb_JSON_Writer_02" instanceName="o1Fb_JSON_Writer_02">
+              <position x="0" y="0" />
+              <inputVariables>
+                <variable formalParameter="sJSON_BaseFrame">
+                  <connectionPointIn>
+                    <connection refLocalId="30000000000" />
+                  </connectionPointIn>
+                </variable>
+                <variable formalParameter="xDeleteFormattingCharacters">
+                  <connectionPointIn>
+                    <connection refLocalId="30000000001" />
+                  </connectionPointIn>
+                </variable>
+                <variable formalParameter="aParameterValues">
+                  <connectionPointIn>
+                    <connection refLocalId="30000000002" />
+                  </connectionPointIn>
+                </variable>
+              </inputVariables>
+              <inOutVariables>
+                <variable formalParameter="xTrigger">
+                  <connectionPointIn>
+                    <connection refLocalId="30000000003" />
+                  </connectionPointIn>
+                  <connectionPointOut>
+                    <expression />
+                  </connectionPointOut>
+                </variable>
+                <variable formalParameter="sOutput">
+                  <connectionPointIn>
+                    <connection refLocalId="30000000004" />
+                  </connectionPointIn>
+                  <connectionPointOut>
+                    <expression />
+                  </connectionPointOut>
+                </variable>
+              </inOutVariables>
+              <outputVariables>
+                <variable formalParameter="oStatus">
+                  <connectionPointOut />
+                </variable>
+                <variable formalParameter="xError">
+                  <connectionPointOut>
+                    <expression />
+                  </connectionPointOut>
+                </variable>
+                <variable formalParameter="xDone">
+                  <connectionPointOut>
+                    <expression />
+                  </connectionPointOut>
+                </variable>
+              </outputVariables>
+              <addData>
+                <data name="http://www.3s-software.com/plcopenxml/fbdcalltype" handleUnknown="implementation">
+                  <CallType xmlns="">functionblock</CallType>
+                </data>
+                <data name="http://www.3s-software.com/plcopenxml/inputparamtypes" handleUnknown="implementation">
+                  <InputParamTypes xmlns="">STRING(JSON_MAX_STRING) BOOL POINTER TO STRING(JSON_MAX_PARAMETER_STRING) BOOL[REF] STRING(JSON_MAX_STRING)[REF]</InputParamTypes>
+                </data>
+                <data name="http://www.3s-software.com/plcopenxml/outputparamtypes" handleUnknown="implementation">
+                  <OutputParamTypes xmlns="">WagoSysErrorBase.FbResult BOOL BOOL</OutputParamTypes>
+                </data>
+              </addData>
+            </block>
+            <inVariable localId="40000000000">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression>xEnableAnomaly</expression>
+            </inVariable>
+            <inVariable localId="40000000001">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression>TO_STRING(GVL.dtCurrentTime)</expression>
+            </inVariable>
+            <inVariable localId="40000000002">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression />
+            </inVariable>
+            <inVariable localId="40000000003">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression />
+            </inVariable>
+            <inVariable localId="40000000004">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression />
+            </inVariable>
+            <inVariable localId="40000000005">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression>oFb_SimulateAnalyticsMetrics.aValuesString20</expression>
+            </inVariable>
+            <inVariable localId="40000000006">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression>oFb_SimulateAnalyticsMetrics.aMinString</expression>
+            </inVariable>
+            <inVariable localId="40000000007">
+              <position x="0" y="0" />
+              <connectionPointOut />
+              <expression>oFb_SimulateAnalyticsMetrics.aMaxString</expression>
+            </inVariable>
+            <block localId="40000000008" typeName="WagoAppAnalytics.FbAnomalyDetection" instanceName="oAnomaly">
+              <position x="0" y="0" />
+              <inputVariables>
+                <variable formalParameter="xEnable">
+                  <connectionPointIn>
+                    <connection refLocalId="40000000000" />
+                  </connectionPointIn>
+                </variable>
+                <variable formalParameter="sDateTime">
+                  <connectionPointIn>
+                    <connection refLocalId="40000000001" />
+                  </connectionPointIn>
+                </variable>
+                <variable formalParameter="tStepPublish">
+                  <connectionPointIn>
+                    <connection refLocalId="40000000002" />
+                  </connectionPointIn>
+                </variable>
+                <variable formalParameter="tStepSubscribe">
+                  <connectionPointIn>
+                    <connection refLocalId="40000000003" />
+                  </connectionPointIn>
+                </variable>
+                <variable formalParameter="tWindowSize">
+                  <connectionPointIn>
+                    <connection refLocalId="40000000004" />
+                  </connectionPointIn>
+                </variable>
+                <variable formalParameter="asValues">
+                  <connectionPointIn>
+                    <connection refLocalId="40000000005" />
+                  </connectionPointIn>
+                </variable>
+                <variable formalParameter="asMins">
+                  <connectionPointIn>
+                    <connection refLocalId="40000000006" />
+                  </connectionPointIn>
+                </variable>
+                <variable formalParameter="asMaxs">
+                  <connectionPointIn>
+                    <connection refLocalId="40000000007" />
+                  </connectionPointIn>
+                </variable>
+              </inputVariables>
+              <inOutVariables />
+              <outputVariables>
+                <variable formalParameter="rAnomalyScore">
+                  <connectionPointOut />
+                </variable>
+                <variable formalParameter="sDateTimeResult">
+                  <connectionPointOut>
+                    <expression />
+                  </connectionPointOut>
+                </variable>
+                <variable formalParameter="oStatus">
+                  <connectionPointOut>
+                    <expression />
+                  </connectionPointOut>
+                </variable>
+              </outputVariables>
+              <addData>
+                <data name="http://www.3s-software.com/plcopenxml/fbdcalltype" handleUnknown="implementation">
+                  <CallType xmlns="">functionblock</CallType>
+                </data>
+                <data name="http://www.3s-software.com/plcopenxml/inputparamtypes" handleUnknown="implementation">
+                  <InputParamTypes xmlns="">BOOL STRING TIME TIME TIME POINTER TO STRING(20) POINTER TO STRING(20) POINTER TO STRING(20)</InputParamTypes>
+                </data>
+                <data name="http://www.3s-software.com/plcopenxml/outputparamtypes" handleUnknown="implementation">
+                  <OutputParamTypes xmlns="">REAL STRING(255) WagoSysErrorBase.FbResult</OutputParamTypes>
+                </data>
+              </addData>
+            </block>
+          </FBD>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>e169184e-a415-4a4b-a512-427f8ffd2af2</ObjectId>
+          </data>
+        </addData>
+      </pou>
+      <pou name="FuPRNG" pouType="function">
+        <interface>
+          <returnType>
+            <REAL />
+          </returnType>
+          <localVars>
+            <variable name="tmp">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+            <variable name="uiPRNG">
+              <type>
+                <UDINT />
+              </type>
+              <initialValue>
+                <simpleValue value="4264141" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Startwert</xhtml>
+              </documentation>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">uiPRNG := uiPRNG * 1664525 + 1013904223;   // LCG
+tmp := uiPRNG AND 16#7FFFFFFF;
+FuPRNG := TO_REAL(tmp) / TO_REAL(16#7FFFFFFF);     // 0..1</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>4ed99616-caee-4bb1-b25c-dec8baaf69c6</ObjectId>
+          </data>
+        </addData>
+      </pou>
+      <pou name="FB_SimulateAnalyticsMetrics" pouType="functionBlock">
+        <interface>
+          <inputVars>
+            <variable name="xEnable">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Enable simulation </xhtml>
+              </documentation>
+            </variable>
+            <variable name="axAnomalySimulateArray">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <BOOL />
+                  </baseType>
+                </array>
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> TRUE = anomaly active </xhtml>
+              </documentation>
+            </variable>
+            <variable name="rGlobalNoiseLevel">
+              <type>
+                <REAL />
+              </type>
+              <initialValue>
+                <simpleValue value="0.05" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Max noise amplitude 0..1 </xhtml>
+              </documentation>
+            </variable>
+            <variable name="rTimeBase">
+              <type>
+                <REAL />
+              </type>
+              <initialValue>
+                <simpleValue value="0.1" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Base time step in seconds </xhtml>
+              </documentation>
+            </variable>
+          </inputVars>
+          <outputVars>
+            <variable name="aValuesString20">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <string length="20" />
+                  </baseType>
+                </array>
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Simulated values as strings max 20 char for Wago Lib Analytics</xhtml>
+              </documentation>
+            </variable>
+            <variable name="aValuesString">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <string length="JSON_MAX_PARAMETER_STRING" />
+                  </baseType>
+                </array>
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Simulated values as strings max JSON_MAX_PARAMETER_STRING</xhtml>
+              </documentation>
+            </variable>
+            <variable name="aMinString">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <string length="20" />
+                  </baseType>
+                </array>
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Min values as strings </xhtml>
+              </documentation>
+            </variable>
+            <variable name="aMaxString">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <string length="20" />
+                  </baseType>
+                </array>
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Max values as strings </xhtml>
+              </documentation>
+            </variable>
+            <variable name="aMetricNames">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <string length="64" />
+                  </baseType>
+                </array>
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Metric names </xhtml>
+              </documentation>
+            </variable>
+            <variable name="bValid">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> TRUE = values valid </xhtml>
+              </documentation>
+            </variable>
+            <variable name="bParsingError">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Always FALSE </xhtml>
+              </documentation>
+            </variable>
+            <variable name="rRawValues">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <REAL />
+                  </baseType>
+                </array>
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Raw real values </xhtml>
+              </documentation>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="iMetricCount">
+              <type>
+                <UINT />
+              </type>
+              <initialValue>
+                <simpleValue value="141" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Number of metrics 0..141 </xhtml>
+              </documentation>
+            </variable>
+            <variable name="udiPRNGState">
+              <type>
+                <UDINT />
+              </type>
+              <initialValue>
+                <simpleValue value="4264141" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> PRNG state - Linear Congruential Generator </xhtml>
+              </documentation>
+            </variable>
+            <variable name="rPhase">
+              <type>
+                <REAL />
+              </type>
+              <initialValue>
+                <simpleValue value="0.0" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Phase accumulator </xhtml>
+              </documentation>
+            </variable>
+            <variable name="rSimTime">
+              <type>
+                <REAL />
+              </type>
+              <initialValue>
+                <simpleValue value="0.0" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Simulation time </xhtml>
+              </documentation>
+            </variable>
+            <variable name="udiSeqCounter">
+              <type>
+                <UDINT />
+              </type>
+              <initialValue>
+                <simpleValue value="0" />
+              </initialValue>
+            </variable>
+            <variable name="i">
+              <type>
+                <UINT />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Loop and temp variables </xhtml>
+              </documentation>
+            </variable>
+            <variable name="rBaseValue">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="rNoise">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="rAnomalyOffset">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="rFinalValue">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="rRandom">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="rTriTemp">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="rNormAngle">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="udiTmp">
+              <type>
+                <UDINT />
+              </type>
+            </variable>
+            <variable name="sTemp">
+              <type>
+                <string length="20" />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> String conversion temps </xhtml>
+              </documentation>
+            </variable>
+            <variable name="rAbsVal">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="liIntPart">
+              <type>
+                <LINT />
+              </type>
+            </variable>
+            <variable name="iFracPart">
+              <type>
+                <INT />
+              </type>
+            </variable>
+            <variable name="PI">
+              <type>
+                <REAL />
+              </type>
+              <initialValue>
+                <simpleValue value="3.14159265358979" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Constants </xhtml>
+              </documentation>
+            </variable>
+            <variable name="TWO_PI">
+              <type>
+                <REAL />
+              </type>
+              <initialValue>
+                <simpleValue value="6.28318530717959" />
+              </initialValue>
+            </variable>
+            <variable name="arMetricMin">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <REAL />
+                  </baseType>
+                </array>
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Metric configuration arrays </xhtml>
+              </documentation>
+            </variable>
+            <variable name="arMetricMax">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <REAL />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="arMetricCenter">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <REAL />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="arMetricAmplitude">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <REAL />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="aiWaveformType">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <INT />
+                  </baseType>
+                </array>
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> 0=sin,1=cos,2=tri,3=ramp,4=toggle,5=const </xhtml>
+              </documentation>
+            </variable>
+            <variable name="arPhaseOffset">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <REAL />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="arFreqMultiplier">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <REAL />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="arAnomalyFreezeValue">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <REAL />
+                  </baseType>
+                </array>
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Anomaly state </xhtml>
+              </documentation>
+            </variable>
+            <variable name="axAnomalyFreezeActive">
+              <type>
+                <array>
+                  <dimension lower="0" upper="141" />
+                  <baseType>
+                    <BOOL />
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="xInitialized">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="FALSE" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Init flag </xhtml>
+              </documentation>
+            </variable>
+          </localVars>
+          <documentation>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml"> ============================================================================
+   FB_SimulateAnalyticsMetrics
+   IEC 61131-3 Structured Text Function Block
+   Simulates realistic yacht telemetry metrics with noise and anomaly injection
+   Compatible with CODESYS / WAGO PLC environments
+   
+   Author: Generated for Besecke  telemetry simulation
+   Version: 1.0
+   ============================================================================ </xhtml>
+          </documentation>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">(* ============================================================================
+   MAIN LOGIC
+   ============================================================================ *)
+
+IF NOT xEnable THEN
+    bValid := FALSE;
+    RETURN;
+END_IF
+
+(* ----------------------------------------------------------------------------
+   Initialize metric configurations on first run
+   ---------------------------------------------------------------------------- *)
+IF NOT xInitialized THEN
+    FOR i := 0 TO 141 DO
+        arMetricMin[i] := 0.0;
+        arMetricMax[i] := 100.0;
+        arMetricCenter[i] := 50.0;
+        arMetricAmplitude[i] := 25.0;
+        aiWaveformType[i] := 0;
+        arPhaseOffset[i] := TO_REAL(i) * 0.1;
+        arFreqMultiplier[i] := 1.0;
+        axAnomalyFreezeActive[i] := FALSE;
+        arAnomalyFreezeValue[i] := 0.0;
+    END_FOR
+    
+    (* === Configure yacht telemetry metrics === *)
+    
+    (* Index 0: timestamp *)
+    aMetricNames[0] := 'timestamp';
+    arMetricMin[0] := 0.0; arMetricMax[0] := 999999999.0;
+    arMetricCenter[0] := 0.0; arMetricAmplitude[0] := 0.0;
+    aiWaveformType[0] := 3;
+    
+    (* Index 1: seq *)
+    aMetricNames[1] := 'seq';
+    arMetricMin[1] := 0.0; arMetricMax[1] := 999999.0;
+    arMetricCenter[1] := 0.0; arMetricAmplitude[1] := 0.0;
+    aiWaveformType[1] := 3;
+    
+    (* Index 2-11: Engine metrics *)
+    aMetricNames[2] := 'engine_rpm_port';
+    arMetricMin[2] := 0.0; arMetricMax[2] := 3500.0;
+    arMetricCenter[2] := 1800.0; arMetricAmplitude[2] := 500.0;
+    aiWaveformType[2] := 0; arFreqMultiplier[2] := 0.3;
+    
+    aMetricNames[3] := 'engine_rpm_starboard';
+    arMetricMin[3] := 0.0; arMetricMax[3] := 3500.0;
+    arMetricCenter[3] := 1800.0; arMetricAmplitude[3] := 500.0;
+    aiWaveformType[3] := 0; arFreqMultiplier[3] := 0.31; arPhaseOffset[3] := 0.1;
+    
+    aMetricNames[4] := 'engine_temp_port';
+    arMetricMin[4] := 60.0; arMetricMax[4] := 110.0;
+    arMetricCenter[4] := 85.0; arMetricAmplitude[4] := 10.0;
+    aiWaveformType[4] := 0; arFreqMultiplier[4] := 0.1;
+    
+    aMetricNames[5] := 'engine_temp_starboard';
+    arMetricMin[5] := 60.0; arMetricMax[5] := 110.0;
+    arMetricCenter[5] := 85.0; arMetricAmplitude[5] := 10.0;
+    aiWaveformType[5] := 0; arFreqMultiplier[5] := 0.11; arPhaseOffset[5] := 0.2;
+    
+    aMetricNames[6] := 'engine_oil_pressure_port';
+    arMetricMin[6] := 20.0; arMetricMax[6] := 80.0;
+    arMetricCenter[6] := 50.0; arMetricAmplitude[6] := 15.0;
+    aiWaveformType[6] := 0; arFreqMultiplier[6] := 0.2;
+    
+    aMetricNames[7] := 'engine_oil_pressure_starboard';
+    arMetricMin[7] := 20.0; arMetricMax[7] := 80.0;
+    arMetricCenter[7] := 50.0; arMetricAmplitude[7] := 15.0;
+    aiWaveformType[7] := 0; arFreqMultiplier[7] := 0.21; arPhaseOffset[7] := 0.15;
+    
+    aMetricNames[8] := 'engine_load_port';
+    arMetricMin[8] := 0.0; arMetricMax[8] := 100.0;
+    arMetricCenter[8] := 60.0; arMetricAmplitude[8] := 30.0;
+    aiWaveformType[8] := 0; arFreqMultiplier[8] := 0.15;
+    
+    aMetricNames[9] := 'engine_load_starboard';
+    arMetricMin[9] := 0.0; arMetricMax[9] := 100.0;
+    arMetricCenter[9] := 60.0; arMetricAmplitude[9] := 30.0;
+    aiWaveformType[9] := 0; arFreqMultiplier[9] := 0.16; arPhaseOffset[9] := 0.1;
+    
+    aMetricNames[10] := 'engine_coolant_level_port';
+    arMetricMin[10] := 0.0; arMetricMax[10] := 100.0;
+    arMetricCenter[10] := 95.0; arMetricAmplitude[10] := 3.0;
+    aiWaveformType[10] := 2; arFreqMultiplier[10] := 0.05;
+    
+    aMetricNames[11] := 'engine_coolant_level_starboard';
+    arMetricMin[11] := 0.0; arMetricMax[11] := 100.0;
+    arMetricCenter[11] := 95.0; arMetricAmplitude[11] := 3.0;
+    aiWaveformType[11] := 2; arFreqMultiplier[11] := 0.05; arPhaseOffset[11] := 0.5;
+    
+    (* Index 12-15: Generator *)
+    aMetricNames[12] := 'generator_rpm';
+    arMetricMin[12] := 0.0; arMetricMax[12] := 1800.0;
+    arMetricCenter[12] := 1500.0; arMetricAmplitude[12] := 50.0;
+    aiWaveformType[12] := 0; arFreqMultiplier[12] := 0.5;
+    
+    aMetricNames[13] := 'generator_load';
+    arMetricMin[13] := 0.0; arMetricMax[13] := 100.0;
+    arMetricCenter[13] := 45.0; arMetricAmplitude[13] := 25.0;
+    aiWaveformType[13] := 2; arFreqMultiplier[13] := 0.2;
+    
+    aMetricNames[14] := 'generator_oil_pressure';
+    arMetricMin[14] := 20.0; arMetricMax[14] := 60.0;
+    arMetricCenter[14] := 40.0; arMetricAmplitude[14] := 10.0;
+    aiWaveformType[14] := 0; arFreqMultiplier[14] := 0.1;
+    
+    aMetricNames[15] := 'generator_temp';
+    arMetricMin[15] := 50.0; arMetricMax[15] := 100.0;
+    arMetricCenter[15] := 75.0; arMetricAmplitude[15] := 15.0;
+    aiWaveformType[15] := 0; arFreqMultiplier[15] := 0.08;
+    
+    (* Index 16-21: Fuel system *)
+    aMetricNames[16] := 'fuel_level_main';
+    arMetricMin[16] := 0.0; arMetricMax[16] := 100.0;
+    arMetricCenter[16] := 70.0; arMetricAmplitude[16] := 5.0;
+    aiWaveformType[16] := 2; arFreqMultiplier[16] := 0.02;
+    
+    aMetricNames[17] := 'fuel_level_daytank';
+    arMetricMin[17] := 0.0; arMetricMax[17] := 100.0;
+    arMetricCenter[17] := 85.0; arMetricAmplitude[17] := 10.0;
+    aiWaveformType[17] := 2; arFreqMultiplier[17] := 0.1;
+    
+    aMetricNames[18] := 'fuel_flow_port';
+    arMetricMin[18] := 0.0; arMetricMax[18] := 50.0;
+    arMetricCenter[18] := 25.0; arMetricAmplitude[18] := 15.0;
+    aiWaveformType[18] := 0; arFreqMultiplier[18] := 0.25;
+    
+    aMetricNames[19] := 'fuel_flow_starboard';
+    arMetricMin[19] := 0.0; arMetricMax[19] := 50.0;
+    arMetricCenter[19] := 25.0; arMetricAmplitude[19] := 15.0;
+    aiWaveformType[19] := 0; arFreqMultiplier[19] := 0.26; arPhaseOffset[19] := 0.1;
+    
+    aMetricNames[20] := 'fuel_temp';
+    arMetricMin[20] := 15.0; arMetricMax[20] := 45.0;
+    arMetricCenter[20] := 30.0; arMetricAmplitude[20] := 8.0;
+    aiWaveformType[20] := 0; arFreqMultiplier[20] := 0.05;
+    
+    aMetricNames[21] := 'fuel_pressure';
+    arMetricMin[21] := 2.0; arMetricMax[21] := 6.0;
+    arMetricCenter[21] := 4.0; arMetricAmplitude[21] := 1.0;
+    aiWaveformType[21] := 0; arFreqMultiplier[21] := 0.3;
+    
+    (* Index 22-27: Battery system *)
+    aMetricNames[22] := 'battery_voltage_service';
+    arMetricMin[22] := 22.0; arMetricMax[22] := 28.8;
+    arMetricCenter[22] := 26.4; arMetricAmplitude[22] := 1.5;
+    aiWaveformType[22] := 0; arFreqMultiplier[22] := 0.1;
+    
+    aMetricNames[23] := 'battery_voltage_start_port';
+    arMetricMin[23] := 11.5; arMetricMax[23] := 14.4;
+    arMetricCenter[23] := 13.2; arMetricAmplitude[23] := 0.8;
+    aiWaveformType[23] := 0; arFreqMultiplier[23] := 0.08;
+    
+    aMetricNames[24] := 'battery_voltage_start_starboard';
+    arMetricMin[24] := 11.5; arMetricMax[24] := 14.4;
+    arMetricCenter[24] := 13.2; arMetricAmplitude[24] := 0.8;
+    aiWaveformType[24] := 0; arFreqMultiplier[24] := 0.08; arPhaseOffset[24] := 0.2;
+    
+    aMetricNames[25] := 'battery_soc_service';
+    arMetricMin[25] := 0.0; arMetricMax[25] := 100.0;
+    arMetricCenter[25] := 85.0; arMetricAmplitude[25] := 10.0;
+    aiWaveformType[25] := 2; arFreqMultiplier[25] := 0.03;
+    
+    aMetricNames[26] := 'battery_soc_backup';
+    arMetricMin[26] := 0.0; arMetricMax[26] := 100.0;
+    arMetricCenter[26] := 95.0; arMetricAmplitude[26] := 3.0;
+    aiWaveformType[26] := 5;
+    
+    aMetricNames[27] := 'battery_current_service';
+    arMetricMin[27] := -100.0; arMetricMax[27] := 200.0;
+    arMetricCenter[27] := 25.0; arMetricAmplitude[27] := 50.0;
+    aiWaveformType[27] := 0; arFreqMultiplier[27] := 0.2;
+    
+    (* Index 28-35: Shore power and electrical *)
+    aMetricNames[28] := 'shore_power_connected';
+    arMetricMin[28] := 0.0; arMetricMax[28] := 1.0;
+    arMetricCenter[28] := 0.0; arMetricAmplitude[28] := 0.0;
+    aiWaveformType[28] := 4; arFreqMultiplier[28] := 0.01;
+    
+    aMetricNames[29] := 'shore_power_voltage';
+    arMetricMin[29] := 0.0; arMetricMax[29] := 250.0;
+    arMetricCenter[29] := 230.0; arMetricAmplitude[29] := 10.0;
+    aiWaveformType[29] := 0; arFreqMultiplier[29] := 0.5;
+    
+    aMetricNames[30] := 'shore_power_current';
+    arMetricMin[30] := 0.0; arMetricMax[30] := 32.0;
+    arMetricCenter[30] := 15.0; arMetricAmplitude[30] := 10.0;
+    aiWaveformType[30] := 2; arFreqMultiplier[30] := 0.15;
+    
+    aMetricNames[31] := 'inverter_status';
+    arMetricMin[31] := 0.0; arMetricMax[31] := 3.0;
+    arMetricCenter[31] := 1.0; arMetricAmplitude[31] := 0.0;
+    aiWaveformType[31] := 5;
+    
+    aMetricNames[32] := 'inverter_load';
+    arMetricMin[32] := 0.0; arMetricMax[32] := 100.0;
+    arMetricCenter[32] := 35.0; arMetricAmplitude[32] := 25.0;
+    aiWaveformType[32] := 2; arFreqMultiplier[32] := 0.12;
+    
+    aMetricNames[33] := 'inverter_temp';
+    arMetricMin[33] := 20.0; arMetricMax[33] := 65.0;
+    arMetricCenter[33] := 40.0; arMetricAmplitude[33] := 15.0;
+    aiWaveformType[33] := 0; arFreqMultiplier[33] := 0.06;
+    
+    aMetricNames[34] := 'charger_status';
+    arMetricMin[34] := 0.0; arMetricMax[34] := 4.0;
+    arMetricCenter[34] := 2.0; arMetricAmplitude[34] := 0.0;
+    aiWaveformType[34] := 5;
+    
+    aMetricNames[35] := 'charger_output_current';
+    arMetricMin[35] := 0.0; arMetricMax[35] := 100.0;
+    arMetricCenter[35] := 40.0; arMetricAmplitude[35] := 30.0;
+    aiWaveformType[35] := 2; arFreqMultiplier[35] := 0.08;
+    
+    (* Index 36-41: Water system *)
+    aMetricNames[36] := 'water_level_fresh';
+    arMetricMin[36] := 0.0; arMetricMax[36] := 100.0;
+    arMetricCenter[36] := 75.0; arMetricAmplitude[36] := 10.0;
+    aiWaveformType[36] := 2; arFreqMultiplier[36] := 0.02;
+    
+    aMetricNames[37] := 'water_level_grey';
+    arMetricMin[37] := 0.0; arMetricMax[37] := 100.0;
+    arMetricCenter[37] := 30.0; arMetricAmplitude[37] := 20.0;
+    aiWaveformType[37] := 3; arFreqMultiplier[37] := 0.01;
+    
+    aMetricNames[38] := 'water_level_black';
+    arMetricMin[38] := 0.0; arMetricMax[38] := 100.0;
+    arMetricCenter[38] := 20.0; arMetricAmplitude[38] := 15.0;
+    aiWaveformType[38] := 3; arFreqMultiplier[38] := 0.008;
+    
+    aMetricNames[39] := 'water_pump_status';
+    arMetricMin[39] := 0.0; arMetricMax[39] := 1.0;
+    arMetricCenter[39] := 0.0; arMetricAmplitude[39] := 0.0;
+    aiWaveformType[39] := 4; arFreqMultiplier[39] := 0.3;
+    
+    aMetricNames[40] := 'watermaker_status';
+    arMetricMin[40] := 0.0; arMetricMax[40] := 1.0;
+    arMetricCenter[40] := 0.0; arMetricAmplitude[40] := 0.0;
+    aiWaveformType[40] := 4; arFreqMultiplier[40] := 0.02;
+    
+    aMetricNames[41] := 'watermaker_output_lph';
+    arMetricMin[41] := 0.0; arMetricMax[41] := 60.0;
+    arMetricCenter[41] := 45.0; arMetricAmplitude[41] := 10.0;
+    aiWaveformType[41] := 0; arFreqMultiplier[41] := 0.15;
+    
+    (* Index 42-46: GPS *)
+    aMetricNames[42] := 'gps_latitude';
+    arMetricMin[42] := -90.0; arMetricMax[42] := 90.0;
+    arMetricCenter[42] := 52.5; arMetricAmplitude[42] := 0.01;
+    aiWaveformType[42] := 0; arFreqMultiplier[42] := 0.02;
+    
+    aMetricNames[43] := 'gps_longitude';
+    arMetricMin[43] := -180.0; arMetricMax[43] := 180.0;
+    arMetricCenter[43] := 8.5; arMetricAmplitude[43] := 0.01;
+    aiWaveformType[43] := 1; arFreqMultiplier[43] := 0.02;
+    
+    aMetricNames[44] := 'gps_speed_over_ground';
+    arMetricMin[44] := 0.0; arMetricMax[44] := 25.0;
+    arMetricCenter[44] := 8.0; arMetricAmplitude[44] := 5.0;
+    aiWaveformType[44] := 0; arFreqMultiplier[44] := 0.1;
+    
+    aMetricNames[45] := 'gps_course_over_ground';
+    arMetricMin[45] := 0.0; arMetricMax[45] := 360.0;
+    arMetricCenter[45] := 180.0; arMetricAmplitude[45] := 30.0;
+    aiWaveformType[45] := 0; arFreqMultiplier[45] := 0.05;
+    
+    aMetricNames[46] := 'gps_fix_quality';
+    arMetricMin[46] := 0.0; arMetricMax[46] := 5.0;
+    arMetricCenter[46] := 4.0; arMetricAmplitude[46] := 0.0;
+    aiWaveformType[46] := 5;
+    
+    (* Index 47-51: Weather *)
+    aMetricNames[47] := 'wind_speed';
+    arMetricMin[47] := 0.0; arMetricMax[47] := 60.0;
+    arMetricCenter[47] := 15.0; arMetricAmplitude[47] := 10.0;
+    aiWaveformType[47] := 0; arFreqMultiplier[47] := 0.25;
+    
+    aMetricNames[48] := 'wind_direction';
+    arMetricMin[48] := 0.0; arMetricMax[48] := 360.0;
+    arMetricCenter[48] := 220.0; arMetricAmplitude[48] := 45.0;
+    aiWaveformType[48] := 0; arFreqMultiplier[48] := 0.08;
+    
+    aMetricNames[49] := 'barometric_pressure';
+    arMetricMin[49] := 960.0; arMetricMax[49] := 1050.0;
+    arMetricCenter[49] := 1013.0; arMetricAmplitude[49] := 15.0;
+    aiWaveformType[49] := 0; arFreqMultiplier[49] := 0.01;
+    
+    aMetricNames[50] := 'air_temperature';
+    arMetricMin[50] := -10.0; arMetricMax[50] := 40.0;
+    arMetricCenter[50] := 22.0; arMetricAmplitude[50] := 5.0;
+    aiWaveformType[50] := 0; arFreqMultiplier[50] := 0.02;
+    
+    aMetricNames[51] := 'air_humidity';
+    arMetricMin[51] := 20.0; arMetricMax[51] := 100.0;
+    arMetricCenter[51] := 65.0; arMetricAmplitude[51] := 20.0;
+    aiWaveformType[51] := 0; arFreqMultiplier[51] := 0.03;
+    
+    (* Index 52-54: Depth *)
+    aMetricNames[52] := 'depth_below_keel';
+    arMetricMin[52] := 0.0; arMetricMax[52] := 200.0;
+    arMetricCenter[52] := 25.0; arMetricAmplitude[52] := 15.0;
+    aiWaveformType[52] := 0; arFreqMultiplier[52] := 0.05;
+    
+    aMetricNames[53] := 'depth_below_transducer';
+    arMetricMin[53] := 0.0; arMetricMax[53] := 200.0;
+    arMetricCenter[53] := 27.0; arMetricAmplitude[53] := 15.0;
+    aiWaveformType[53] := 0; arFreqMultiplier[53] := 0.05;
+    
+    aMetricNames[54] := 'sea_temperature';
+    arMetricMin[54] := 0.0; arMetricMax[54] := 30.0;
+    arMetricCenter[54] := 16.0; arMetricAmplitude[54] := 3.0;
+    aiWaveformType[54] := 0; arFreqMultiplier[54] := 0.01;
+    
+    (* Index 55-59: Speed and control surfaces *)
+    aMetricNames[55] := 'speed_through_water';
+    arMetricMin[55] := 0.0; arMetricMax[55] := 25.0;
+    arMetricCenter[55] := 7.5; arMetricAmplitude[55] := 4.0;
+    aiWaveformType[55] := 0; arFreqMultiplier[55] := 0.12;
+    
+    aMetricNames[56] := 'rudder_angle_port';
+    arMetricMin[56] := -35.0; arMetricMax[56] := 35.0;
+    arMetricCenter[56] := 0.0; arMetricAmplitude[56] := 15.0;
+    aiWaveformType[56] := 0; arFreqMultiplier[56] := 0.3;
+    
+    aMetricNames[57] := 'rudder_angle_starboard';
+    arMetricMin[57] := -35.0; arMetricMax[57] := 35.0;
+    arMetricCenter[57] := 0.0; arMetricAmplitude[57] := 15.0;
+    aiWaveformType[57] := 0; arFreqMultiplier[57] := 0.3; arPhaseOffset[57] := 3.14159;
+    
+    aMetricNames[58] := 'trim_tab_position_port';
+    arMetricMin[58] := 0.0; arMetricMax[58] := 100.0;
+    arMetricCenter[58] := 50.0; arMetricAmplitude[58] := 20.0;
+    aiWaveformType[58] := 2; arFreqMultiplier[58] := 0.08;
+    
+    aMetricNames[59] := 'trim_tab_position_starboard';
+    arMetricMin[59] := 0.0; arMetricMax[59] := 100.0;
+    arMetricCenter[59] := 50.0; arMetricAmplitude[59] := 20.0;
+    aiWaveformType[59] := 2; arFreqMultiplier[59] := 0.08; arPhaseOffset[59] := 0.5;
+    
+    (* Index 60-64: Gyro and attitude *)
+    aMetricNames[60] := 'gyro_heading';
+    arMetricMin[60] := 0.0; arMetricMax[60] := 360.0;
+    arMetricCenter[60] := 180.0; arMetricAmplitude[60] := 20.0;
+    aiWaveformType[60] := 0; arFreqMultiplier[60] := 0.04;
+    
+    aMetricNames[61] := 'magnetic_heading';
+    arMetricMin[61] := 0.0; arMetricMax[61] := 360.0;
+    arMetricCenter[61] := 182.0; arMetricAmplitude[61] := 20.0;
+    aiWaveformType[61] := 0; arFreqMultiplier[61] := 0.04; arPhaseOffset[61] := 0.05;
+    
+    aMetricNames[62] := 'roll_angle';
+    arMetricMin[62] := -30.0; arMetricMax[62] := 30.0;
+    arMetricCenter[62] := 0.0; arMetricAmplitude[62] := 8.0;
+    aiWaveformType[62] := 0; arFreqMultiplier[62] := 0.8;
+    
+    aMetricNames[63] := 'pitch_angle';
+    arMetricMin[63] := -15.0; arMetricMax[63] := 15.0;
+    arMetricCenter[63] := 2.0; arMetricAmplitude[63] := 4.0;
+    aiWaveformType[63] := 0; arFreqMultiplier[63] := 0.5;
+    
+    aMetricNames[64] := 'yaw_rate';
+    arMetricMin[64] := -10.0; arMetricMax[64] := 10.0;
+    arMetricCenter[64] := 0.0; arMetricAmplitude[64] := 3.0;
+    aiWaveformType[64] := 0; arFreqMultiplier[64] := 0.4;
+    
+    (* Index 65-67: Autopilot *)
+    aMetricNames[65] := 'autopilot_mode';
+    arMetricMin[65] := 0.0; arMetricMax[65] := 5.0;
+    arMetricCenter[65] := 2.0; arMetricAmplitude[65] := 0.0;
+    aiWaveformType[65] := 5;
+    
+    aMetricNames[66] := 'autopilot_set_heading';
+    arMetricMin[66] := 0.0; arMetricMax[66] := 360.0;
+    arMetricCenter[66] := 180.0; arMetricAmplitude[66] := 0.0;
+    aiWaveformType[66] := 5;
+    
+    aMetricNames[67] := 'autopilot_status';
+    arMetricMin[67] := 0.0; arMetricMax[67] := 3.0;
+    arMetricCenter[67] := 1.0; arMetricAmplitude[67] := 0.0;
+    aiWaveformType[67] := 5;
+    
+    (* Index 68-71: Lights *)
+    aMetricNames[68] := 'navigation_lights_status';
+    arMetricMin[68] := 0.0; arMetricMax[68] := 1.0;
+    arMetricCenter[68] := 1.0; arMetricAmplitude[68] := 0.0;
+    aiWaveformType[68] := 5;
+    
+    aMetricNames[69] := 'anchor_light_status';
+    arMetricMin[69] := 0.0; arMetricMax[69] := 1.0;
+    arMetricCenter[69] := 0.0; arMetricAmplitude[69] := 0.0;
+    aiWaveformType[69] := 4; arFreqMultiplier[69] := 0.005;
+    
+    aMetricNames[70] := 'deck_light_status';
+    arMetricMin[70] := 0.0; arMetricMax[70] := 1.0;
+    arMetricCenter[70] := 0.0; arMetricAmplitude[70] := 0.0;
+    aiWaveformType[70] := 4; arFreqMultiplier[70] := 0.02;
+    
+    aMetricNames[71] := 'underwater_lights_status';
+    arMetricMin[71] := 0.0; arMetricMax[71] := 1.0;
+    arMetricCenter[71] := 0.0; arMetricAmplitude[71] := 0.0;
+    aiWaveformType[71] := 4; arFreqMultiplier[71] := 0.01;
+    
+    (* Index 72-80: Bilge system *)
+    aMetricNames[72] := 'bilge_water_level_fwd';
+    arMetricMin[72] := 0.0; arMetricMax[72] := 100.0;
+    arMetricCenter[72] := 5.0; arMetricAmplitude[72] := 3.0;
+    aiWaveformType[72] := 2; arFreqMultiplier[72] := 0.05;
+    
+    aMetricNames[73] := 'bilge_water_level_mid';
+    arMetricMin[73] := 0.0; arMetricMax[73] := 100.0;
+    arMetricCenter[73] := 8.0; arMetricAmplitude[73] := 5.0;
+    aiWaveformType[73] := 2; arFreqMultiplier[73] := 0.06;
+    
+    aMetricNames[74] := 'bilge_water_level_aft';
+    arMetricMin[74] := 0.0; arMetricMax[74] := 100.0;
+    arMetricCenter[74] := 3.0; arMetricAmplitude[74] := 2.0;
+    aiWaveformType[74] := 2; arFreqMultiplier[74] := 0.04;
+    
+    aMetricNames[75] := 'bilge_pump_fwd_status';
+    arMetricMin[75] := 0.0; arMetricMax[75] := 1.0;
+    arMetricCenter[75] := 0.0; arMetricAmplitude[75] := 0.0;
+    aiWaveformType[75] := 4; arFreqMultiplier[75] := 0.01;
+    
+    aMetricNames[76] := 'bilge_pump_mid_status';
+    arMetricMin[76] := 0.0; arMetricMax[76] := 1.0;
+    arMetricCenter[76] := 0.0; arMetricAmplitude[76] := 0.0;
+    aiWaveformType[76] := 4; arFreqMultiplier[76] := 0.015;
+    
+    aMetricNames[77] := 'bilge_pump_aft_status';
+    arMetricMin[77] := 0.0; arMetricMax[77] := 1.0;
+    arMetricCenter[77] := 0.0; arMetricAmplitude[77] := 0.0;
+    aiWaveformType[77] := 4; arFreqMultiplier[77] := 0.008;
+    
+    aMetricNames[78] := 'bilge_alarm_fwd';
+    arMetricMin[78] := 0.0; arMetricMax[78] := 1.0;
+    arMetricCenter[78] := 0.0; arMetricAmplitude[78] := 0.0;
+    aiWaveformType[78] := 5;
+    
+    aMetricNames[79] := 'bilge_alarm_mid';
+    arMetricMin[79] := 0.0; arMetricMax[79] := 1.0;
+    arMetricCenter[79] := 0.0; arMetricAmplitude[79] := 0.0;
+    aiWaveformType[79] := 5;
+    
+    aMetricNames[80] := 'bilge_alarm_aft';
+    arMetricMin[80] := 0.0; arMetricMax[80] := 1.0;
+    arMetricCenter[80] := 0.0; arMetricAmplitude[80] := 0.0;
+    aiWaveformType[80] := 5;
+    
+    (* Index 81-83: Fire alarms *)
+    aMetricNames[81] := 'fire_alarm_engine_room';
+    arMetricMin[81] := 0.0; arMetricMax[81] := 1.0;
+    arMetricCenter[81] := 0.0; arMetricAmplitude[81] := 0.0;
+    aiWaveformType[81] := 5;
+    
+    aMetricNames[82] := 'fire_alarm_galley';
+    arMetricMin[82] := 0.0; arMetricMax[82] := 1.0;
+    arMetricCenter[82] := 0.0; arMetricAmplitude[82] := 0.0;
+    aiWaveformType[82] := 5;
+    
+    aMetricNames[83] := 'fire_alarm_cabin';
+    arMetricMin[83] := 0.0; arMetricMax[83] := 1.0;
+    arMetricCenter[83] := 0.0; arMetricAmplitude[83] := 0.0;
+    aiWaveformType[83] := 5;
+    
+    (* Index 84-87: Doors and hatches *)
+    aMetricNames[84] := 'door_main_status';
+    arMetricMin[84] := 0.0; arMetricMax[84] := 1.0;
+    arMetricCenter[84] := 1.0; arMetricAmplitude[84] := 0.0;
+    aiWaveformType[84] := 4; arFreqMultiplier[84] := 0.005;
+    
+    aMetricNames[85] := 'door_cabin_status';
+    arMetricMin[85] := 0.0; arMetricMax[85] := 1.0;
+    arMetricCenter[85] := 1.0; arMetricAmplitude[85] := 0.0;
+    aiWaveformType[85] := 4; arFreqMultiplier[85] := 0.003;
+    
+    aMetricNames[86] := 'hatch_bow_status';
+    arMetricMin[86] := 0.0; arMetricMax[86] := 1.0;
+    arMetricCenter[86] := 1.0; arMetricAmplitude[86] := 0.0;
+    aiWaveformType[86] := 4; arFreqMultiplier[86] := 0.002;
+    
+    aMetricNames[87] := 'hatch_stern_status';
+    arMetricMin[87] := 0.0; arMetricMax[87] := 1.0;
+    arMetricCenter[87] := 1.0; arMetricAmplitude[87] := 0.0;
+    aiWaveformType[87] := 4; arFreqMultiplier[87] := 0.002;
+    
+    (* Index 88-91: Engine room environment *)
+    aMetricNames[88] := 'generator_fuel_level';
+    arMetricMin[88] := 0.0; arMetricMax[88] := 100.0;
+    arMetricCenter[88] := 80.0; arMetricAmplitude[88] := 10.0;
+    aiWaveformType[88] := 2; arFreqMultiplier[88] := 0.01;
+    
+    aMetricNames[89] := 'engine_room_temp';
+    arMetricMin[89] := 20.0; arMetricMax[89] := 65.0;
+    arMetricCenter[89] := 42.0; arMetricAmplitude[89] := 12.0;
+    aiWaveformType[89] := 0; arFreqMultiplier[89] := 0.08;
+    
+    aMetricNames[90] := 'engine_room_humidity';
+    arMetricMin[90] := 30.0; arMetricMax[90] := 90.0;
+    arMetricCenter[90] := 55.0; arMetricAmplitude[90] := 15.0;
+    aiWaveformType[90] := 0; arFreqMultiplier[90] := 0.05;
+    
+    aMetricNames[91] := 'engine_room_fan_status';
+    arMetricMin[91] := 0.0; arMetricMax[91] := 1.0;
+    arMetricCenter[91] := 1.0; arMetricAmplitude[91] := 0.0;
+    aiWaveformType[91] := 5;
+    
+    (* Index 92-95: Thrusters *)
+    aMetricNames[92] := 'thruster_bow_status';
+    arMetricMin[92] := 0.0; arMetricMax[92] := 1.0;
+    arMetricCenter[92] := 0.0; arMetricAmplitude[92] := 0.0;
+    aiWaveformType[92] := 4; arFreqMultiplier[92] := 0.02;
+    
+    aMetricNames[93] := 'thruster_bow_current';
+    arMetricMin[93] := 0.0; arMetricMax[93] := 300.0;
+    arMetricCenter[93] := 0.0; arMetricAmplitude[93] := 150.0;
+    aiWaveformType[93] := 0; arFreqMultiplier[93] := 0.5;
+    
+    aMetricNames[94] := 'thruster_stern_status';
+    arMetricMin[94] := 0.0; arMetricMax[94] := 1.0;
+    arMetricCenter[94] := 0.0; arMetricAmplitude[94] := 0.0;
+    aiWaveformType[94] := 4; arFreqMultiplier[94] := 0.015;
+    
+    aMetricNames[95] := 'thruster_stern_current';
+    arMetricMin[95] := 0.0; arMetricMax[95] := 250.0;
+    arMetricCenter[95] := 0.0; arMetricAmplitude[95] := 125.0;
+    aiWaveformType[95] := 0; arFreqMultiplier[95] := 0.45;
+    
+    (* Index 96-99: Stabilizers *)
+    aMetricNames[96] := 'stabilizer_status';
+    arMetricMin[96] := 0.0; arMetricMax[96] := 3.0;
+    arMetricCenter[96] := 2.0; arMetricAmplitude[96] := 0.0;
+    aiWaveformType[96] := 5;
+    
+    aMetricNames[97] := 'stabilizer_fin_angle_port';
+    arMetricMin[97] := -25.0; arMetricMax[97] := 25.0;
+    arMetricCenter[97] := 0.0; arMetricAmplitude[97] := 12.0;
+    aiWaveformType[97] := 0; arFreqMultiplier[97] := 0.6;
+    
+    aMetricNames[98] := 'stabilizer_fin_angle_starboard';
+    arMetricMin[98] := -25.0; arMetricMax[98] := 25.0;
+    arMetricCenter[98] := 0.0; arMetricAmplitude[98] := 12.0;
+    aiWaveformType[98] := 0; arFreqMultiplier[98] := 0.6; arPhaseOffset[98] := 3.14159;
+    
+    aMetricNames[99] := 'stabilizer_oil_temp';
+    arMetricMin[99] := 30.0; arMetricMax[99] := 80.0;
+    arMetricCenter[99] := 55.0; arMetricAmplitude[99] := 15.0;
+    aiWaveformType[99] := 0; arFreqMultiplier[99] := 0.04;
+    
+    (* Index 100-104: Radar and AIS *)
+    aMetricNames[100] := 'radar_status';
+    arMetricMin[100] := 0.0; arMetricMax[100] := 3.0;
+    arMetricCenter[100] := 2.0; arMetricAmplitude[100] := 0.0;
+    aiWaveformType[100] := 5;
+    
+    aMetricNames[101] := 'radar_range';
+    arMetricMin[101] := 0.25; arMetricMax[101] := 96.0;
+    arMetricCenter[101] := 12.0; arMetricAmplitude[101] := 0.0;
+    aiWaveformType[101] := 5;
+    
+    aMetricNames[102] := 'radar_target_count';
+    arMetricMin[102] := 0.0; arMetricMax[102] := 50.0;
+    arMetricCenter[102] := 5.0; arMetricAmplitude[102] := 4.0;
+    aiWaveformType[102] := 2; arFreqMultiplier[102] := 0.1;
+    
+    aMetricNames[103] := 'ais_status';
+    arMetricMin[103] := 0.0; arMetricMax[103] := 2.0;
+    arMetricCenter[103] := 1.0; arMetricAmplitude[103] := 0.0;
+    aiWaveformType[103] := 5;
+    
+    aMetricNames[104] := 'ais_target_count';
+    arMetricMin[104] := 0.0; arMetricMax[104] := 100.0;
+    arMetricCenter[104] := 12.0; arMetricAmplitude[104] := 8.0;
+    aiWaveformType[104] := 2; arFreqMultiplier[104] := 0.08;
+    
+    (* Index 105-107: Navigation *)
+    aMetricNames[105] := 'nav_chart_zoom';
+    arMetricMin[105] := 1.0; arMetricMax[105] := 20.0;
+    arMetricCenter[105] := 8.0; arMetricAmplitude[105] := 0.0;
+    aiWaveformType[105] := 5;
+    
+    aMetricNames[106] := 'nav_route_active';
+    arMetricMin[106] := 0.0; arMetricMax[106] := 1.0;
+    arMetricCenter[106] := 1.0; arMetricAmplitude[106] := 0.0;
+    aiWaveformType[106] := 5;
+    
+    aMetricNames[107] := 'nav_waypoint_name';
+    arMetricMin[107] := 0.0; arMetricMax[107] := 0.0;
+    arMetricCenter[107] := 0.0; arMetricAmplitude[107] := 0.0;
+    aiWaveformType[107] := 5;
+    
+    (* Index 108-116: HVAC and Refrigeration *)
+    aMetricNames[108] := 'hvac_saloon_temp_set';
+    arMetricMin[108] := 16.0; arMetricMax[108] := 28.0;
+    arMetricCenter[108] := 22.0; arMetricAmplitude[108] := 0.0;
+    aiWaveformType[108] := 5;
+    
+    aMetricNames[109] := 'hvac_saloon_temp_actual';
+    arMetricMin[109] := 16.0; arMetricMax[109] := 30.0;
+    arMetricCenter[109] := 22.0; arMetricAmplitude[109] := 2.0;
+    aiWaveformType[109] := 0; arFreqMultiplier[109] := 0.03;
+    
+    aMetricNames[110] := 'hvac_cabin1_temp_set';
+    arMetricMin[110] := 16.0; arMetricMax[110] := 28.0;
+    arMetricCenter[110] := 21.0; arMetricAmplitude[110] := 0.0;
+    aiWaveformType[110] := 5;
+    
+    aMetricNames[111] := 'hvac_cabin1_temp_actual';
+    arMetricMin[111] := 16.0; arMetricMax[111] := 30.0;
+    arMetricCenter[111] := 21.0; arMetricAmplitude[111] := 2.5;
+    aiWaveformType[111] := 0; arFreqMultiplier[111] := 0.025;
+    
+    aMetricNames[112] := 'hvac_cabin2_temp_set';
+    arMetricMin[112] := 16.0; arMetricMax[112] := 28.0;
+    arMetricCenter[112] := 20.0; arMetricAmplitude[112] := 0.0;
+    aiWaveformType[112] := 5;
+    
+    aMetricNames[113] := 'hvac_cabin2_temp_actual';
+    arMetricMin[113] := 16.0; arMetricMax[113] := 30.0;
+    arMetricCenter[113] := 20.0; arMetricAmplitude[113] := 2.5;
+    aiWaveformType[113] := 0; arFreqMultiplier[113] := 0.028;
+    
+    aMetricNames[114] := 'refrigerator_temp';
+    arMetricMin[114] := 2.0; arMetricMax[114] := 8.0;
+    arMetricCenter[114] := 4.0; arMetricAmplitude[114] := 1.5;
+    aiWaveformType[114] := 2; arFreqMultiplier[114] := 0.15;
+    
+    aMetricNames[115] := 'freezer_temp';
+    arMetricMin[115] := -25.0; arMetricMax[115] := -15.0;
+    arMetricCenter[115] := -20.0; arMetricAmplitude[115] := 3.0;
+    aiWaveformType[115] := 2; arFreqMultiplier[115] := 0.1;
+    
+    aMetricNames[116] := 'winecooler_temp';
+    arMetricMin[116] := 10.0; arMetricMax[116] := 18.0;
+    arMetricCenter[116] := 14.0; arMetricAmplitude[116] := 2.0;
+    aiWaveformType[116] := 2; arFreqMultiplier[116] := 0.08;
+    
+    (* Index 117-128: Security and Communications *)
+    aMetricNames[117] := 'security_cameras_online';
+    arMetricMin[117] := 0.0; arMetricMax[117] := 8.0;
+    arMetricCenter[117] := 8.0; arMetricAmplitude[117] := 0.0;
+    aiWaveformType[117] := 5;
+    
+    aMetricNames[118] := 'security_motion_detected';
+    arMetricMin[118] := 0.0; arMetricMax[118] := 1.0;
+    arMetricCenter[118] := 0.0; arMetricAmplitude[118] := 0.0;
+    aiWaveformType[118] := 4; arFreqMultiplier[118] := 0.05;
+    
+    aMetricNames[119] := 'satcom_signal_strength';
+    arMetricMin[119] := 0.0; arMetricMax[119] := 100.0;
+    arMetricCenter[119] := 75.0; arMetricAmplitude[119] := 20.0;
+    aiWaveformType[119] := 0; arFreqMultiplier[119] := 0.15;
+    
+    aMetricNames[120] := 'satcom_data_rate';
+    arMetricMin[120] := 0.0; arMetricMax[120] := 512.0;
+    arMetricCenter[120] := 256.0; arMetricAmplitude[120] := 128.0;
+    aiWaveformType[120] := 0; arFreqMultiplier[120] := 0.2;
+    
+    aMetricNames[121] := 'wifi_status';
+    arMetricMin[121] := 0.0; arMetricMax[121] := 2.0;
+    arMetricCenter[121] := 2.0; arMetricAmplitude[121] := 0.0;
+    aiWaveformType[121] := 5;
+    
+    aMetricNames[122] := 'wifi_signal_strength';
+    arMetricMin[122] := -90.0; arMetricMax[122] := -30.0;
+    arMetricCenter[122] := -55.0; arMetricAmplitude[122] := 15.0;
+    aiWaveformType[122] := 0; arFreqMultiplier[122] := 0.25;
+    
+    aMetricNames[123] := 'lte_status';
+    arMetricMin[123] := 0.0; arMetricMax[123] := 2.0;
+    arMetricCenter[123] := 2.0; arMetricAmplitude[123] := 0.0;
+    aiWaveformType[123] := 5;
+    
+    aMetricNames[124] := 'lte_signal_strength';
+    arMetricMin[124] := -110.0; arMetricMax[124] := -50.0;
+    arMetricCenter[124] := -75.0; arMetricAmplitude[124] := 20.0;
+    aiWaveformType[124] := 0; arFreqMultiplier[124] := 0.3;
+    
+    aMetricNames[125] := 'entertainment_system_status';
+    arMetricMin[125] := 0.0; arMetricMax[125] := 2.0;
+    arMetricCenter[125] := 1.0; arMetricAmplitude[125] := 0.0;
+    aiWaveformType[125] := 5;
+    
+    aMetricNames[126] := 'tv_status';
+    arMetricMin[126] := 0.0; arMetricMax[126] := 1.0;
+    arMetricCenter[126] := 0.0; arMetricAmplitude[126] := 0.0;
+    aiWaveformType[126] := 4; arFreqMultiplier[126] := 0.01;
+    
+    aMetricNames[127] := 'audio_zone1_volume';
+    arMetricMin[127] := 0.0; arMetricMax[127] := 100.0;
+    arMetricCenter[127] := 35.0; arMetricAmplitude[127] := 20.0;
+    aiWaveformType[127] := 2; arFreqMultiplier[127] := 0.02;
+    
+    aMetricNames[128] := 'audio_zone2_volume';
+    arMetricMin[128] := 0.0; arMetricMax[128] := 100.0;
+    arMetricCenter[128] := 25.0; arMetricAmplitude[128] := 15.0;
+    aiWaveformType[128] := 2; arFreqMultiplier[128] := 0.018;
+    
+    (* Index 129-141: Alarms and Custom metrics *)
+    aMetricNames[129] := 'engine_alarm_port';
+    arMetricMin[129] := 0.0; arMetricMax[129] := 1.0;
+    arMetricCenter[129] := 0.0; arMetricAmplitude[129] := 0.0;
+    aiWaveformType[129] := 5;
+    
+    aMetricNames[130] := 'engine_alarm_starboard';
+    arMetricMin[130] := 0.0; arMetricMax[130] := 1.0;
+    arMetricCenter[130] := 0.0; arMetricAmplitude[130] := 0.0;
+    aiWaveformType[130] := 5;
+    
+    aMetricNames[131] := 'generator_alarm';
+    arMetricMin[131] := 0.0; arMetricMax[131] := 1.0;
+    arMetricCenter[131] := 0.0; arMetricAmplitude[131] := 0.0;
+    aiWaveformType[131] := 5;
+    
+    aMetricNames[132] := 'gps_alarm';
+    arMetricMin[132] := 0.0; arMetricMax[132] := 1.0;
+    arMetricCenter[132] := 0.0; arMetricAmplitude[132] := 0.0;
+    aiWaveformType[132] := 5;
+    
+    aMetricNames[133] := 'autopilot_alarm';
+    arMetricMin[133] := 0.0; arMetricMax[133] := 1.0;
+    arMetricCenter[133] := 0.0; arMetricAmplitude[133] := 0.0;
+    aiWaveformType[133] := 5;
+    
+    aMetricNames[134] := 'bilge_alarm';
+    arMetricMin[134] := 0.0; arMetricMax[134] := 1.0;
+    arMetricCenter[134] := 0.0; arMetricAmplitude[134] := 0.0;
+    aiWaveformType[134] := 5;
+    
+    aMetricNames[135] := 'custom_metric_1';
+    arMetricMin[135] := 0.0; arMetricMax[135] := 1000.0;
+    arMetricCenter[135] := 500.0; arMetricAmplitude[135] := 250.0;
+    aiWaveformType[135] := 0; arFreqMultiplier[135] := 0.1;
+    
+    aMetricNames[136] := 'custom_metric_2';
+    arMetricMin[136] := -100.0; arMetricMax[136] := 100.0;
+    arMetricCenter[136] := 0.0; arMetricAmplitude[136] := 50.0;
+    aiWaveformType[136] := 1; arFreqMultiplier[136] := 0.15;
+    
+    aMetricNames[137] := 'custom_metric_3';
+    arMetricMin[137] := 0.0; arMetricMax[137] := 500.0;
+    arMetricCenter[137] := 250.0; arMetricAmplitude[137] := 100.0;
+    aiWaveformType[137] := 2; arFreqMultiplier[137] := 0.12;
+    
+    aMetricNames[138] := 'custom_metric_4';
+    arMetricMin[138] := 0.0; arMetricMax[138] := 100.0;
+    arMetricCenter[138] := 50.0; arMetricAmplitude[138] := 30.0;
+    aiWaveformType[138] := 0; arFreqMultiplier[138] := 0.08;
+    
+    aMetricNames[139] := 'custom_metric_5';
+    arMetricMin[139] := 10.0; arMetricMax[139] := 90.0;
+    arMetricCenter[139] := 50.0; arMetricAmplitude[139] := 25.0;
+    aiWaveformType[139] := 0; arFreqMultiplier[139] := 0.2;
+    
+    aMetricNames[140] := 'custom_metric_6';
+    arMetricMin[140] := 0.0; arMetricMax[140] := 1.0;
+    arMetricCenter[140] := 0.5; arMetricAmplitude[140] := 0.3;
+    aiWaveformType[140] := 0; arFreqMultiplier[140] := 0.5;
+    
+    aMetricNames[141] := 'custom_metric_7';
+    arMetricMin[141] := 0.0; arMetricMax[141] := 10.0;
+    arMetricCenter[141] := 5.0; arMetricAmplitude[141] := 3.0;
+    aiWaveformType[141] := 2; arFreqMultiplier[141] := 0.25;
+    
+    xInitialized := TRUE;
+END_IF
+
+(* ----------------------------------------------------------------------------
+   Update simulation time and phase
+   ---------------------------------------------------------------------------- *)
+rSimTime := rSimTime + rTimeBase;
+udiSeqCounter := udiSeqCounter + 1;
+rPhase := rPhase + (rTimeBase * TWO_PI * 0.1);
+
+(* Wrap phase to prevent overflow *)
+IF rPhase &gt; (TWO_PI * 1000.0) THEN
+    rPhase := rPhase - (TWO_PI * 1000.0);
+END_IF
+
+(* ----------------------------------------------------------------------------
+   Generate values for all metrics
+   ---------------------------------------------------------------------------- *)
+FOR i := 0 TO 141 DO
+    IF i &gt; iMetricCount THEN
+        rRawValues[i] := 0.0;
+        aValuesString[i] := '0.0';
+        aMinString[i] := '0.0';
+        aMaxString[i] := '0.0';
+    ELSE
+        (* Generate random number using internal LCG PRNG *)
+        udiPRNGState := udiPRNGState * 1664525 + 1013904223;
+        udiTmp := udiPRNGState AND 16#7FFFFFFF;
+        rRandom := TO_REAL(udiTmp) / TO_REAL(16#7FFFFFFF);
+        
+        (* Calculate base waveform value based on type *)
+        CASE aiWaveformType[i] OF
+            0:  (* Sine wave *)
+                rBaseValue := arMetricCenter[i] + 
+                    arMetricAmplitude[i] * SIN(rPhase * arFreqMultiplier[i] + arPhaseOffset[i]);
+                
+            1:  (* Cosine wave *)
+                rBaseValue := arMetricCenter[i] + 
+                    arMetricAmplitude[i] * COS(rPhase * arFreqMultiplier[i] + arPhaseOffset[i]);
+                
+            2:  (* Triangle wave - inline calculation *)
+                rTriTemp := rPhase * arFreqMultiplier[i] + arPhaseOffset[i];
+                (* Normalize to 0..2*PI *)
+                WHILE rTriTemp &gt;= TWO_PI DO
+                    rTriTemp := rTriTemp - TWO_PI;
+                END_WHILE
+                WHILE rTriTemp &lt; 0.0 DO
+                    rTriTemp := rTriTemp + TWO_PI;
+                END_WHILE
+                (* Generate triangle: -1 to +1 *)
+                IF rTriTemp &lt; PI THEN
+                    rNormAngle := -1.0 + (2.0 * rTriTemp / PI);
+                ELSE
+                    rNormAngle := 3.0 - (2.0 * rTriTemp / PI);
+                END_IF
+                rBaseValue := arMetricCenter[i] + arMetricAmplitude[i] * rNormAngle;
+                
+            3:  (* Ramp / sawtooth *)
+                rTriTemp := rSimTime * arFreqMultiplier[i] * 100.0;
+                rTriTemp := rTriTemp - TRUNC(rTriTemp / (arMetricMax[i] - arMetricMin[i])) * (arMetricMax[i] - arMetricMin[i]);
+                rBaseValue := arMetricMin[i] + rTriTemp;
+                
+            4:  (* Toggle digital on/off *)
+                IF SIN(rPhase * arFreqMultiplier[i] + arPhaseOffset[i]) &gt; 0.0 THEN
+                    rBaseValue := 1.0;
+                ELSE
+                    rBaseValue := 0.0;
+                END_IF
+                
+            5:  (* Constant with noise only *)
+                rBaseValue := arMetricCenter[i];
+                
+            ELSE
+                rBaseValue := arMetricCenter[i];
+        END_CASE
+        
+        (* Apply noise - skip for toggle signals *)
+        IF aiWaveformType[i] &lt;&gt; 4 THEN
+            rNoise := (rRandom - 0.5) * 2.0 * rGlobalNoiseLevel * (arMetricMax[i] - arMetricMin[i]);
+            rBaseValue := rBaseValue + rNoise;
+        END_IF
+        
+        (* Apply anomaly if enabled *)
+        rAnomalyOffset := 0.0;
+        IF axAnomalySimulateArray[i] THEN
+            (* Get new random for anomaly type *)
+            udiPRNGState := udiPRNGState * 1664525 + 1013904223;
+            udiTmp := udiPRNGState AND 16#7FFFFFFF;
+            rRandom := TO_REAL(udiTmp) / TO_REAL(16#7FFFFFFF);
+            
+            IF rRandom &lt; 0.33 THEN
+                (* Spike anomaly *)
+                udiPRNGState := udiPRNGState * 1664525 + 1013904223;
+                udiTmp := udiPRNGState AND 16#7FFFFFFF;
+                rAnomalyOffset := (TO_REAL(udiTmp) / TO_REAL(16#7FFFFFFF) - 0.5) * 4.0 * arMetricAmplitude[i];
+                axAnomalyFreezeActive[i] := FALSE;
+                
+            ELSIF rRandom &lt; 0.66 THEN
+                (* Offset jump *)
+                IF NOT axAnomalyFreezeActive[i] THEN
+                    udiPRNGState := udiPRNGState * 1664525 + 1013904223;
+                    udiTmp := udiPRNGState AND 16#7FFFFFFF;
+                    arAnomalyFreezeValue[i] := (TO_REAL(udiTmp) / TO_REAL(16#7FFFFFFF) - 0.5) * 2.0 * arMetricAmplitude[i];
+                    axAnomalyFreezeActive[i] := TRUE;
+                END_IF
+                rAnomalyOffset := arAnomalyFreezeValue[i];
+                
+            ELSE
+                (* Freeze anomaly *)
+                IF NOT axAnomalyFreezeActive[i] THEN
+                    arAnomalyFreezeValue[i] := rBaseValue;
+                    axAnomalyFreezeActive[i] := TRUE;
+                END_IF
+                rBaseValue := arAnomalyFreezeValue[i];
+                rAnomalyOffset := 0.0;
+            END_IF
+        ELSE
+            axAnomalyFreezeActive[i] := FALSE;
+        END_IF
+        
+        (* Calculate final value *)
+        rFinalValue := rBaseValue + rAnomalyOffset;
+        
+        (* Clamp to bounds *)
+        IF rFinalValue &lt; arMetricMin[i] THEN
+            rFinalValue := arMetricMin[i];
+        ELSIF rFinalValue &gt; arMetricMax[i] THEN
+            rFinalValue := arMetricMax[i];
+        END_IF
+        
+        (* Store raw value *)
+        rRawValues[i] := rFinalValue;
+        
+        (* Convert to string with appropriate precision *)
+        rAbsVal := ABS(rFinalValue);
+        liIntPart := TRUNC(rFinalValue);
+        
+        IF rAbsVal &gt;= 1000.0 THEN
+            aValuesString[i] := REAL_TO_STRING(rFinalValue);
+			aValuesString20[i] := REAL_TO_STRING(rFinalValue);
+        ELSIF rAbsVal &gt;= 1.0 THEN
+            (* 2 decimal places *)
+            iFracPart := TO_INT((rAbsVal - ABS(TO_REAL(liIntPart))) * 100.0);
+            sTemp := LINT_TO_STRING(liIntPart);
+            sTemp := CONCAT(sTemp, '.');
+            IF iFracPart &lt; 10 THEN
+                sTemp := CONCAT(sTemp, '0');
+            END_IF
+            sTemp := CONCAT(sTemp, INT_TO_STRING(iFracPart));
+            aValuesString[i] := sTemp;
+			aValuesString20[i] := sTemp;
+        ELSE
+            (* 3 decimal places for small values *)
+            iFracPart := TO_INT(rAbsVal * 1000.0);
+            IF rFinalValue &lt; 0.0 THEN
+                sTemp := '-0.';
+            ELSE
+                sTemp := '0.';
+            END_IF
+            IF iFracPart &lt; 10 THEN
+                sTemp := CONCAT(sTemp, '00');
+            ELSIF iFracPart &lt; 100 THEN
+                sTemp := CONCAT(sTemp, '0');
+            END_IF
+            sTemp := CONCAT(sTemp, INT_TO_STRING(iFracPart));
+            aValuesString[i] := sTemp;
+			aValuesString20[i] := sTemp;
+        END_IF
+        
+        (* Set min/max strings *)
+        aMinString[i] := REAL_TO_STRING(arMetricMin[i]);
+        aMaxString[i] := REAL_TO_STRING(arMetricMax[i]);
+    END_IF
+END_FOR
+
+(* Special handling for timestamp index 0 *)
+rRawValues[0] := rSimTime * 1000.0;
+aValuesString[0] := LREAL_TO_STRING(TRUNC(rSimTime * 1000.0));
+aValuesString20[0] := LREAL_TO_STRING(TRUNC(rSimTime * 1000.0));
+
+(* Special handling for sequence index 1 *)
+rRawValues[1] := TO_REAL(udiSeqCounter);
+aValuesString[1] := UDINT_TO_STRING(udiSeqCounter);
+aValuesString20[1] := UDINT_TO_STRING(udiSeqCounter);
+
+(* Set output flags *)
+bValid := TRUE;
+bParsingError := FALSE;</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>86b5082a-ac99-4481-af1c-4d272a8d94ce</ObjectId>
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/globalvars" handleUnknown="implementation">
+      <globalVars name="GVL">
+        <variable name="typCurrentTime">
+          <type>
+            <derived name="WagoAppTime.WagoTypes.typWagoTimeComponents" />
+          </type>
+        </variable>
+        <variable name="dtCurrentTime">
+          <type>
+            <DT />
+          </type>
+        </variable>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/attributes" handleUnknown="implementation">
+            <Attributes>
+              <Attribute Name="qualified_only" Value="" />
+            </Attributes>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>d96b7cf6-2909-49e6-9944-c774e2a6e41e</ObjectId>
+          </data>
+        </addData>
+      </globalVars>
+    </data>
+    <data name="http://www.3s-software.com/plcopenxml/globalvars" handleUnknown="implementation">
+      <globalVars name="GVL_Fast">
+        <variable name="sJSONMetricOutput">
+          <type>
+            <string length="8196" />
+          </type>
+        </variable>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/attributes" handleUnknown="implementation">
+            <Attributes>
+              <Attribute Name="qualified_only" Value="" />
+            </Attributes>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>3ca1edfb-ed52-4ba7-b904-26f441a6a143</ObjectId>
+          </data>
+        </addData>
+      </globalVars>
+    </data>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Folder Name="MQTT Publish">
+          <Object Name="Prg_MQTT" ObjectId="bf9d5ced-951f-4b29-8014-e690fcb6ec9e">
+            <Object Name="ACT_Publish" ObjectId="67e8e549-fe66-4f99-98aa-2965d31a1aeb" />
+            <Object Name="ACT_Subscribe" ObjectId="a28a90d4-b4b6-4296-8693-36d4298043d8" />
+          </Object>
+          <Object Name="FbCreateCustomPayload" ObjectId="b6415b19-fc20-4254-ad30-b3967482ac21" />
+          <Object Name="typMQTTPayload" ObjectId="17d3a1e4-8c42-4923-bfdc-e3d8e7cb2f6a" />
+          <Object Name="typMetric" ObjectId="11994ecc-4fa1-4601-9bde-feb714a8b7d6" />
+          <Object Name="eMetricType" ObjectId="6f741580-63eb-4fbd-835f-3b8ac71c291b" />
+        </Folder>
+        <Object Name="eHelmetState" ObjectId="b559a871-a4a4-4131-988d-40cafd896a4e" />
+        <Object Name="PRG_SimJsonAnalytics" ObjectId="e169184e-a415-4a4b-a512-427f8ffd2af2" />
+        <Folder Name="SimulationData">
+          <Object Name="FuPRNG" ObjectId="4ed99616-caee-4bb1-b25c-dec8baaf69c6" />
+          <Object Name="FB_SimulateAnalyticsMetrics" ObjectId="86b5082a-ac99-4481-af1c-4d272a8d94ce" />
+        </Folder>
+        <Object Name="GVL" ObjectId="d96b7cf6-2909-49e6-9944-c774e2a6e41e" />
+        <Object Name="GVL_Fast" ObjectId="3ca1edfb-ed52-4ba7-b904-26f441a6a143" />
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>

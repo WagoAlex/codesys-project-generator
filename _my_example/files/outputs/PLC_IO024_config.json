@@ -1,0 +1,2485 @@
+{
+  "PLC_Info": {
+    "Name": "IO024",
+    "Type": "750-8210",
+    "IP_Address": "172.16.46.024",
+    "Location": "VII S 0",
+    "IO_Box": "36141072"
+  },
+  "IO_Modules": [
+    {
+      "Module_Type": "750-432",
+      "Signals": [
+        {
+          "Terminal": "IX 64. 1 -A3.1",
+          "Object_Name": "I0053_Me_GenPsAvRAlrm",
+          "Signal_Type": "I",
+          "Signal": "NC"
+        },
+        {
+          "Terminal": "IX 64. 0 -A3.1",
+          "Object_Name": "I0058_Fu_IO024",
+          "Signal_Type": "I",
+          "Signal": "NC"
+        }
+      ]
+    },
+    {
+      "Module_Type": "750-517",
+      "Signals": [
+        {
+          "Terminal": "QX 65. 8 -A6.1",
+          "Object_Name": "I0058_Fu_IO024",
+          "Signal_Type": "O",
+          "Signal": "NO"
+        }
+      ]
+    },
+    {
+      "Module_Type": "750-652",
+      "Signals": [
+        {
+          "Terminal": "XX   0 -A8.1",
+          "Object_Name": "I12000_Me_SERIAL_InTERFAcE",
+          "Signal_Type": "RS422",
+          "Signal": "MODBUS"
+        },
+        {
+          "Terminal": "XX   1 -A8.2",
+          "Object_Name": "I12001_Me_SSAUToMPowREDUCT",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX   2 -A8.3",
+          "Object_Name": "I12002_Me_LOPLbOilECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX   3 -A8.4",
+          "Object_Name": "I12003_Me_SSPLbOilECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX   4 -A8.5",
+          "Object_Name": "I12004_Me_HIPCRANKCASE",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX   5 -A8.6",
+          "Object_Name": "I12005_Me_SSPCRANKCASE",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX   6 -A8.7",
+          "Object_Name": "I12006_Me_LOPCool",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX   7 -A8.8",
+          "Object_Name": "I12007_Me_SSPCool",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX   8 -A8.9",
+          "Object_Name": "I12008_Me_LOPFuel",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX   9 -A8.10",
+          "Object_Name": "I12009_Me_SSPFuel",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  10 -A8.11",
+          "Object_Name": "I12010_Me_LOPCHARGEAirA",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  11 -A8.12",
+          "Object_Name": "I12011_Me_HItCHARGEAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  12 -A8.13",
+          "Object_Name": "I12012_Me_SSTCHARGEAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  13 -A8.14",
+          "Object_Name": "I12013_Me_HIPOilFltrDfEREN",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  14 -A8.15",
+          "Object_Name": "I12014_Me_LOCoolLev",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  15 -A8.16",
+          "Object_Name": "I12015_Me_HIFuelLeak",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  16 -A8.17",
+          "Object_Name": "I12016_Me_HIETC1Spd",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  17 -A8.18",
+          "Object_Name": "I12017_Me_SSETC1OvrSpd",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  18 -A8.19",
+          "Object_Name": "I12018_Me_HIETC2Spd",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  19 -A8.20",
+          "Object_Name": "I12019_Me_SSETC2OvrSpd",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  20 -A8.21",
+          "Object_Name": "I12020_Me_LOPFuelCmnRail",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  21 -A8.22",
+          "Object_Name": "I12021_Me_HIPFuelCmnRail",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  22 -A8.23",
+          "Object_Name": "I12022_Me_ALECUpDkEFECT",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  23 -A8.24",
+          "Object_Name": "I12023_Me_LOECUPowSupVolt",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  24 -A8.25",
+          "Object_Name": "I12024_Me_LOLOECUPowSupVol",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  25 -A8.26",
+          "Object_Name": "I12025_Me_HIECUPowSupVolt",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  26 -A8.27",
+          "Object_Name": "I12026_Me_HIHIECUPowSupVol",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  27 -A8.28",
+          "Object_Name": "I12027_Me_HItCoolECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  28 -A8.29",
+          "Object_Name": "I12028_Me_HIHItCoolECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  29 -A8.30",
+          "Object_Name": "I12029_Me_HItLbOil",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  30 -A8.31",
+          "Object_Name": "I12030_Me_SSTLbOil",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  31 -A8.32",
+          "Object_Name": "I12031_Me_HItExCombA",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  32 -A8.33",
+          "Object_Name": "I12032_Me_SSTExCombA",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  33 -A8.34",
+          "Object_Name": "I12033_Me_HItExCombB",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  34 -A8.35",
+          "Object_Name": "I12034_Me_SSTExCombB",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  35 -A8.36",
+          "Object_Name": "I12035_Me_HItECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  36 -A8.37",
+          "Object_Name": "I12036_Me_SSEngSpdLw",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  37 -A8.38",
+          "Object_Name": "I12037_Me_ALECUERRORCHECKC",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  38 -A8.39",
+          "Object_Name": "I12038_Me_ALCmnRailLeak",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  39 -A8.40",
+          "Object_Name": "I12039_Me_HIETC2IdlSpd",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  40 -A8.41",
+          "Object_Name": "I12040_Me_HIETCSpdDfERENCE",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  41 -A8.42",
+          "Object_Name": "I12041_Me_ALETC2CUTIn",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  42 -A8.43",
+          "Object_Name": "I12042_Me_HIHItFuel",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  43 -A8.44",
+          "Object_Name": "I12043_Me_HItCHARGEAirSEQC",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  44 -A8.45",
+          "Object_Name": "I12044_Me_SSTCHARGEAirSEQC",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  45 -A8.46",
+          "Object_Name": "I12045_Me_HItFuel",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  46 -A8.47",
+          "Object_Name": "I12046_Me_LOPLbOilEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  47 -A8.48",
+          "Object_Name": "I12047_Me_SSPLbOilEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  48 -A8.49",
+          "Object_Name": "I12048_Me_HItCoolEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  49 -A8.50",
+          "Object_Name": "I12049_Me_SSTCoolEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  50 -A8.51",
+          "Object_Name": "I12050_Me_HItExA1",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  51 -A8.52",
+          "Object_Name": "I12051_Me_HItExA2",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  52 -A8.53",
+          "Object_Name": "I12052_Me_HItExA3",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  53 -A8.54",
+          "Object_Name": "I12053_Me_HItExA4",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  54 -A8.55",
+          "Object_Name": "I12054_Me_HItExA5",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  55 -A8.56",
+          "Object_Name": "I12055_Me_HItExA6",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  56 -A8.57",
+          "Object_Name": "I12056_Me_HItExA7",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  57 -A8.58",
+          "Object_Name": "I12057_Me_HItExA8",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  60 -A8.61",
+          "Object_Name": "I12058_Me_HItExB1",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  61 -A8.62",
+          "Object_Name": "I12059_Me_HItExB2",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  62 -A8.63",
+          "Object_Name": "I12060_Me_HItExB3",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  63 -A8.64",
+          "Object_Name": "I12061_Me_HItExB4",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  64 -A8.65",
+          "Object_Name": "I12062_Me_HItExB5",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  65 -A8.66",
+          "Object_Name": "I12063_Me_HItExB6",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  66 -A8.67",
+          "Object_Name": "I12064_Me_HItExB7",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  67 -A8.68",
+          "Object_Name": "I12065_Me_HItExB8",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  70 -A8.71",
+          "Object_Name": "I12066_Me_LOTExA1",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  71 -A8.72",
+          "Object_Name": "I12067_Me_LOTExA2",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  72 -A8.73",
+          "Object_Name": "I12068_Me_LOTExA3",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  73 -A8.74",
+          "Object_Name": "I12069_Me_LOTExA4",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  74 -A8.75",
+          "Object_Name": "I12070_Me_LOTExA5",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  75 -A8.76",
+          "Object_Name": "I12071_Me_LOTExA6",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  76 -A8.77",
+          "Object_Name": "I12072_Me_LOTExA7",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  77 -A8.78",
+          "Object_Name": "I12073_Me_LOTExA8",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  80 -A8.81",
+          "Object_Name": "I12074_Me_LOTExB1",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  81 -A8.82",
+          "Object_Name": "I12075_Me_LOTExB2",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  82 -A8.83",
+          "Object_Name": "I12076_Me_LOTExB3",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  83 -A8.84",
+          "Object_Name": "I12077_Me_LOTExB4",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  84 -A8.85",
+          "Object_Name": "I12078_Me_LOTExB5",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  85 -A8.86",
+          "Object_Name": "I12079_Me_LOTExB6",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  86 -A8.87",
+          "Object_Name": "I12080_Me_LOTExB7",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  87 -A8.88",
+          "Object_Name": "I12081_Me_LOTExB8",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  90 -A8.91",
+          "Object_Name": "I12082_Me_LOPRAWWtr",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  91 -A8.92",
+          "Object_Name": "I12083_Me_SSReqPowRed",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  92 -A8.93",
+          "Object_Name": "I12084_Me_ALExMonInG",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  93 -A8.94",
+          "Object_Name": "I12085_Me_ALPrsMonInGEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  94 -A8.95",
+          "Object_Name": "I12086_Me_SSSecCHANNELwrDk",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  95 -A8.96",
+          "Object_Name": "I12087_Me_TankDkTCool",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  96 -A8.97",
+          "Object_Name": "I12088_Me_TankDkPLbOil",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 101 -A8.102",
+          "Object_Name": "I12089_Me_SSOvrSpdEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 102 -A8.103",
+          "Object_Name": "I12090_Me_LOPOilREFillPmp",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 103 -A8.104",
+          "Object_Name": "I12091_Me_MGExtStartInTERL",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 104 -A8.105",
+          "Object_Name": "I12092_Me_ALBARGrEnga",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 105 -A8.106",
+          "Object_Name": "I12093_Me_HItRISER",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 106 -A8.107",
+          "Object_Name": "I12094_Me_SSSecShdwn",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 107 -A8.108",
+          "Object_Name": "I12095_Me_SSEmgStp",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 108 -A8.109",
+          "Object_Name": "I12096_Me_ALwrDkfPROTECTIO",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 109 -A8.110",
+          "Object_Name": "I12097_Me_ALCoolLeakGen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 110 -A8.111",
+          "Object_Name": "I12098_Me_HItWndgL1",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 111 -A8.112",
+          "Object_Name": "I12099_Me_HIHItWndgL1",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 112 -A8.113",
+          "Object_Name": "I12100_Me_HItWndgL2",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 113 -A8.114",
+          "Object_Name": "I12101_Me_HIHItWndgL2",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 114 -A8.115",
+          "Object_Name": "I12102_Me_HItWndgL3",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 115 -A8.116",
+          "Object_Name": "I12103_Me_HIHItWndgL3",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 116 -A8.117",
+          "Object_Name": "I12104_Me_MGNotRdyForOp",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 149 -A8.150",
+          "Object_Name": "I12108_Me_ALPRIMinGPmp",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 150 -A8.151",
+          "Object_Name": "I12109_Me_ALWtrInFuelPreFl",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 151 -A8.152",
+          "Object_Name": "I12110_Me_ALBattCHARGER",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 152 -A8.153",
+          "Object_Name": "I12111_Me_LOPstartAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 153 -A8.154",
+          "Object_Name": "I12112_Me_ALOvrRdAct",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 154 -A8.155",
+          "Object_Name": "I12113_Me_HItBrngDRIVENEND",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 155 -A8.156",
+          "Object_Name": "I12114_Me_HIHItBrngDRIVENE",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 156 -A8.157",
+          "Object_Name": "I12115_Me_HItBrngNonDRIVEN",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 157 -A8.158",
+          "Object_Name": "I12116_Me_HIHItBrngNonDRIV",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 158 -A8.159",
+          "Object_Name": "I12117_Me_HItCoolAirOut",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 159 -A8.160",
+          "Object_Name": "I12118_Me_HIHItCoolAirOut",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 160 -A8.161",
+          "Object_Name": "I12119_Me_SSSafeSysEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 161 -A8.162",
+          "Object_Name": "I12120_Me_ALShdwnEXPECTED",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 164 -A8.165",
+          "Object_Name": "I12121_Me_LOLOPstartAirSta",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 123 -A8.124",
+          "Object_Name": "I12123_Me_ALMnPowSup",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 124 -A8.125",
+          "Object_Name": "I12124_Me_ALEmgPowSup",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 175 -A8.176",
+          "Object_Name": "I12127_Me_StpAct",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 176 -A8.177",
+          "Object_Name": "I12128_An_EngRun",
+          "Signal_Type": "SI",
+          "Signal": "NO"
+        },
+        {
+          "Terminal": "XX 177 -A8.178",
+          "Object_Name": "I12129_Me_ETC2CUTIn",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 179 -A8.180",
+          "Object_Name": "I12131_Me_ShdwnEXPECTED",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 180 -A8.181",
+          "Object_Name": "I12132_Me_CoolLev",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 181 -A8.182",
+          "Object_Name": "I12133_Me_FuelLeakLev",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 182 -A8.183",
+          "Object_Name": "I12134_Me_CombAlrmREDPRIO2",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 183 -A8.184",
+          "Object_Name": "I12135_Me_CombAlrmYELLwPRI",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 184 -A8.185",
+          "Object_Name": "I12136_Me_FBccUStart",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 185 -A8.186",
+          "Object_Name": "I12137_Me_FBccUStp",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 186 -A8.187",
+          "Object_Name": "I12138_Me_MLRdyForStart",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 187 -A8.188",
+          "Object_Name": "I12139_Me_PRIMinGPmpAutoMd",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 188 -A8.189",
+          "Object_Name": "I12140_Me_OvrRdAct",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 189 -A8.190",
+          "Object_Name": "I12141_Me_PRIMinGPmpON",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 197 -A8.198",
+          "Object_Name": "I12145_Va_EngSpdECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 198 -A8.199",
+          "Object_Name": "I12146_Va_PLbOilECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 199 -A8.200",
+          "Object_Name": "I12146_Va_PLbOilECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 200 -A8.201",
+          "Object_Name": "I12146_Va_PLbOilECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 201 -A8.202",
+          "Object_Name": "I12149_Va_PCRANKCASE",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 202 -A8.203",
+          "Object_Name": "I12149_Va_PCRANKCASE",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 203 -A8.204",
+          "Object_Name": "I12149_Va_PCRANKCASE",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 204 -A8.205",
+          "Object_Name": "I12152_Va_PCool",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 205 -A8.206",
+          "Object_Name": "I12152_Va_PCool",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 206 -A8.207",
+          "Object_Name": "I12152_Va_PCool",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 207 -A8.208",
+          "Object_Name": "I12155_Va_PFuel",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 208 -A8.209",
+          "Object_Name": "I12156_Va_PCHARGEAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 209 -A8.210",
+          "Object_Name": "I12156_Va_PCHARGEAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 210 -A8.211",
+          "Object_Name": "I12158_Va_ETC1Spd",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 211 -A8.212",
+          "Object_Name": "I12158_Va_ETC1Spd",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 212 -A8.213",
+          "Object_Name": "I12158_Va_ETC1Spd",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 213 -A8.214",
+          "Object_Name": "I12161_Va_ETC2Spd",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 214 -A8.215",
+          "Object_Name": "I12161_Va_ETC2Spd",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 215 -A8.216",
+          "Object_Name": "I12161_Va_ETC2Spd",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 217 -A8.218",
+          "Object_Name": "I12165_CN_ECUOPERATInGHOUR",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 218 -A8.219",
+          "Object_Name": "I12166_Va_TCoolECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 219 -A8.220",
+          "Object_Name": "I12166_Va_TCoolECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 220 -A8.221",
+          "Object_Name": "I12166_Va_TCoolECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 221 -A8.222",
+          "Object_Name": "I12169_Va_TCHARGEAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 222 -A8.223",
+          "Object_Name": "I12169_Va_TCHARGEAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 223 -A8.224",
+          "Object_Name": "I12169_Va_TCHARGEAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 224 -A8.225",
+          "Object_Name": "I12172_Va_TLbOil",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 225 -A8.226",
+          "Object_Name": "I12172_Va_TLbOil",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 226 -A8.227",
+          "Object_Name": "I12172_Va_TLbOil",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 227 -A8.228",
+          "Object_Name": "I12175_Va_TExCombA",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 228 -A8.229",
+          "Object_Name": "I12175_Va_TExCombA",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 229 -A8.230",
+          "Object_Name": "I12175_Va_TExCombA",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 230 -A8.231",
+          "Object_Name": "I12178_Va_TExCombB",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 231 -A8.232",
+          "Object_Name": "I12178_Va_TExCombB",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 232 -A8.233",
+          "Object_Name": "I12178_Va_TExCombB",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 233 -A8.234",
+          "Object_Name": "I12181_Va_TInTAKEAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 234 -A8.235",
+          "Object_Name": "I12182_Va_TFuel",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 235 -A8.236",
+          "Object_Name": "I12155_Va_PFuel",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 236 -A8.237",
+          "Object_Name": "I12155_Va_PFuel",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 237 -A8.238",
+          "Object_Name": "I12145_Va_EngSpdECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 238 -A8.239",
+          "Object_Name": "I12182_Va_TFuel",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 239 -A8.240",
+          "Object_Name": "I12187_Va_InJECTIONInRELAT",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 240 -A8.241",
+          "Object_Name": "I12188_Va_TCHARGEAirSEQCTR",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 241 -A8.242",
+          "Object_Name": "I12188_Va_TCHARGEAirSEQCTR",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 242 -A8.243",
+          "Object_Name": "I12188_Va_TCHARGEAirSEQCTR",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 243 -A8.244",
+          "Object_Name": "I12182_Va_TFuel",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 244 -A8.245",
+          "Object_Name": "I12192_Va_ULTECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 245 -A8.246",
+          "Object_Name": "I12193_Va_EngSpdEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 246 -A8.247",
+          "Object_Name": "I12194_Va_PLbOilEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 247 -A8.248",
+          "Object_Name": "I12194_Va_PLbOilEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 248 -A8.249",
+          "Object_Name": "I12194_Va_PLbOilEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 249 -A8.250",
+          "Object_Name": "I12197_Va_TCoolEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 250 -A8.251",
+          "Object_Name": "I12197_Va_TCoolEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 251 -A8.252",
+          "Object_Name": "I12197_Va_TCoolEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 252 -A8.253",
+          "Object_Name": "I12193_Va_EngSpdEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 253 -A8.254",
+          "Object_Name": "I12201_Va_TExA1",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 254 -A8.255",
+          "Object_Name": "I12202_Va_TExA2",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 255 -A8.256",
+          "Object_Name": "I12203_Va_TExA3",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 256 -A8.257",
+          "Object_Name": "I12204_Va_TExA4",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 257 -A8.258",
+          "Object_Name": "I12205_Va_TExA5",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 258 -A8.259",
+          "Object_Name": "I12206_Va_TExA6",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 259 -A8.260",
+          "Object_Name": "I12207_Va_TExA7",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 260 -A8.261",
+          "Object_Name": "I12208_Va_TExA8",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 263 -A8.264",
+          "Object_Name": "I12209_Va_TExB1",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 264 -A8.265",
+          "Object_Name": "I12210_Va_TExB2",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 265 -A8.266",
+          "Object_Name": "I12211_Va_TExB3",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 266 -A8.267",
+          "Object_Name": "I12212_Va_TExB4",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 267 -A8.268",
+          "Object_Name": "I12213_Va_TExB5",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 268 -A8.269",
+          "Object_Name": "I12214_Va_TExB6",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 269 -A8.270",
+          "Object_Name": "I12215_Va_TExB7",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 270 -A8.271",
+          "Object_Name": "I12216_Va_TExB8",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 273 -A8.274",
+          "Object_Name": "I12217_Va_TExMean",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 275 -A8.276",
+          "Object_Name": "I12217_Va_TExMean",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 276 -A8.277",
+          "Object_Name": "I12219_Va_PRAWWtr",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 277 -A8.278",
+          "Object_Name": "I12219_Va_PRAWWtr",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 278 -A8.279",
+          "Object_Name": "I12221_Va_TWndgL1Gen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 279 -A8.280",
+          "Object_Name": "I12221_Va_TWndgL1Gen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 280 -A8.281",
+          "Object_Name": "I12221_Va_TWndgL1Gen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 281 -A8.282",
+          "Object_Name": "I12224_Va_TWndgL2Gen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 282 -A8.283",
+          "Object_Name": "I12224_Va_TWndgL2Gen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 283 -A8.284",
+          "Object_Name": "I12224_Va_TWndgL2Gen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 284 -A8.285",
+          "Object_Name": "I12227_Va_TWndgL3Gen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 285 -A8.286",
+          "Object_Name": "I12227_Va_TWndgL3Gen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 286 -A8.287",
+          "Object_Name": "I12227_Va_TWndgL3Gen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 287 -A8.288",
+          "Object_Name": "I12230_Va_ActFuelConsum",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 297 -A8.298",
+          "Object_Name": "I12231_Va_POilREFillPmp",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 298 -A8.299",
+          "Object_Name": "I12231_Va_POilREFillPmp",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 299 -A8.300",
+          "Object_Name": "I12233_Va_PstartAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 300 -A8.301",
+          "Object_Name": "I12233_Va_PstartAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 302 -A8.303",
+          "Object_Name": "I12235_Va_TbrngDRIVENENDGe",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 305 -A8.306",
+          "Object_Name": "I12236_Va_TbEARNonDRIVENEN",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 308 -A8.309",
+          "Object_Name": "I12237_Va_TCoolAirOutGen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 315 -A8.316",
+          "Object_Name": "I12238_Va_GenActPowInKW",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 301 -A8.302",
+          "Object_Name": "I12233_Va_PstartAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 290 -A8.291",
+          "Object_Name": "I12245_Va_MeanTRIPFuelCons",
+          "Signal_Type": "SI",
+          "Signal": "WORD"
+        },
+        {
+          "Terminal": "XX 293 -A8.294",
+          "Object_Name": "I12246_Va_MaxALEFuelCONSUM",
+          "Signal_Type": "SI",
+          "Signal": "WORD"
+        },
+        {
+          "Terminal": "XX 322 -A8.323",
+          "Object_Name": "I12247_Va_ActFuelCONSL",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 294 -A8.295",
+          "Object_Name": "I12248_Va_MeanTRIPFuelCONS",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 163 -A8.164",
+          "Object_Name": "I12311_Me_ALLbOilREFillTan",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 119 -A8.120",
+          "Object_Name": "I12312_Me_HItCoolAirIn",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 120 -A8.121",
+          "Object_Name": "I12313_Me_HIHItCoolAirIn",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 168 -A8.169",
+          "Object_Name": "I12314_Me_ALGenShdwnEXPECT",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 303 -A8.304",
+          "Object_Name": "I12235_Va_TbrngDRIVENENDGe",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 304 -A8.305",
+          "Object_Name": "I12235_Va_TbrngDRIVENENDGe",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 306 -A8.307",
+          "Object_Name": "I12236_Va_TbEARNonDRIVENEN",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 307 -A8.308",
+          "Object_Name": "I12236_Va_TbEARNonDRIVENEN",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 309 -A8.310",
+          "Object_Name": "I12237_Va_TCoolAirOutGen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 310 -A8.311",
+          "Object_Name": "I12237_Va_TCoolAirOutGen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 311 -A8.312",
+          "Object_Name": "I12323_Va_TCoolAirInGen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 312 -A8.313",
+          "Object_Name": "I12323_Va_TCoolAirInGen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 313 -A8.314",
+          "Object_Name": "I12323_Va_TCoolAirInGen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  58 -A8.59",
+          "Object_Name": "I12327_Me_HItExA9",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  59 -A8.60",
+          "Object_Name": "I12328_Me_HItExA10",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  68 -A8.69",
+          "Object_Name": "I12329_Me_HItExB9",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  69 -A8.70",
+          "Object_Name": "I12330_Me_HItExB10",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  78 -A8.79",
+          "Object_Name": "I12331_Me_LOTExA9",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  79 -A8.80",
+          "Object_Name": "I12332_Me_LOTExA10",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  88 -A8.89",
+          "Object_Name": "I12333_Me_LOTExB9",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  89 -A8.90",
+          "Object_Name": "I12334_Me_LOTExB10",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 118 -A8.119",
+          "Object_Name": "I12338_Me_MGBARGrEnga",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 117 -A8.118",
+          "Object_Name": "I12339_Me_SSOvrSpdECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  97 -A8.98",
+          "Object_Name": "I12340_Me_LOPCoolantInterc",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  98 -A8.99",
+          "Object_Name": "I12341_Me_LOLOPCoolantInte",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX  99 -A8.100",
+          "Object_Name": "I12342_Me_HItCoolantInterc",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 100 -A8.101",
+          "Object_Name": "I12343_Me_HIHItCoolantInte",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 121 -A8.122",
+          "Object_Name": "I12344_Me_ALFuelTreatmentC",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 122 -A8.123",
+          "Object_Name": "I12345_Me_ALRCSSpeedDemand",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 125 -A8.126",
+          "Object_Name": "I12346_Me_ALPowerAmplifier",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 126 -A8.127",
+          "Object_Name": "I12347_Me_ALPowerAmplifier",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 127 -A8.128",
+          "Object_Name": "I12348_Me_ALStatusTransist",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 128 -A8.129",
+          "Object_Name": "I12349_Me_CombinedAlarmECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 129 -A8.130",
+          "Object_Name": "I12350_Me_HItSplashOilB1",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 130 -A8.131",
+          "Object_Name": "I12351_Me_HItSplashOilB2",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 131 -A8.132",
+          "Object_Name": "I12352_Me_HItSplashOilB3",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 132 -A8.133",
+          "Object_Name": "I12353_Me_HItSplashOilB4",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 133 -A8.134",
+          "Object_Name": "I12354_Me_HItSplashOilB5",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 134 -A8.135",
+          "Object_Name": "I12355_Me_HItSplashOilB6",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 135 -A8.136",
+          "Object_Name": "I12356_Me_HItSplashOilB7",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 136 -A8.137",
+          "Object_Name": "I12357_Me_HItSplashOilB8",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 137 -A8.138",
+          "Object_Name": "I12358_Me_HItSplashOilB9",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 138 -A8.139",
+          "Object_Name": "I12359_Me_HItSplashOilB10",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 139 -A8.140",
+          "Object_Name": "I12360_Me_SSTSplashOilB1",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 140 -A8.141",
+          "Object_Name": "I12361_Me_SSTSplashOilB2",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 141 -A8.142",
+          "Object_Name": "I12362_Me_SSTSplashOilB3",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 142 -A8.143",
+          "Object_Name": "I12363_Me_SSTSplashOilB4",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 143 -A8.144",
+          "Object_Name": "I12364_Me_SSTSplashOilB5",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 144 -A8.145",
+          "Object_Name": "I12365_Me_SSTSplashOilB6",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 145 -A8.146",
+          "Object_Name": "I12366_Me_SSTSplashOilB7",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 146 -A8.147",
+          "Object_Name": "I12367_Me_SSTSplashOilB8",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 147 -A8.148",
+          "Object_Name": "I12368_Me_SSTSplashOilB9",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 148 -A8.149",
+          "Object_Name": "I12369_Me_SSTSplashOilB10",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 162 -A8.163",
+          "Object_Name": "I12370_Me_HIPExhaustBack",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 165 -A8.166",
+          "Object_Name": "I12371_Me_MGAckEStopactnot",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 166 -A8.167",
+          "Object_Name": "I12372_Me_WBSwBmonitoringE",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 167 -A8.168",
+          "Object_Name": "I12373_Me_ALGensetShutdown",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 169 -A8.170",
+          "Object_Name": "I12374_Me_HIPFuelFilterDif",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 170 -A8.171",
+          "Object_Name": "I12375_Me_HIPFuelfilterDif",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 171 -A8.172",
+          "Object_Name": "I12376_Me_HIWaterinFuelPre",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 172 -A8.173",
+          "Object_Name": "I12377_Me_LOPLubeOilRefill",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 173 -A8.174",
+          "Object_Name": "I12378_Me_LOCoolantLevelIn",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 174 -A8.175",
+          "Object_Name": "I12379_Me_ALLOCoolantLevLT",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 178 -A8.179",
+          "Object_Name": "I12380_Me_RatedSpeedReache",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 190 -A8.191",
+          "Object_Name": "I12381_Me_NotReadyforOpera",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 191 -A8.192",
+          "Object_Name": "I12382_Me_CylinderCutout",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 192 -A8.193",
+          "Object_Name": "I12383_Me_SwBGensetFailedS",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 193 -A8.194",
+          "Object_Name": "I12384_Me_Autostop",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 194 -A8.195",
+          "Object_Name": "I12385_Me_RemoteMode",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 195 -A8.196",
+          "Object_Name": "I12386_Me_ETC3CutIn",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 196 -A8.197",
+          "Object_Name": "I12387_Me_EngineStopped",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 261 -A8.262",
+          "Object_Name": "I12388_Va_TExhaustA9",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 262 -A8.263",
+          "Object_Name": "I12389_Va_TExhaustA10",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 271 -A8.272",
+          "Object_Name": "I12390_Va_TExhaustB9",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 272 -A8.273",
+          "Object_Name": "I12391_Va_TExhaustB10",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 274 -A8.275",
+          "Object_Name": "I12392_Va_ULTExhaust",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 289 -A8.290",
+          "Object_Name": "I12393_Va_TotalFuelConsump",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 314 -A8.315",
+          "Object_Name": "I12394_Va_InjectionQuantit",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 316 -A8.317",
+          "Object_Name": "I12395_Va_TCoolantIntercoo",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 317 -A8.318",
+          "Object_Name": "I12395_Va_TCoolantIntercoo",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 318 -A8.319",
+          "Object_Name": "I12395_Va_TCoolantIntercoo",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 319 -A8.320",
+          "Object_Name": "I12398_Va_PCoolantIntercoo",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 320 -A8.321",
+          "Object_Name": "I12398_Va_PCoolantIntercoo",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 321 -A8.322",
+          "Object_Name": "I12398_Va_PCoolantIntercoo",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 323 -A8.324",
+          "Object_Name": "I12401_Va_TSplashOilB1",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 324 -A8.325",
+          "Object_Name": "I12402_Va_TSplashOilB2",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 325 -A8.326",
+          "Object_Name": "I12403_Va_TSplashOilB3",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 326 -A8.327",
+          "Object_Name": "I12404_Va_TSplashOilB4",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 327 -A8.328",
+          "Object_Name": "I12405_Va_TSplashOilB5",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 328 -A8.329",
+          "Object_Name": "I12406_Va_TSplashOilB6",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 329 -A8.330",
+          "Object_Name": "I12407_Va_TSplashOilB7",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 330 -A8.331",
+          "Object_Name": "I12408_Va_TSplashOilB8",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 331 -A8.332",
+          "Object_Name": "I12409_Va_TSplashOilB9",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 332 -A8.333",
+          "Object_Name": "I12410_Va_TSplashOilB10",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 333 -A8.334",
+          "Object_Name": "I12450_Me_SdEngSpdECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 334 -A8.335",
+          "Object_Name": "I12451_Me_SdPLbOilECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 335 -A8.336",
+          "Object_Name": "I12452_Me_SdPCRANKCASE",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 336 -A8.337",
+          "Object_Name": "I12453_Me_SdPCool",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 337 -A8.338",
+          "Object_Name": "I12454_Me_SdPFuel",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 338 -A8.339",
+          "Object_Name": "I12455_Me_SdPCHARGEAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 339 -A8.340",
+          "Object_Name": "I12456_Me_SdETC1Spd",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 340 -A8.341",
+          "Object_Name": "I12457_Me_SdETC2Spd",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 342 -A8.343",
+          "Object_Name": "I12459_Me_SdECUOPERATInGHO",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 343 -A8.344",
+          "Object_Name": "I12460_Me_SdTCoolECU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 344 -A8.345",
+          "Object_Name": "I12461_Me_SdTCHARGEAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 345 -A8.346",
+          "Object_Name": "I12462_Me_SdTLbOil",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 346 -A8.347",
+          "Object_Name": "I12463_Me_SdTExCombA",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 347 -A8.348",
+          "Object_Name": "I12464_Me_SdTExCombB",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 348 -A8.349",
+          "Object_Name": "I12465_Me_SdTInTAKEAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 349 -A8.350",
+          "Object_Name": "I12466_Me_SdTFuel",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 350 -A8.351",
+          "Object_Name": "I12467_Me_SdInJECTIONInREL",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 351 -A8.352",
+          "Object_Name": "I12468_Me_SdTCHARGEAirSEQC",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 352 -A8.353",
+          "Object_Name": "I12469_Me_SdEngSpdEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 353 -A8.354",
+          "Object_Name": "I12470_Me_SdPLbOilEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 354 -A8.355",
+          "Object_Name": "I12471_Me_SdTCoolEMU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 355 -A8.356",
+          "Object_Name": "I12472_Me_SdTExA1",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 356 -A8.357",
+          "Object_Name": "I12473_Me_SdTExA2",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 357 -A8.358",
+          "Object_Name": "I12474_Me_SdTExA3",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 358 -A8.359",
+          "Object_Name": "I12475_Me_SdTExA4",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 359 -A8.360",
+          "Object_Name": "I12476_Me_SdTExA5",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 360 -A8.361",
+          "Object_Name": "I12477_Me_SdTExA6",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 361 -A8.362",
+          "Object_Name": "I12478_Me_SdTExA7",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 362 -A8.363",
+          "Object_Name": "I12479_Me_SdTExA8",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 363 -A8.364",
+          "Object_Name": "I12480_Me_SdTExhaustA9",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 364 -A8.365",
+          "Object_Name": "I12481_Me_SdTExhaustA10",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 365 -A8.366",
+          "Object_Name": "I12482_Me_SdTExB1",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 366 -A8.367",
+          "Object_Name": "I12483_Me_SdTExB2",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 367 -A8.368",
+          "Object_Name": "I12484_Me_SdTExB3",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 368 -A8.369",
+          "Object_Name": "I12485_Me_SdTExB4",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 369 -A8.370",
+          "Object_Name": "I12486_Me_SdTExB5",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 370 -A8.371",
+          "Object_Name": "I12487_Me_SdTExB6",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 371 -A8.372",
+          "Object_Name": "I12488_Me_SdTExB7",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 372 -A8.373",
+          "Object_Name": "I12489_Me_SdTExB8",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 373 -A8.374",
+          "Object_Name": "I12490_Me_SdTExhaustB9",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 374 -A8.375",
+          "Object_Name": "I12491_Me_SdTExhaustB10",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 375 -A8.376",
+          "Object_Name": "I12492_Me_SdTExMean",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 376 -A8.377",
+          "Object_Name": "I12493_Me_SdPRAWWtr",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 377 -A8.378",
+          "Object_Name": "I12494_Me_SdTWndgL1Gen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 378 -A8.379",
+          "Object_Name": "I12495_Me_SdTWndgL2Gen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 379 -A8.380",
+          "Object_Name": "I12496_Me_SdTWndgL3Gen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 380 -A8.381",
+          "Object_Name": "I12497_Me_SdActFuelConsum",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 381 -A8.382",
+          "Object_Name": "I12498_Me_SdTRIPFuelConsum",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 382 -A8.383",
+          "Object_Name": "I12499_Me_SdTotalFuelConsu",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 383 -A8.384",
+          "Object_Name": "I12500_Me_SdMeanTRIPFuelCo",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 384 -A8.385",
+          "Object_Name": "I12501_Me_SdTRIPOPERATInGH",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 385 -A8.386",
+          "Object_Name": "I12502_Me_SdTRIPResCOUNTan",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 386 -A8.387",
+          "Object_Name": "I12503_Me_SdMaxALEFuelCONS",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 387 -A8.388",
+          "Object_Name": "I12504_Me_SdMeanTRIPFuelCO",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 388 -A8.389",
+          "Object_Name": "I12505_Me_SdToTALFuelCONSU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 389 -A8.390",
+          "Object_Name": "I12506_Me_SdToTALFuelCONSU",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 390 -A8.391",
+          "Object_Name": "I12507_Me_SdPOilREFillPmp",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 391 -A8.392",
+          "Object_Name": "I12508_Me_SdPstartAir",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 392 -A8.393",
+          "Object_Name": "I12509_Me_SdTbrngDRIVENEND",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 393 -A8.394",
+          "Object_Name": "I12510_Me_SdTbEARNonDRIVEN",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 394 -A8.395",
+          "Object_Name": "I12511_Me_SdTCoolAirOutGen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 395 -A8.396",
+          "Object_Name": "I12512_Me_SdTCoolAirInGen",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 396 -A8.397",
+          "Object_Name": "I12513_Me_SdInjectionQuant",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 397 -A8.398",
+          "Object_Name": "I12514_Me_SdGenActPowInKW",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 398 -A8.399",
+          "Object_Name": "I12515_Me_SdTCoolantInterc",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 399 -A8.400",
+          "Object_Name": "I12516_Me_SdPCoolantInterc",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 400 -A8.401",
+          "Object_Name": "I12517_Me_SdActFuelCONSL",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 401 -A8.402",
+          "Object_Name": "I12518_Me_SdTSplashOilB1",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 402 -A8.403",
+          "Object_Name": "I12519_Me_SdTSplashOilB2",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 403 -A8.404",
+          "Object_Name": "I12520_Me_SdTSplashOilB3",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 404 -A8.405",
+          "Object_Name": "I12521_Me_SdTSplashOilB4",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 405 -A8.406",
+          "Object_Name": "I12522_Me_SdTSplashOilB5",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 406 -A8.407",
+          "Object_Name": "I12523_Me_SdTSplashOilB6",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 407 -A8.408",
+          "Object_Name": "I12524_Me_SdTSplashOilB7",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 408 -A8.409",
+          "Object_Name": "I12525_Me_SdTSplashOilB8",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 409 -A8.410",
+          "Object_Name": "I12526_Me_SdTSplashOilB9",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 410 -A8.411",
+          "Object_Name": "I12527_Me_SdTSplashOilB10",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        },
+        {
+          "Terminal": "XX 411 -A8.412",
+          "Object_Name": "I12528_V_ALPreHEATInGTCoo",
+          "Signal_Type": "SI",
+          "Signal": "INT"
+        }
+      ]
+    }
+  ],
+  "Statistics": {
+    "Total_Modules": 3,
+    "Total_Signals": 408,
+    "Input_Signals": 2,
+    "Output_Signals": 1
+  },
+  "Metadata": {
+    "Generated": "2025-10-28T08:28:58.510811",
+    "Source_File": "LIST_OF_MEASURING_POINTS_Large_2.xls",
+    "Generator": "WAGO PLC Config Extractor v2.0"
+  }
+}
