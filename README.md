@@ -590,8 +590,8 @@ Enable in `project_config.json`:
 
 ### Version Roadmap
 
-- **0.9.0** (Q1 2025) - Configuration validation API, enhanced error recovery
-- **1.0.0** (Q2 2025) - Production release, API stabilization, extended hardware support
+- **0.9.0** (~Q2 2026) - Configuration validation API, enhanced error recovery
+- **1.0.0** (~Q4 2026) - Production release, API stabilization, extended hardware support
 
 ---
 
